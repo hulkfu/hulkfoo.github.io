@@ -95,6 +95,8 @@ a:visited { color: #a0a; }
 }
 
 .footer {
+  position: absolute;
+  bottom: 0;
   font-size: 80%;
   color: #666;
   border-top: 4px solid #eee;
