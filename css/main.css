@@ -100,8 +100,18 @@ blockquote {
   color: #000;
 }
 
+#page-title {
+  font-size: 1.7em;
+  font-weight: 700;
+  text-align: center;
+}
+
 .meta {
   color: #aaa;
+}
+
+.date {
+  text-align: center;
 }
 
 .footer {
@@ -167,4 +177,8 @@ blockquote {
 
 .post pre.terminal code {
   background-color: #333;
+}
+
+.post h1 {
+  margin-top: 1.5em;
 }
