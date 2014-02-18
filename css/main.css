@@ -29,6 +29,15 @@ a         { color: #38659d; text-decoration: none; }
 a:hover   { color: #3db679; text-decoration: underline; }
 a:visited { color: #93b3db; }
 
+blockquote {
+  padding: 7px;
+  font-size: 18px;
+  font-weight: 100;
+  line-height: 30px;
+  word-break: break-word;
+  border-left: 4px solid #999;
+}
+
 /*****************************************************************************/
 /*
 /* Home
