@@ -101,7 +101,7 @@ blockquote {
 }
 
 #page-title {
-  font-size: 1.7em;
+  font-size: 1.9em;
   font-weight: 700;
   text-align: center;
 }
@@ -181,4 +181,11 @@ blockquote {
 
 .post h1 {
   margin-top: 1.5em;
+  font-size: 1.5em;
+}
+
+.post h2 {
+  color: gray;
+  margin-top: 1.3em;
+  font-size: 1.3em;
 }
