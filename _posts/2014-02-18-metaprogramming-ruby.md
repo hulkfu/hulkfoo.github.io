@@ -140,7 +140,29 @@ proc.call "world"  #=> hello, world
 
 ## proc与lambda比较
 除了Proc.new，Ruby还提供了Proc:lambda()和proc()两个内核方法来创建转换成对象的块。
-。。。
+
+用lambda()创建的Proc称为lambda，其它方式创建的叫proc。他们的区别主要是：
+
+* return关键字
+
+在lambda中，return仅是从这个lambda中返回，而proc中会从定义proc的作用域中返回。
+
+```ruby
+def double(callable)
+  callable.call * 2
+end
+
+l = lambda { return 10 }
+puts double(l)  # => 20
+
+p = proc { return 10 }
+puts double(p)  # 此时会报 unexpected return (LocalJumpError)的错误
+```
+
+* 参数检验
+
+lambda的适应能力比proc差。如果调用lambda的参数量不对，会失败，抛出一个ArgumentError错误;而proc会忽略多余的参数，不足则补为nil。
+
 
 # Eigenclass
 一个看不见的类。。。
