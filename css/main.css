@@ -152,6 +152,7 @@ blockquote {
   border: 1px solid #ddd;
   background-color: #eef;
   padding: 0 .4em;
+  margin: 17px 0;
 }
 
 .post ul, .post ol {
