@@ -163,8 +163,74 @@ puts double(p)  # 此时会报 unexpected return (LocalJumpError)的错误
 
 lambda的适应能力比proc差。如果调用lambda的参数量不对，会失败，抛出一个ArgumentError错误;而proc会忽略多余的参数，不足则补为nil。
 
+# 类定义
+类似当前对象**self**，也存在当前类的概念。当定义一个方法时，该方法将成为当前类的一个方法。每当用**class**打开一个类时，这个类就成为了当前类。
 
-# Eigenclass
+对应的打开现有类的扁平化方法Module#class_eval()，它能在一个已存在类的上下文中执行一个块：
+
+```ruby
+def add_hello_to_class(klass)
+
+  klass.class_eval do
+    # 实例方法
+    def hello
+      puts "hello"
+    end
+
+    # 类方法
+    def self.hi
+      puts "hi"
+    end
+  end
+end
+
+add_hello_to_class String
+"s".hello  #=> hello
+String.hi  #=> hi
+```
+
+这里顺便提一下Object#instance_eval()方法，顾名思义，它是打开对象，所有它只会修改当前对象self，然后来执行代码。
+
+## 类实例变量
+Ruby解释器假定所有的实例变量都属于当前对象self。所以要牢记
+
+> 类也是对象，而且需要自己在程序中追踪**self**。
+
+```ruby
+class C
+  @var = 2
+  def self.read
+    puts @var
+  end
+
+  def write(var)
+    @var = var
+  end
+
+  def read
+    puts @var
+  end
+end
+
+c = C.new
+c.write 3
+c.read  #=> 3
+C.read  #=> 2
+```
+
+上面的例子中，定义了两个同名@var的变量，一个在C充当self的时刻，所以是类的实例变量；另一个在对象充当self的时刻，所以是对象的实例变量。它们互不影响。
+
+## 类变量
+上面的类的实例变量，不能被继承或被其实例访问，而类变量可以，一个变量前加上**@@**就是了。
+
+把上面的例子中的@var都换为@@var，那么结果就是：
+
+```ruby
+c.read  #=> 3
+C.read  #=> 3
+```
+
+## Eigenclass
 一个看不见的类。。。
 
 学习时顺便建了一个学习代码库：[ruby-study][2]，想法是让代码说话，知识点都写到注释里。下一步继续整理，并能够生成注释文档。
