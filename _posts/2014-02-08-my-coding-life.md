@@ -36,7 +36,7 @@ title: 我的编年史
 
 目前主要集中在：
 
-* ruby - 脚本，Rails
+* Ruby - 脚本，Rails
 * JavaScript - 前端，node.js，HTML5桌面应用
 * Java - Android，JVM
 
