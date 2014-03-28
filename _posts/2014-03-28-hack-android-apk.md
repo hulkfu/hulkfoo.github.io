@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 逆向Android APK文件
+title: 逆向与反逆向Android APK文件
 ---
 
 #二次打包
@@ -28,12 +28,15 @@ apktool b [OPTS] [<app_apth>] [<out_file>] # 将app的文件夹打包成到out_f
 dex2jar.sh file.apk #就会在相同目录出来它的jar版
 ```
 
-生成jar文件后，就可以用Java Decompiler来反编译成java源码了，这里用[JD-GUI](http://jd.benow.ca/)。直接打开jar文件即能看见源码。
+生成jar文件后，就可以用Java Decompiler来反编译成java源码了，这里用[JD-GUI](http://jd.benow.ca/)，直接打开jar文件即能看见源码。
 
 下面软件下载：
 
 * [dex2jar][3]
 * [jd-gui linux][4]
+
+# 反逆向
+上面可知，在发布apk时，一定要做好反逆向，要不你的代码就是裸奔，其实保护一下就是多穿了件衣服，费些时间还是能看到里面的。
 
 
 [1]: /file/apktool1.5.2.tar.bz2 "apktool"
