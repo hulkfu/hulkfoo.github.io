@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 逆向APK文件
+title: 逆向Android APK文件
 ---
 
 #二次打包
@@ -11,7 +11,7 @@ title: 逆向APK文件
 * [apktool.jar 核心功能文件][1]
 * [aapt和apktool 脚本(Linux)][2]
 
-下载解压放到同一个目录里，一遍是~/bin/目录，就可以使用了。
+下载解压放到同一个目录里，就可以使用了。
 
 它有decode和build功能，即解包和打包。如下使用：
 
@@ -24,8 +24,19 @@ apktool b [OPTS] [<app_apth>] [<out_file>] # 将app的文件夹打包成到out_f
 #反编译代码
 [dex2jar](http://code.google.com/p/dex2jar/)将Android apk里的dex文件转换成jar文件。
 
-生成jar文件后，就可以用Java Decompiler来反编译成java源码了，这里用[JD](http://jd.benow.ca/)。
+```bash
+dex2jar.sh file.apk #就会在相同目录出来它的jar版
+```
+
+生成jar文件后，就可以用Java Decompiler来反编译成java源码了，这里用[JD-GUI](http://jd.benow.ca/)。直接打开jar文件即能看见源码。
+
+下面软件下载：
+
+* [dex2jar][3]
+* [jd-gui linux][4]
 
 
 [1]: /file/apktool1.5.2.tar.bz2 "apktool"
 [2]: /file/apktool-install-linux-r05-ibot.tar.bz2 "apktool script"
+[3]: /file/dex2jar-0.0.9.15.zip "dex2jar"
+[4]: /file/jd-gui-0.3.5.linux.i686.tar.gz "jd-gui"
