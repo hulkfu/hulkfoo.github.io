@@ -42,9 +42,11 @@ keytool工具是Java JDK自带的证书工具，参数解释如下：
 
 ## 签名
 使用生成的key对apk签名，运行如下命令：
+
 ```
 jarsigner -verbose -keystore demo.keystore -signedjar demo_signed.apk demo.apk demo.keystore
 ```
+
 jarsigner是Java的签名工具，参数解释如下：
 
 * -verbose参数表示：显示出签名详细信息
@@ -85,6 +87,11 @@ dex2jar.sh file.apk #就会在相同目录出来它的jar版
 
 # 反逆向
 上面可知，在发布apk时，一定要做好反逆向，要不你的代码就是裸奔，其实保护一下就是多穿了件衣服，费些时间还是能看到里面的。
+
+## 混淆
+
+## .so库
+
 
 
 [1]: /file/apktool1.5.2.tar.bz2 "apktool"
