@@ -150,8 +150,7 @@ blockquote {
 /* standard */
 .post pre {
   border: 1px solid #ddd;
-  background-color: #eef;
-  padding: 0 .4em;
+  padding: .4em .4em;
   margin: 17px 0;
 }
 
@@ -161,7 +160,6 @@ blockquote {
 
 .post code {
   border: 1px solid #ddd;
-  background-color: #eef;
   padding: 0 .2em;
 }
 
