@@ -231,7 +231,21 @@ C.read  #=> 3
 ```
 
 ## Eigenclass
-一个看不见的类。。。
+一个看不见的类，像JavaScript的原型类。通过它，可以为单个实例创建方法。
+
+每个eigenclass只有一个实例，并且不能被继承。但是
+
+>eigenclass的超类是超类的eigenclass。
+
+因此，可以在子类中调用超类的类方法。方法路径是子类 -> 子类eigenclass -> 超类eigenclass。
+
+通过下面的语法进入eigenclass
+
+```ruby
+class << an_object
+
+end
+```
 
 # 例子
 学习时顺便建了一个学习代码库：[ruby-study][2]，想法是让代码说话，知识点都写到注释里。下一步继续整理，并能够生成注释文档。
