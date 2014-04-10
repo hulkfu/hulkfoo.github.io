@@ -21,6 +21,12 @@ apktool d [OPTS] file.apk [<dir>] # 将file.apk文件解包到dir里。
 apktool b [OPTS] [<app_apth>] [<out_file>] # 将app的文件夹打包成到out_file。如果app_path空，则默认当前目录；如果out_file空，则<app_path>/dist/<name_of_original.apk>。
 ```
 
+其它：
+
+```
+sed -i "s/oldString/newString/g" `grep oldString -rl /path`
+```
+
 # 重新签名
 因为二次打包会抹掉签名信息，因此需要重新签名。
 
