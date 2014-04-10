@@ -5,6 +5,9 @@ title : JavaScript编程
 
 JavaScript是一门简单但完备的语言。
 
+# this
+通过改变this，实现各种动态。
+
 # prototype
 正是prototype体现了JavaScript的Script，其它的都是Java了。
 通过prototype，可以实现类、继承进而其它高级的设计模式。
