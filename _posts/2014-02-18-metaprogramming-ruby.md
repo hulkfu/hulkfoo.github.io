@@ -9,6 +9,61 @@ title: Ruby元编程
 
 下面总结一些知识和法术。
 
+# 动态方法
+使用动态方法，可以调用没有在代码中明确定义的方法。实现上有两种方式：
+
+* 主动：在调用前就定义了方法，一般在初始化的时候。
+* 被动：在调用时才去定义方法，通过覆写method_missing()方法来实现。
+
+主动的方式会对respond_to?()有反应，被动的还需要另实现。但被动的更灵活，因为很多时候并不是有数据源的。
+
+下面是会用到的法术。
+
+## 动态调用方法
+对一个实例调用send方法，第一个参数是要调用的方法名，后面的是参数。
+
+通过Object#send()，调用的方法便成为了参数，这样就可以动态决定调用什么方法了。
+
+```ruby
+class A
+  def echo(str)
+    puts str
+  end
+end
+
+a = A.new
+a.echo "hi"         #=> hi
+a.send :echo, "hi"  #=> hi
+```
+
+##动态创建方法
+使用Module#define_method()方法定义，下文还会讲它的扁平作用域。
+
+```ruby
+define_method :echo do |arg|
+  puts arg
+end
+
+echo "hi"  #=> hi
+```
+
+## method_missing()
+当调用一个不存在的方法时，会触发method_missing()方法。可以通过覆写它来调用实际上并不存在的方法。
+
+在覆写时，要注意何时触发super方法，也就是报错。
+
+```ruby
+class B
+  def method_missing(method, *args)
+    puts "called #{method}(#{args.join(',')})"
+    puts "with a block" if block_given?
+  end
+end
+
+B.new.test(1, 2) { } #=> called test(1,2)
+                     #=> with a block
+```
+
 # 作用域
 变量作用域跟Java、C++等区别很大，没有“内部作用域”的概念，因此无法在内部作用域中看到外部作用域。
 
