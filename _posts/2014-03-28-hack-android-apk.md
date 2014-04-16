@@ -95,10 +95,56 @@ dex2jar.sh file.apk #就会在相同目录出来它的jar版
 上面可知，在发布apk时，一定要做好反逆向，要不你的代码就是裸奔，其实保护一下就是多穿了件衣服，费些时间还是能看到里面的。
 
 ## 混淆
+通过混淆，会让代码变得难读，类名、变量等都变成了字母表。
 
-## .so库
+* 去掉project.propert文件中的注释：proguard.config=${sdk.dir}/tools/proguard/proguard-android.txt:proguard-project.txt。
+* 在上面路径中的proguard-project.txt文件里设置。
 
+具体可参考[官方文档](http://developer.android.com/tools/help/proguard.html)。
 
+## JNI
+反编译这个就需要更进一步的工具和能力，这样就提高了门槛。
+
+使用步骤：
+
+* 在Java代码中用**native**关键字声明这个原生方法。
+* 用javah生成相应的头文件。
+* 原生代码和Android.mk文件。在Eclipse环境下可以轻松通过：右击工程->Android Tools->Add Native Support... 来创建代码框架。
+* 在上面生成的jni目录里引用头文件，编写C代码。
+* 在声明native方法的Java类中使用System.loadLibrary("libname")载入库，一般在static块中载入，然后就可以使用用native方法。
+
+Java调用C/C++通过上面步骤很容易就实现了，可如果需要在C/C++里面处理Java层的东西，就需要：
+
+* 通过包名、类名找到类。
+* 通过方法签名在类中找到方法ID。
+* 调用。
+
+下面是一个简单调用Java类中静态方法的C++代码：
+
+```
+int JNICALL Java_com_example_name_Test_init
+  (JNIEnv *env, jclass klass)
+{
+  jclass App = env->FindClass("com/example/name/App");
+  jmethodID getContext_method_id = env->GetStaticMethodID(App, "getContext", "()Landroid/content/Context;");
+  jobject context = env->CallStaticObjectMethod(App, getContext_method_id);
+
+  return 1;
+}
+```
+
+上面的代码在Java中就是执行App.getContext()，但在C++中，它不知道Java中的信息。因此要通过env变量也就是虚拟机环境找到类，类的方法id，然后再调用，很符合逻辑。
+
+说明一下这里的方法签名和smali中的是一样的。
+
+# 总结
+apk是要把自己的安装包发布出去，不像web别人浏览到的只是网页。所有发布前要谨慎，尽可能保护自己的代码。
+
+想保护代码，就要知道怎么逆向代码，要去逆向分析代码就得会写代码。
+
+# 参考
+* [C调用Java](http://www.cnblogs.com/luxiaofeng54/archive/2011/08/17/2142000.html)
+* [Java调用C](http://www.cnblogs.com/luxiaofeng54/archive/2011/08/15/2139934.html)
 
 [1]: /file/apktool1.5.2.tar.bz2 "apktool"
 [2]: /file/apktool-install-linux-r05-ibot.tar.bz2 "apktool script"
