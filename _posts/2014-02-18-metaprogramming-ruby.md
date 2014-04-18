@@ -302,6 +302,32 @@ class << an_object
 end
 ```
 
+## 类扩展汇入
+
+
+# eval()
+在eval眼里，代码只是文本。
+
+与instance_eval()和class_eval()不同，eval()执行的是一个**代码字符串**，而不是块。而instance_eval()和class_eval()也可以执行代码字符串。
+
+## Binding类
+Binding的对象是一个完整的作用域，可以通过它来捕捉并带走当前的作用域。可以通过Kernel#binding()方法来创建。
+
+```ruby
+class C
+  def m
+    @val = 7
+    binding
+  end
+end
+
+b = C.new.m
+eval "puts @val", b
+```
+
+## 安全级别
+
+
 # 例子
 学习时顺便建了一个学习代码库：[ruby-study][2]，想法是让代码说话，知识点都写到注释里。下一步继续整理，并能够生成注释文档。
 
