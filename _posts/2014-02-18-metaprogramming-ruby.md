@@ -303,7 +303,39 @@ end
 ```
 
 ## 类扩展汇入
+在Ruby中，一般用include来扩展类，而include方法会将模块的方法扩展成类的实例方法，extend方法会将模块的方法扩展成类的类方法。那如何在用include时也扩展类方法呢？
 
+答案是用钩子。勾住module的included方法。
+
+```ruby
+module M
+  def self.included(base)
+    base.extend(ClassMethods)
+  end
+
+  module ClassMethods
+    def m1
+    end
+  end
+```
+
+Rails里的[ActiveSupport::Concern](http://api.rubyonrails.org/classes/ActiveSupport/Concern.html)，不仅替我们写了上面的过程，还很好的整理了module依赖关系。
+
+```ruby
+module M
+  extend ActiveSupport::Concern
+
+  module ClassMethods
+    def m1
+    end
+  end
+```
+
+模块混入Concern后，会自动将ClassMethods里方法扩展成类方法。
+
+对于依赖，如果A include B, B include C，那么C中类方法其实是混入到B而不是A中的，如果想在A中让B调用C的方法，就需要在A里先include C，然后再include B。而如果有了Concern，前面更清晰的逻辑就可以实现。
+
+因为它主动帮我们把C里方法混入到A。
 
 # eval()
 在eval眼里，代码只是文本。
