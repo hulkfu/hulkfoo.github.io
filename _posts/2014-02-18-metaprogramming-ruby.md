@@ -335,7 +335,7 @@ module M
 
 对于依赖，如果A include B, B include C，那么C中类方法其实是混入到B而不是A中的，如果想在A中让B调用C的方法，就需要在A里先include C，然后再include B。而如果有了Concern，前面更清晰的逻辑就可以实现。
 
-因为它主动帮我们把C里方法混入到A。
+因为它主动帮我们把C里方法混入到A。具体实现可参考[源码](https://github.com/rails/rails/blob/master/activesupport/lib/active_support/concern.rb)。
 
 # eval()
 在eval眼里，代码只是文本。
