@@ -6,7 +6,7 @@ title: anemone爬虫代码分析
 anemone是用ruby写的一个爬虫，[代码托管在github上](https://github.com/chriskite/anemone)。
 
 # 爬取
-爬取的关键算法就在：**从开始页面获得更多的链接**。
+爬取的关键算法就在：**从一个开始链接获得更多的可用链接**。
 
 主要爬取功能集中在lib目录下的：
 
@@ -195,8 +195,154 @@ end
 ```
 
 # 存储
+在core调用crawl方法时，会先调用process_options来处理可选参数，其中传入storage即可指定存储方式，它需要传入一个storage adapter，通过Anemone::Storage里工厂方法来生成。
+
+```ruby
+# lib/core.rb
+
+def process_options
+  @opts = DEFAULT_OPTS.merge @opts
+  @opts[:threads] = 1 if @opts[:delay] > 0
+  storage = Anemone::Storage::Base.new(@opts[:storage] || Anemone::Storage.Hash)
+  @pages = PageStore.new(storage)
+  @robots = Robotex.new(@opts[:user_agent]) if @opts[:obey_robots_txt]
+
+  freeze_options
+end
+```
+
+然后Anemone::Storage::Base通过传入的adapter来初始化storage。这里可以把Anemone::Storage::Base类理解为一个接口，它的初始化也主要是检查adapter是否含有存储所需要的方法的。
+
+```ruby
+# lib/storage/base.rb
+
+module Anemone
+  module Storage
+    class Base
+
+      def initialize(adapter)
+        @adap = adapter
+
+        # verify adapter conforms to this class's methods
+        methods.each do |method|
+          if !@adap.respond_to?(method.to_sym)
+            raise "Storage adapter must support method #{method}"
+          end
+        end
+      end
+
+      # 接口方法的定义
+      ...
+    end
+  end
+end
+```
 
 # Bin
+作为一个gem，它也为我们提供了方便的命令行工具，可以直接用来使用，同时也是在代码中如何使用anemone的例子。
+
+如果我们执行
+
+```ruby
+anemone count http://www.example.com
+```
+
+那么首先到bin目录里的anemone可执行文件文件：
+
+```ruby
+#!/usr/bin/env ruby
+require 'anemone/cli'
+
+Anemone::CLI::run
+```
+
+然后执行CLI::run，从输入的AVGV取出第一个参数即count，然后通过load执行count.rb。
+
+```ruby
+# lib/cli.rb
+
+module Anemone
+  module CLI
+    COMMANDS = %w[count cron pagedepth serialize url-list]
+
+    def self.run
+      command = ARGV.shift
+
+      if COMMANDS.include? command
+        load "anemone/cli/#{command.tr('-', '_')}.rb"
+      else
+        puts <<-INFO
+Anemone is a web spider framework that can collect
+useful information about pages it visits.
+
+Usage:
+  anemone <command> [arguments]
+
+Commands:
+  #{COMMANDS.join(', ')}
+INFO
+      end
+    end
+  end
+end
+```
+
+count.rb就是一个脚本文件了，它require 'anemone'，然后取出剩下的ARGV的第一个参数，就是要爬取的链接地址了。
+
+```ruby
+# lib/cli/count.rb
+
+require 'anemone'
+
+begin
+  # make sure that the first option is a URL we can crawl
+  url = URI(ARGV[0])
+rescue
+  puts <<-INFO
+Usage:
+  anemone count <url>
+
+Synopsis:
+  Crawls a site starting at the given URL and outputs the total number
+  of unique pages on the site.
+INFO
+  exit(0)
+end
+
+Anemone.crawl(url) do |anemone|
+  anemone.after_crawl do |pages|
+    puts pages.uniq!.size
+  end
+end
+```
+
+因为在执行爬取前会先执行传入的块，且块的参数就是当前的core实例，因此可以直接在块里执行相关方法，这样看上去很优雅，把所有关于它的操作都集中在了它的块了。
+
+```ruby
+#
+# Convenience method to start a new crawl
+#
+def self.crawl(urls, opts = {})
+  self.new(urls, opts) do |core|
+    yield core if block_given?
+    core.run
+  end
+end
+```
+
+# 测试
+最后但是最重要的，如果一个工程没有好的测试代码，它注定不能被长久维护，不能被社区接受。
 
 # 总结
-爬虫是我们收集信息的第一步，是件很有意思的事情。
+从分析anemone的代码，能学习到很多东西：
+
+* 多线程
+* HTTP协议
+* gem的结构
+* ruby项目工程的结构
+* 鸭子方法的使用
+* 数据库的封装
+* 项目的测试
+* 出错处理
+
+所以说，编程是最容易独自学成高手的，因为金山可以随便出入。关键是要有心人。
