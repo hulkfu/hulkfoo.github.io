@@ -213,6 +213,10 @@ end
 
 然后Anemone::Storage::Base通过传入的adapter来初始化storage。这里可以把Anemone::Storage::Base类理解为一个接口，它的初始化也主要是检查adapter是否含有存储所需要的方法的。
 
+这里的storage主要通过Anemone::PageStore类来存储pages，即爬取的页面，按照url:page存到数据库中，其中page如果不是存在hash中就用Marshal.dump方法序列化。
+
+从而为判断一个url是否爬过、爬虫结束后数据处理等提供支撑。
+
 ```ruby
 # lib/storage/base.rb
 
@@ -332,6 +336,59 @@ end
 
 # 测试
 最后但是最重要的，如果一个工程没有好的测试代码，它注定不能被长久维护，不能被社区接受。
+
+Anemone使用[RSpec](http://rubyspec.org/)作为测试框架，[fakeweb](https://github.com/chrisk/fakeweb)来模仿web服务器的请求返回。
+
+spec_helper.rb文件会被每个测试脚本require。
+
+```ruby
+require 'rubygems'
+require 'bundler/setup'
+require 'fakeweb'
+require File.dirname(__FILE__) + '/fakeweb_helper'
+
+$:.unshift(File.dirname(__FILE__) + '/../lib/')
+require 'anemone'
+
+SPEC_DOMAIN = 'http://www.example.com/'
+```
+
+上面的$:是$LOAD_PATH的缩写，那一行代码会把anemone的lib目录放$LOAD_PATH的队首。这样当执行require或load时，它们的优先级就最高。
+
+因为ruby载入的默认顺序是ruby library、/usr/local/lib/ruby、然后才是当前目录，可是要测试的就是当前目录。
+
+下面是core_spec.rb的开头，一个简单的测试用例
+
+```ruby
+$:.unshift(File.dirname(__FILE__))
+require 'spec_helper'
+%w[pstore tokyo_cabinet sqlite3].each { |file| require "anemone/storage/#{file}.rb" }
+
+module Anemone
+  describe Core do
+
+    before(:each) do
+      FakeWeb.clean_registry
+    end
+
+    shared_examples_for "crawl" do
+      it "should crawl all the html pages in a domain by following <a> href's" do
+        pages = []
+        pages << FakePage.new('0', :links => ['1', '2'])
+        pages << FakePage.new('1', :links => ['3'])
+        pages << FakePage.new('2')
+        pages << FakePage.new('3')
+
+        Anemone.crawl(pages[0].url, @opts).should have(4).pages
+      end
+
+      # 其他测试
+      ...
+  end
+end
+```
+
+很简单，像正常的英语。
 
 # 总结
 从分析anemone的代码，能学习到很多东西：
