@@ -15,7 +15,9 @@ anemone是用ruby写的一个爬虫，[代码托管在github上](https://github.
 * http.rb
 * page.rb
 
-代码逻辑比较简单：core调用tentacle，tentacle调用http将数据存到page。
+core维护了links和pages两个线程安全队列：links保存待爬取的url，pages保存从url获得的网页数据。
+
+core开始会启动多个tentacle，然后传入第一个起始url，之后tentacle开始工作，通过http获得page，core从page中获得更多links供tentacle爬取，直到所有links都爬取过。
 
 tentacle正如它的英文意思：“触手”，而core是anemone————“海葵”，将它的触手们伸到互联网里去爬取信息。
 
