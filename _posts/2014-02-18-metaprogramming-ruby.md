@@ -367,7 +367,7 @@ eval "puts @val", b
 
 待续。。。
 
-[1]: http://www.amazon.cn/Ruby%E5%85%83%E7%BC%96%E7%A8%8B-Paolo-Perrotta/dp/B0073APSCK/ref=sr_1_1?ie=UTF8&qid=1392710077&sr=8-1&keywords=ruby%E5%85%83%E7%BC%96%E7%A8%8B
+[1]: http://www.amazon.cn/gp/product/B0073APSCK/ref=as_li_tf_tl?ie=UTF8&camp=536&creative=3200&creativeASIN=B0073APSCK&linkCode=as2&tag=phun-23
     "《Ruby元编程》"
 [2]: https://github.com/astonfu/ruby-study
     "ruby study"
