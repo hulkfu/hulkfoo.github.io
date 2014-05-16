@@ -3,6 +3,30 @@ layout: post
 title: 模糊测试
 ---
 
+# 调试器
+
+* 打开要调试的进程。
+* 附加调试进程跟踪调试进程的状态。
+
+# windows安装pydbg
+
+1. 编译环境。这里用[mingw](http://www.mingw.org/)。
+2. pydasm。它基于[libdasm](http://code.google.com/p/libdasm/)。进入libdasm\pydasm目录编译安装：
+
+```
+python setup.py install **build --compiler=mingw32**
+```
+
+如果装了VS就不用选择编译器了，否则会报*error: Unable to find vcvarsall.bat*的错误。
+
+3. pydbg。[下载代码](https://github.com/OpenRCE/pydbg)，拷贝到python安装目录的lib文件夹里，并移除里面自带的不好用的pydasm.pyd文件。
+
+# Valgrind
+
+
+# Python的Fusil
+
+# Ruby的FuzzBert
 ```ruby
 def trap_child_exit
   trap(:CHLD) do
