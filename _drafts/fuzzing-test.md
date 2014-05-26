@@ -51,3 +51,22 @@ end
 主要就是靠这段代码来捕捉子进程的异常，然后handle记录的。
 
 相比Fusil，FuzzBert它没有CPU监控，进程监控也不完善，最明显的就是不能自动关闭进程。所有还是比较适合测试Ruby的库等接口，而不适合测试外面的应用。
+
+
+```ruby
+# lib/dsl.rb
+module FuzzBert::DSL
+  def fuzz(*args, &blk)
+    # 主要是在新创建的实例里调用了instance_eval(&blk)
+    suite = FuzzBert::TestSuite.create(*args, &blk)
+    raise RuntimeError.new "No 'deploy' block was given" unless suite.test
+    raise RuntimeError.new "No 'data' blocks were given" unless suite.generators
+    FuzzBert::AutoRun.register(suite)
+  end
+end
+
+extend FuzzBert::DSL
+Module.send(:include, FuzzBert::DSL)
+```
+
+Ruby的一个长处就是DSL，通过上面的简单定义，就可以在代码里使用fuzz了。
