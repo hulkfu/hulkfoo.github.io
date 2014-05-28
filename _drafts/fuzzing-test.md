@@ -70,3 +70,5 @@ Module.send(:include, FuzzBert::DSL)
 ```
 
 Ruby的一个长处就是DSL，通过上面的简单定义，就可以在代码里使用fuzz了。
+
+# Vagrant
