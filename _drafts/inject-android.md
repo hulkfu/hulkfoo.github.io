@@ -10,6 +10,9 @@ title: 注入Android
 * Java JNI
 * Linux Ptrace
 
+# AndBug
+
+# dexclassloader
 
 # 参考
 
