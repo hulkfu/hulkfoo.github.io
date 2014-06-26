@@ -130,10 +130,11 @@ thor setup:config --force
 能写出测试，说明对代码的意图和结果有明确的认识。测试通过了，心中就有底了。
 
 ## 反面教材
-用Nokogiri来提取xml文件中的数据，以为在子节点的node调用xpath('//node')即表示在这个子节点找匹配的node，结果发现要在当前节点，就需要用xpath('.//node')。就是少了那个点，让本来是O(n)的算法复杂度变成了O(n*n)。
+用Nokogiri来提取xml文件中的数据，以为在子节点的node调用xpath('//node')即表示在这个子节点找匹配的node，参考[xpath语法][3]，发现要在当前节点，就需要用xpath('.//node')。就是少了那个点，让本来是O(n)的算法复杂度变成了O(n*n)。
 
 这个如果写了测试程序，哪怕检测一下结果个数，肯定能知道自己写错代码了。
 
 
 [1]: http://archives.ryandaigle.com/articles/2007/6/22/using-command-line-parameters-w-rake-and-capistrano
 [2]: http://viget.com/extend/protip-passing-parameters-to-your-rake-tasks
+[3]: http://www.w3school.com.cn/xpath/xpath_syntax.asp
