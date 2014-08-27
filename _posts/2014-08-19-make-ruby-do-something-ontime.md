@@ -226,6 +226,12 @@ bundle exec sidekiq
 ## 在Ruby里单独使用
 还在研究中。
 
+# [DJ(delayed_job)](https://github.com/collectiveidea/delayed_job)
+
+http://railscasts.com/episodes/171-delayed-job
+
+如其名，就是在后台执行，用着很方便。
+
 # 总结
 对比以上，whenever运维用，clockwork单独用，sidekiq 在 Rails里用。
 
