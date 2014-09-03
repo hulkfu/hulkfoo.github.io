@@ -130,7 +130,7 @@ clockwork只是负责只是在一个进程中负责定时定点的任务的分�
 
 这样既不会有死锁，还能灵活满足各种需求。
 
-如使用[Stalker](https://github.com/adamwiggins/stalker)：
+如使用[Stalker](https://github.com/adamwiggins/stalker)，[RailsCasts参考](http://railscasts.com/episodes/243-beanstalkd-and-stalker)：
 
 ```ruby
 require 'stalker'
@@ -236,4 +236,4 @@ http://railscasts.com/episodes/171-delayed-job
 对比以上，whenever运维用，clockwork单独用，sidekiq 在 Rails里用。
 
 # 参考
-* http://www.cnblogs.com/wangyuyu/p/3818826.html 
+* http://www.cnblogs.com/wangyuyu/p/3818826.html
