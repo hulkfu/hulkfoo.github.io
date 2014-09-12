@@ -232,6 +232,11 @@ http://railscasts.com/episodes/171-delayed-job
 
 如其名，就是在后台执行，用着很方便。
 
+需要启动worker才能运行delay的任务。
+
+```
+rake jobs:work
+```
 # 总结
 对比以上，whenever运维用，clockwork单独用，sidekiq 在 Rails里用。
 
