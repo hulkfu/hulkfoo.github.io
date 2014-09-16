@@ -232,10 +232,23 @@ http://railscasts.com/episodes/171-delayed-job
 
 如其名，就是在后台执行，用着很方便。
 
+
 需要启动worker才能运行delay的任务。
 
 ```
 rake jobs:work
+```
+
+## mongoid下使用
+
+```
+gem 'delayed_job_mongoid'
+```
+
+然后建立索引，尤其是在生成环境：
+
+```
+rails runner 'Delayed::Backend::Mongoid::Job.create_indexes'
 ```
 # 总结
 对比以上，whenever运维用，clockwork单独用，sidekiq 在 Rails里用。
