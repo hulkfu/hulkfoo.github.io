@@ -335,9 +335,77 @@ module M
 
 模块混入Concern后，会自动将ClassMethods里方法扩展成类方法。
 
-对于依赖，如果A include B, B include C，那么C中类方法其实是混入到B而不是A中的，如果想在A中让B调用C的方法，就需要在A里先include C，然后再include B。而如果有了Concern，前面更清晰的逻辑就可以实现。
+```ruby
+module Foo
+  def self.included(base)
+    base.class_eval do
+      def self.method_injected_by_foo
+        ...
+      end
+    end
+  end
+end
 
-因为它主动帮我们把C里方法混入到A。具体实现可参考[源码](https://github.com/rails/rails/blob/master/activesupport/lib/active_support/concern.rb)。
+module Bar
+  def self.included(base)
+    base.method_injected_by_foo
+  end
+end
+
+class Host
+  include Foo # We need to include this dependency for Bar
+  include Bar # Bar is the module that Host really needs
+end
+```
+
+如上，Host需要include Bar，但是当Bar被included时，Host需要调用Foo扩展的类方法method_injected_by_foo，因此需要首先inclued Foo。
+
+而我们实际只需要提供的信息是include Bar，然后由Bar去负责其依赖的module。
+
+```ruby
+module Bar
+  include Foo
+  def self.included(base)
+    base.method_injected_by_foo
+  end
+end
+
+class Host
+  include Bar
+end
+```
+
+但是上面代码行不通，因为Bar include Foo，那么method_injected_by_foo便定义给了Bar，而不是我们期望的Host::method_injected_by_foo。
+
+通过使用 ActiveSupport::Concern便可实现上面的想法：
+
+```ruby
+require 'active_support/concern'
+
+module Foo
+  extend ActiveSupport::Concern
+  included do
+    def self.method_injected_by_foo
+      ...
+    end
+  end
+end
+
+module Bar
+  extend ActiveSupport::Concern
+  include Foo
+
+  included do
+    self.method_injected_by_foo
+  end
+end
+
+class Host
+  include Bar # works, Bar takes care now of its dependencies
+end
+```
+
+Concern的具体实现可参考[源码](https://github.com/rails/rails/blob/master/activesupport/lib/active_support/concern.rb)。
 
 # eval()
 在eval眼里，代码只是文本。
