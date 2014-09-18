@@ -3,6 +3,8 @@ layout: post
 title: Rails Test
 ---
 
+把经常在做的测试抽象成测试用例代码，比如一个功能函数。	
+
 # RSpec
 在Rails下需要使用[rspec-rails](https://github.com/rspec/rspec-rails)，其官网参考文档很详细。
 

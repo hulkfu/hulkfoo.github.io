@@ -250,6 +250,43 @@ gem 'delayed_job_mongoid'
 ```
 rails runner 'Delayed::Backend::Mongoid::Job.create_indexes'
 ```
+
+## 后台运行
+在Rails 4中bin目录下会自动生成**delayed_job**脚本，Rails 3在script目录下，依赖[daemons](https://github.com/ghazel/daemons)gem，如下使用：
+
+```
+RAILS_ENV=production script/delayed_job start
+RAILS_ENV=production script/delayed_job stop
+
+# Runs two workers in separate processes.
+RAILS_ENV=production script/delayed_job -n 2 start
+RAILS_ENV=production script/delayed_job stop
+
+# Set the --queue or --queues option to work from a particular queue.
+RAILS_ENV=production script/delayed_job --queue=tracking start
+RAILS_ENV=production script/delayed_job --queues=mailers,tasks start
+
+# Use the --pool option to specify a worker pool. You can use this option multiple times to start different numbers of workers for different queues.
+# The following command will start 1 worker for the tracking queue,
+# 2 workers for the mailers and tasks queues, and 2 workers for any jobs:
+RAILS_ENV=production script/delayed_job --pool=tracking --pool=mailers,tasks:2 --pool=*:2 start
+
+# Runs all available jobs and then exits
+RAILS_ENV=production script/delayed_job start --exit-on-complete
+# or to run in the foreground
+RAILS_ENV=production script/delayed_job run --exit-on-complete
+```
+
+## Capistrano 部署后自动运行
+
+```
+require "[delayed/recipes](https://github.com/collectiveidea/delayed_job/blob/master/lib/delayed/recipes.rb)"
+
+after "deploy:stop",    "delayed_job:stop"
+after "deploy:start",   "delayed_job:start"
+after "deploy:restart", "delayed_job:restart"
+```
+
 # 总结
 对比以上，whenever运维用，clockwork单独用，sidekiq 在 Rails里用。
 
