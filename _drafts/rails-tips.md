@@ -45,4 +45,5 @@ $ bin/rails runner -e staging "Model.long_running_method"
 
 主要理解参数的命名规则，从而得到了array和hash。
 
+* 通过name来命名。
 * 上层相同则为一个hash里的，根据后面的来分辨：有内容则又为一个hash，无则是数组。

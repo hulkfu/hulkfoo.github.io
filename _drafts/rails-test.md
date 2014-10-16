@@ -80,11 +80,23 @@ user.first_name
 
 FactoryGirl还有继承、关联、序列等用法，可以参考上面提到的文档。
 
+## 其它
+当使用carriewave时，直接在factories文件里用**File.open**打开文件。如：
+
+```
+FactoryGirl.define do
+  factory :task do
+    name "task"
+    attachment File.open(File.join(Rails.root, 'spec', 'support', 'attachments', 'file.txt'))
+  end
+``
 
 # [capybara](https://github.com/jnicklas/capybara)
 它模仿浏览器的行为，所以使用它就像自己在操作浏览器一样。
 
 也因此只有在feature测试中才能使用。
+
+有时capybara提示ElementNotFound，可能是真的没有找到，也可能是其它地方出了问题，然后它只catch到这个错误。此时去浏览器里重现一下场景看看。
 
 #
 
