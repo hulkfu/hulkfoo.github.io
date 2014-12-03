@@ -79,3 +79,17 @@ search_results = agent.submit search_form
 
 puts search_results.body
 ```
+
+# [listen](https://github.com/guard/listen)
+
+用来监听本地文件的变化。还能将事件通过TCP协议发送。
+
+```ruby
+listener = Listen.to('dir/to/listen', 'dir/to/listen2') do |modified, added, removed|
+  puts "modified absolute path: #{modified}"
+  puts "added absolute path: #{added}"
+  puts "removed absolute path: #{removed}"
+end
+listener.start # not blocking
+sleep
+```
