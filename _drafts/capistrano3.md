@@ -7,7 +7,7 @@ title: Capistrano 3
 
 在模板中，通过dsl来设置服务器的信息。
 
-set设置，fetch获得（不知为什么不用get）。
+set设置，fetch获得（map的通过key获得value的方法）。
 
 ```ruby
 def set(key, value)
