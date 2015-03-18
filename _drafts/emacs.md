@@ -8,3 +8,8 @@ title: emacs
 
 Vim适合修改配置文件等用，所以更适合系统维护人员使用。
 而Emacs更适合开发使用。
+
+# Plugins
+
+* el-get
+* neotree
