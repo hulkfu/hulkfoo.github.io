@@ -9,4 +9,6 @@ cordova是一个移动应用开发框架。它让你使用web技术来开发移�
 
 对于UI，也给出了很多推荐：jQuery Mobile、ionic、Ratchet等等，其中我选择ionic，它的设计好用，MIT授权，github更新勤加星多。而且官网上已经上线的app，用着也很好。
 
+ionic像是Ubuntu对于Debian，加入了好用的包。而ionic的UI是基于angularjs的。所以使用时也自然用angularjs了。
+
 
