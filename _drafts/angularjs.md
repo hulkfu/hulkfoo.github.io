@@ -53,6 +53,19 @@ angular.module('module', ['dependentModule1', 'dependentModule2'])
 
 ## ui-route
 
+state是根据url来判断当前的状态的，然后state里controller的参数命名也是url定义的。
+
+```
+  .state('tab.book-detail', {
+      url: '/books/:bookId',
+      views: {
+        'tab-books': {
+          templateUrl: 'templates/book-detail.html',
+          controller: 'BookDetailCtrl'
+        }
+      }
+    })
+```
 
 # 参考
 * http://www.ng-newsletter.com/posts/beginner2expert-how_to_start.html
