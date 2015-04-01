@@ -11,6 +11,8 @@ directives
 * ng-show/ng-hide
 * ng-init
 
+在directive里引用ng-model等变量，就直接用，不要加{{}}。因为它们都是在一个域里了，加了反而什么都找不到。
+
 # $scope
 
 View和Controller都显性的声明了，而Model就是scope了。在scope里面定义数据和方法，反正对js来说都是key-value。
@@ -33,6 +35,13 @@ angular.module('module', ['dependentModule1', 'dependentModule2'])
 }]}
 .factory() {}
 ```
+
+## Dependency Injection
+https://docs.angularjs.org/guide/di
+
+虽然依赖能够自动注入，但是当你minify你的js代码后，参数名字会变，可是字符串不变。
+
+Careful: If you plan to minify your code, your service names will get renamed and break your app.
 
 所以Angular是定义了一种新的语言，而且它还能自己定义关键字，即directive。通过这些directives，将js与html穿了起来。在html里，directive就是标签的属性。
 
