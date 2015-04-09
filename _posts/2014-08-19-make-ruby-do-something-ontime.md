@@ -232,48 +232,51 @@ http://railscasts.com/episodes/171-delayed-job
 
 如其名，就是在后台执行，用着很方便。
 
+## 安装
 
+mongoid下使用：
+
+gem 'delayed_job_mongoid'
+
+active record下用：
+
+gem 'delayed_job_active_record'
+
+
+## 启动worker
 需要启动worker才能运行delay的任务。
+
+### 使用rake
 
 ```
 rake jobs:work
 ```
 
-## mongoid下使用
+### 在后台执行
 
-```
-gem 'delayed_job_mongoid'
-```
-
-然后建立索引，尤其是在生成环境：
-
-```
-rails runner 'Delayed::Backend::Mongoid::Job.create_indexes'
-```
-
-## 后台运行
-在Rails 4中bin目录下会自动生成**delayed_job**脚本，Rails 3在script目录下，依赖[daemons](https://github.com/ghazel/daemons)gem，如下使用：
+1. 需要 [daemons](https://github.com/ghazel/daemons) gem.
+2. 使用**rails generate delayed_job**生成脚本文件，Rails 3在script目录下，rails 4在bin目录下。
+3. 使用。
 
 ```
 RAILS_ENV=production script/delayed_job start
 RAILS_ENV=production script/delayed_job stop
 
-# Runs two workers in separate processes.
+# 运行2个worker
 RAILS_ENV=production script/delayed_job -n 2 start
 RAILS_ENV=production script/delayed_job stop
 
-# Set the --queue or --queues option to work from a particular queue.
+# 使用--queue 或 --queues执行特定的队列
 RAILS_ENV=production script/delayed_job --queue=tracking start
 RAILS_ENV=production script/delayed_job --queues=mailers,tasks start
 
-# Use the --pool option to specify a worker pool. You can use this option multiple times to start different numbers of workers for different queues.
-# The following command will start 1 worker for the tracking queue,
-# 2 workers for the mailers and tasks queues, and 2 workers for any jobs:
+# 使用 --pool 来指定一个worker pool。可以对不同的队列多次使用来指定不同的worker。
+# 下面的命令会给tracking队列指定一个worker，mailer、tasks两个，其它的两个。
 RAILS_ENV=production script/delayed_job --pool=tracking --pool=mailers,tasks:2 --pool=*:2 start
 
-# Runs all available jobs and then exits
+# 执行所有可执行任务，然后退出
 RAILS_ENV=production script/delayed_job start --exit-on-complete
-# or to run in the foreground
+# 在前台执行
 RAILS_ENV=production script/delayed_job run --exit-on-complete
 ```
 
@@ -287,8 +290,19 @@ after "deploy:start",   "delayed_job:start"
 after "deploy:restart", "delayed_job:restart"
 ```
 
+# active job
+Rails 4.2的新特性，为以上提供了接口，这样可以同一使用了。
+
+在config/application.rb文件配置要使用的引擎：
+
+```
+config.active_job.queue_adapter = :delayed_job
+```
+
 # 总结
 对比以上，whenever运维用，clockwork单独用，sidekiq 在 Rails里用。
+
+最后Rails开不下去了，出了个active job。
 
 # 参考
 * http://www.cnblogs.com/wangyuyu/p/3818826.html

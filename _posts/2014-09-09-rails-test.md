@@ -3,7 +3,7 @@ layout: post
 title: Rails Test
 ---
 
-把经常在做的测试抽象成测试用例代码，比如一个功能函数。	
+把经常在做的测试过程抽象成测试用例代码，比如功能函数、操作过程、性能等任何能想到的。
 
 # RSpec
 在Rails下需要使用[rspec-rails](https://github.com/rspec/rspec-rails)，其官网参考文档很详细。
@@ -16,11 +16,12 @@ title: Rails Test
 
 如果使用rails，需要用factory_girl_rails这个gem。[这里有入门](https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md)。
 
-使用前可以配置test suite，这样就不需要在测试时前面每次都加FactoryGirl了。
+使用前可以在rspec里配置includeFactoryGirl的DSL，这样就不需要在测试时前面每次都加FactoryGirl了。
 
 ```
 # RSpec
 # spec/support/factory_girl.rb
+# 可以在rails_helper.rb里require
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 end
@@ -98,5 +99,7 @@ FactoryGirl.define do
 
 有时capybara提示ElementNotFound，可能是真的没有找到，也可能是其它地方出了问题，然后它只catch到这个错误。此时去浏览器里重现一下场景看看。
 
-#
+# 感悟
+真是越开发越知道测试的重要性，越测试越喜欢测试。不写测试代码用眼去开，那是懒惰的表现。而且测试代码也不需要多么DRY，能用就好。本来操作就是琐碎的。
 
+不写测试，反而会浪费越来越多的时间。
