@@ -93,3 +93,67 @@ end
 listener.start # not blocking
 sleep
 ```
+
+# [foreman](https://github.com/ddollar/foreman)
+
+通过Procfile配置文件来管理多进程的应用。
+
+一个Rails应用的Procfile文件如下：
+
+```
+web:    bundle exec thin start -p $PORT
+worker: bundle exec rake resque:work QUEUE=*
+clock:  bundle exec rake resque:scheduler
+```
+
+在应用根目录执行**foreman start**即可同时启动上面的进程，它们以不同的颜色显示。
+
+## 生产环境
+foreman比较适合用在开发环境，然后它可以将配置导出到[upstart](http://upstart.ubuntu.com/)或标准Unix init来使用。
+
+### Exporting to upstart
+
+```
+$ foreman export upstart /etc/init
+[foreman export] writing: /etc/init/testapp.conf
+[foreman export] writing: /etc/init/testapp-web.conf
+[foreman export] writing: /etc/init/testapp-web-1.conf
+[foreman export] writing: /etc/init/testapp-worker.conf
+[foreman export] writing: /etc/init/testapp-worker-1.conf
+[foreman export] writing: /etc/init/testapp-clock.conf
+[foreman export] writing: /etc/init/testapp-clock-1.conf
+```
+
+导出后，就可以像如下使用了：
+
+```
+$ start testapp
+$ stop testapp-clock
+$ restart testapp-worker-1
+```
+
+### Exporting to init
+
+```
+$ foreman export inittab
+# ----- foreman testapp processes -----
+TE01:4:respawn:/bin/su - testapp -c 'PORT=5000 bundle exec thin start -p $PORT >> /var/log/testapp/web-1.log 2>&1'
+TE02:4:respawn:/bin/su - testapp -c 'PORT=5100 bundle exec rake resque:work QUEUE=* >> /var/log/testapp/worker-1.log 2>&1'
+TE03:4:respawn:/bin/su - testapp -c 'PORT=5200 bundle exec rake resque:scheduler >> /var/log/testapp/clock-1.log 2>&1'
+# ----- end foreman testapp processes -----
+```
+
+## 并发
+foreman支持每一个进程样本执行不只一个进程。
+
+```
+# run 1 of each process type, and 2 workers
+$ foreman start -c worker=2
+
+# do not run a clock process
+$ foreman start -c clock=0
+```
+
+## 参考
+* http://blog.daviddollar.org/2011/05/06/introducing-foreman.html
+
