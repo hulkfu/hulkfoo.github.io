@@ -280,6 +280,65 @@ RAILS_ENV=production script/delayed_job start --exit-on-complete
 RAILS_ENV=production script/delayed_job run --exit-on-complete
 ```
 
+## 在代码中使用
+在任何对象上调用**.delay.method(params)**就会使这个method在后台执行。
+```
+# without delayed_job
+@user.activate!(@device)
+
+# with delayed_job
+@user.delay.activate!(@device)
+```
+
+如果一个方法总是需要在后台执行，可以在声明它后使用#handle_asynchronously来指明。然后可以使用methoud_without_delay来调用原来的方法。
+
+```
+class Device
+  def deliver
+    # long running method
+  end
+  handle_asynchronously :deliver
+end
+
+device = Device.new
+device.deliver
+```
+
+handle_asynchronously接受run_at，priority参数，并且值可以用Proc定义。
+
+```
+class LongTasks
+  def send_mailer
+    # Some other code
+  end
+  handle_asynchronously :send_mailer, :priority => 20
+
+  def in_the_future
+    # Some other code
+  end
+  # 5.minutes.from_now will be evaluated when in_the_future is called
+  handle_asynchronously :in_the_future, :run_at => Proc.new { 5.minutes.from_now }
+
+  def self.when_to_run
+    2.hours.from_now
+  end
+
+  class << self
+    def call_a_class_method
+      # Some other code
+    end
+    handle_asynchronously :call_a_class_method, :run_at => Proc.new { when_to_run }
+  end
+
+  attr_reader :how_important
+
+  def call_an_instance_method
+    # Some other code
+  end
+  handle_asynchronously :call_an_instance_method, :priority => Proc.new {|i| i.how_important }
+end
+```
+
 ## Capistrano 部署后自动运行
 
 ```
