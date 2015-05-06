@@ -433,7 +433,15 @@ eval "puts @val", b
 # 例子
 学习时顺便建了一个学习代码库：[ruby-study][2]，想法是让代码说话，知识点都写到注释里。下一步继续整理，并能够生成注释文档。
 
-待续。。。
+# 使用感想
+在Ruby的使用中，我越来越多的使用元编程了。不是为了酷，是因为它确实能实现更高的抽象，而这不正是编程所要去做的吗？
+只需一条指令，剩下的交给程序去处理；再复杂，也只有一个接口。
+
+> "The more you use it, the more you understand it."
+
+在使用的时候，我也会脑补一下C或者Java要如何实现，Ruby确实简单不少，能够很快实现那想法。
+但首先要意思到更高层抽象的可能性，这就关乎框架了。
+
 
 [1]: http://www.amazon.cn/gp/product/B0073APSCK/ref=as_li_tf_tl?ie=UTF8&camp=536&creative=3200&creativeASIN=B0073APSCK&linkCode=as2&tag=phun-23
     "《Ruby元编程》"
