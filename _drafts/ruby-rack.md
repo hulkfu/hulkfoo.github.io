@@ -3,7 +3,9 @@ layout: post
 title: Ruby Rack
 ---
 
-rack在英文里是“行李架”的意思。而它是在Ruby里，是Web服务器（如Thin、WEBrick）和上层应用（如Rails、Sinatra）之间的接口，它对底层的HTTP进行了接口定义，包括：request、response、cookies和sessions。
+rack在英文里是“行李架”的意思。如其名，将Rails内容放到架子合适的位置上，有Puma将它们运出；Puma将东西放到架子合适的位置上，由Rails取出。。
+
+有而它是在Ruby里，是Web服务器（如Thin、WEBrick）和上层应用（如Rails、Sinatra）之间的接口，它对底层的HTTP进行了接口定义，包括：request、response、cookies和sessions。
 
 一个Rack应用就是一个对访问做应答的对象。它只接收环境一个参数，然后返回三个值：status、headers和body。
 
