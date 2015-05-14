@@ -442,6 +442,8 @@ eval "puts @val", b
 在使用的时候，我也会脑补一下C或者Java要如何实现，Ruby确实简单不少，能够很快实现那想法。
 但首先要意思到更高层抽象的可能性，这就关乎框架了。
 
+元编程，让代码可以动态的定义。充分利用字符变量，可以成为方法名、代码块、变量名，因为有define_method、eval、instance_variable_get等方法。
+
 
 [1]: http://www.amazon.cn/gp/product/B0073APSCK/ref=as_li_tf_tl?ie=UTF8&camp=536&creative=3200&creativeASIN=B0073APSCK&linkCode=as2&tag=phun-23
     "《Ruby元编程》"
