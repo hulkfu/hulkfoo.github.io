@@ -20,6 +20,10 @@ Swift更像Java，需要编译，但是代码是运行在虚拟机上的。
 Java中的接口，只定义行为，实习多继承。
 
 
+# 调用Objective-C
+
+* 创建一个.h的头文件，包含所有要开放给Swift的函数声明。
+* 在build settings里设置。在项目—TARGETS，找到Swift Compiler - Code Generation这一项，这里有一项，Objective-C Bridging Header，在其值的地方，填入头文件信息即可。
 
 
 很开心，Swift要开源了。我仿佛看到了它的辉煌，所以一定要学习。

@@ -154,6 +154,22 @@ $ foreman start -c worker=2
 $ foreman start -c clock=0
 ```
 
-## 参考
-* http://blog.daviddollar.org/2011/05/06/introducing-foreman.html
+# [opal](https://github.com/opal/opal)
 
+可以将ruby翻译成javascript。
+
+感觉js像是浏览器的机器语言，任何代码想在浏览器上运行，写了编译器翻译过去就好了。因为简单，所以强大！
+
+```ruby
+Opal.compile("[1, 2, 3].each { |a| puts a }")
+# => "(function() { ... })()"
+```
+
+# [volt](https://github.com/voltrb/volt/)
+
+一个用ruby写前端和后台的web框架。
+
+
+# 参考
+* http://blog.daviddollar.org/2011/05/06/introducing-foreman.html
+* http://www.oschina.net/translate/ruby-is-about-to-get-red-hot-again
