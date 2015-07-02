@@ -5,6 +5,8 @@ title: Off The Wall
 
 对，我喜欢Vans！无拘无束，见沟飞，见墙翻。
 
+只为科学上网！
+
 没有VPS又不想花钱买VPN的话用goAgent，有VPS的话可以架VPN，也可以使用隧道接口然后在使用时反向代理。
 
 # [goAgent](https://github.com/goagent/goagent)
@@ -47,14 +49,38 @@ sudo ssserver -d stop
 sudo less /var/log/shadowsocks.log
 ```
 
-## Client连接
+## Linux/MacOS Client 使用
+
+1.首先也安装ss：pip install shadowsocks
+
+2.然后执行下面的命令，不用装什么客户端：
 
 ```
 sslocal -s IP -p PORT -b 127.0.0.1 -l 1080 -k PASSWORD -t 600 -m aes-256-cfb
 
 ```
 
-然后在Chrome中就可以用SwitchOmega来使用了。
+3.在Chrome下用[SwitchyOmega](https://github.com/FelisCatus/SwitchyOmega)设置即可。
+
+## iOS 使用
+
+去下载官方应用，[iTunes走起](https://itunes.apple.com/us/app/shadowsocks/id665729974?ls=1&mt=8)。
+
+### 浏览器使用
+可以通过**+**来设置自己的代理，默认会用公用的代理。
+
+### 本地全局PAC代理
+
+但有以下限制：
+
+* 需要WiFi联网。
+* 只能用几分钟。因为iOS的限制，它不能在后台一直运行，所以需要不时的来看看。
+
+设置代理：
+
+* 打开iOS的设置 -> Wi-Fi -> i 图标（在当前所连WiFi的后面） -> HTTP 代理
+* 选择自动，输入http://127.0.0.1:8090/proxy.pac
+* 返回
 
 # SSH
 
@@ -156,7 +182,7 @@ iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -o eth0 -j MASQUERADE
 
 参考：http://freenuts.com/how-to-set-up-a-vpn-in-a-vps/
 
-# 关于DNS
+# 关于VPS
 
 我目前用的是DigitalOcean的最低版本（5美元/月），这里有推荐链接，使用可以多得10美元：[https://www.digitalocean.com/?refcode=3d496b50e388](https://www.digitalocean.com/?refcode=3d496b50e388)
 
