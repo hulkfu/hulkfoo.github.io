@@ -231,11 +231,11 @@ COMMIT
 ...
 ```
 
-参考：
+#### 参考：
+
 * http://www.cviorel.com/2009/02/09/how-to-set-up-a-vpn-server-on-ubuntu/
 * http://askubuntu.com/questions/119534/easiest-way-to-setup-ubuntu-as-a-vpn-server
 * http://ubuntuforums.org/showthread.php?t=1113911
-
 
 # 关于VPS
 
