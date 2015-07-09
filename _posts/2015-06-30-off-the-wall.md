@@ -184,6 +184,11 @@ iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -o eth0 -j MASQUERADE
 
 ## UFW防火墙配置
 
+### 允许1723默认端口
+```
+sudo ufw allow 1723
+```
+
 ### 在**/etc/default/ufw**里将DEFAULT_FORWARD_POLICY 变成 “ACCEPT”:
 
 ```
