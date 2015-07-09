@@ -182,6 +182,61 @@ iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -o eth0 -j MASQUERADE
 
 参考：http://freenuts.com/how-to-set-up-a-vpn-in-a-vps/
 
+## UFW防火墙配置
+
+### 在**/etc/default/ufw**里将DEFAULT_FORWARD_POLICY 变成 “ACCEPT”:
+
+```
+DEFAULT_FORWARD_POLICY="ACCEPT"
+```
+
+### 在**/etc/ufw/before.rules**文件里
+
+#### 1. 在Don't delete these required lines上面加入
+
+```
+# NAT table rules
+*nat
+
+:POSTROUTING ACCEPT [0:0]
+# Allow forward traffic to eth0
+-A POSTROUTING -s 192.168.0.0/24 -o eth0 -j MASQUERADE
+
+# Process the NAT table rules
+COMMIT
+
+# Don't delete these required lines, otherwise there will be errors
+...
+```
+
+#### 2. 在filter部分前面加入（其实位置都无所谓，只要在require后，COMMIT前即可）
+
+```
+# First, since we trust pptpd completely, I would accept all traffic to/from my pptpd. I added this lines at the beginning of the filter section.
+-A ufw-before-input -i ppp+ -j ACCEPT
+-A ufw-before-output -i ppp+ -j ACCEPT
+
+# Additionally, I must forward traffic to/from my pptpd. These lines was also added after the above lines.
+-A ufw-before-forward -s 192.168.0.0/24 -j ACCEPT
+-A ufw-before-forward -d 192.168.0.0/24 -j ACCEPT
+```
+
+#### 3. 在drop INVALID packets前面加上：
+
+```
+-A ufw-before-input -p 47 -j ACCEPT
+-A ufw-before-output -p 47 -j ACCEPT
+
+# drop INVALID packets (logs these in loglevel medium and higher)
+...
+```
+
+参考：
+* http://www.cviorel.com/2009/02/09/how-to-set-up-a-vpn-server-on-ubuntu/
+* http://askubuntu.com/questions/119534/easiest-way-to-setup-ubuntu-as-a-vpn-server
+* http://ubuntuforums.org/showthread.php?t=1113911
+
+
 # 关于VPS
 
 我目前用的是DigitalOcean的最低版本（5美元/月），这里有推荐链接，使用可以多得10美元：[https://www.digitalocean.com/?refcode=3d496b50e388](https://www.digitalocean.com/?refcode=3d496b50e388)
