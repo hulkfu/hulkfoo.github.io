@@ -50,7 +50,7 @@ Adding user '<username>' to group 'libvirtd' ...
 
 然后需要relogin一次，使用户加入libvirtd组。
 
-## 4.使用
+## 4.管理
 
 ### virt-manager
 安装图形化管理界面virt-manager，直接就可以使用了。
@@ -62,6 +62,34 @@ Adding user '<username>' to group 'libvirtd' ...
 ```
 virt-install -r 1024 --name xp --disk path=./xp2.img,size=8 --network network:default --cdrom ~/Downloads/xpsp3.iso --os-type=windows --accelerate --graphics vnc
 ```
+
+### [webvirtmgr](https://github.com/retspen/webvirtmgr)
+Django写的web管理。所依赖包有：
+
+* libvirt-python：libvirt的python接口。
+* novnc：web端vnc。
+* supervisor：监控服务器，如自动运行webvirtmgr、配置noVNC。
+* nginx：web反向代理服务器。
+
+
+按照官方说明，配置好nginx后，配置supervisor，然后是配置ssh（如果用ssh来连接libvirt服务器）。
+
+
+当然，也可以手动启动服务，在webvirtmgr的根目录下启动本地服务：
+
+```
+./manage runserver
+```
+
+然后重启nginx，就会将8000端口的服务映射到80上了。
+
+然后开启[noVNC](https://github.com/kanaka/noVNC)，这样就可以在浏览器中查看界面了。
+
+```
+$ websockify 6080 127.0.0.1:5900
+$ sudo iptables -I INPUT -m state --state NEW -s YOUR_IP_ADDRESS -m tcp -p tcp --dport 6080 -j ACCEPT
+```
+
 
 # 吐槽
 好吧，又掌握了一项新技能，虚拟机平台，听说搜狗几千台服务器就是用的libvirt。一直以为很复杂呢，因为管几千台机器呢，结果用了一个晚上就能跑起来了（因为我只知道个大概原理，然后会敲命令用就行）。
