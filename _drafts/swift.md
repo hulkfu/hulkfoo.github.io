@@ -25,9 +25,23 @@ Java中的接口，只定义行为，实习多继承。
 * 创建一个.h的头文件，包含所有要开放给Swift的函数声明。
 * 在build settings里设置。在项目—TARGETS，找到Swift Compiler - Code Generation这一项，这里有一项，Objective-C Bridging Header，在其值的地方，填入头文件信息即可。
 
+# 使用[cocoapods](https://cocoapods.org/)
+cocoapods是用Ruby写的，看使用方法就是bundle的路子。
 
+用到的pod是用OC写的，就用上面的方法桥接一下。
+
+```
+pod install
+```
+
+后会提醒去项目工程里，在build setting里，在ohter flag里多加一项**$(inherited)**，因为它覆盖了Pods里的。
+
+
+# 感想
 很开心，Swift要开源了。我仿佛看到了它的辉煌，所以一定要学习。
 
 苹果是尊重开发者的，因为它的创始人就是俩个geek。
 
 通过App的开发，我能把自己的创意分享给大家，很是开心！
+
+有了开发cocos2d-x游戏的经验，何惧用代码写界面？这是个一劳永逸的事情。
