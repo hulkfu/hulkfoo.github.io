@@ -3,7 +3,14 @@ layout: post
 title: 编程语言实现模式
 ---
 
-读《编程语言实现模式》，Terence Parr著，一直对“The Pragmatic Programmers”系列的书存在好感，因为写书的人都是实践派，里面有真货。
+从某种意义上说，动态规则处理时间的方式类似于静态作用域处理空间的方式。
+静态规则让我们寻找的声明位于最内层的、包含变量使用位置的单元（块）中;
+而动态规则让我们寻找的声明位于最内层的、包含了变量使用时间的单元（过程调用）中。
+
+# 符号表管理器
+记录源程序中使用的变量的名字，并收集和每个名字的各种属性有关的信息。
+
+
 
 # Lexer
 词法解析器。
@@ -16,6 +23,7 @@ title: 编程语言实现模式
 在Lexer的过程中，判断语法是否正确，正确的话按语义执行操作。如解析出[a,b,c]，就把a,b,c存成数组。
 
 
-
+* 龙书
+* 读《编程语言实现模式》，Terence Parr著，一直对“The Pragmatic Programmers”系列的书存在好感，因为写书的人都是实践派，里面有真货。
 * https://github.com/chriswailes/RLTK
 * https://github.com/manastech/crystal

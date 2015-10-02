@@ -68,5 +68,21 @@ $ bin/rails runner -e staging "Model.long_running_method"
 
 还有validates_with和validates_each，前者使用自定义的验证类；后者直接在块里定义验证。
 
-
 * http://guides.rubyonrails.org/active_record_validations.html
+
+
+# helper
+在app目录下，有一个helpers目录，它和models、views等是同级的。
+
+它在view中使用，让view只是view，而把复杂的逻辑放到helper里，而且helper里的方法可以在view间通用，如css那样。这样的好处是：
+
+* 精简view。因为我们希望的在view里看到是所见即所得的，有时可能是UI直接给的HTML。
+* 方便测试helper。
+
+从定义可以看出，helper是个module，如果想在其它地方使用，比如controller中，直接include即可。
+
+其实在view中使用的path等，都是helper。
+
+* http://mixandgo.com/blog/the-beginner-s-guide-to-rails-helpers
+
+
