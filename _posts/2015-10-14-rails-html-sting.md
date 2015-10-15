@@ -5,10 +5,13 @@ title: Rails中的html string
 
 在html语言中，**'"<>&**这个5个符号有着特殊的作用，如定义标签、属性，嵌入JS代码等，但是有时候又需要显示这些字符。那么如何区分呢？
 
-显示的时候转义：HTML_ESCAPE = { '&' => '&amp;',  '>' => '&gt;',   '<' => '&lt;', '"' => '&quot;', "'" => '&#39;' }
+显示的时候转义。
 
+在Rails的active_support/core_ext/string/output_safety.rb中，定义了HTML_ESCAPE = { '&' => '&amp;',  '>' => '&gt;',   '<' => '&lt;', '"' => '&quot;', "'" => '&#39;' }
 
-在view中，
+每个被显示的字符串都会变成SafeBuffer对象的。
+
+如：
 
 ```
 <%= <script>"alert('ok')"</script> %>  #=> &lt;script&gt;alert(&#39;ok&#39;)&lt;/script&gt;
@@ -40,7 +43,7 @@ class String
   # `raw` helper in views. It is recommended that you use `sanitize` instead of
   # this method. It should never be called on user input.
   def html_safe
-    ActiveSupport::SafeBuffer.new(self)
+    ActiveSupport::SafeBuffer.new(self) # 在ruby里，这种用法很常见——把自己作为参数。
   end
 end
 ```
@@ -49,3 +52,4 @@ end
 
 * https://github.com/rails/rails/blob/master/activesupport/lib/active_support/core_ext/string/output_safety.rb
 * https://ruby-china.org/topics/16633
+* http://stackoverflow.com/questions/4251284/raw-vs-html-safe-vs-h-to-unescape-html
