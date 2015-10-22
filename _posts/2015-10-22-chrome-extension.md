@@ -5,9 +5,16 @@ title: Chrome 扩展插件
 
 开发个东西，如果不能让开发者去扩展去玩耍，那么肯定不行。开发者的力量太强大了，他们用自己的双手改造着这个世界。
 
+# 框架
 
+可参考google的[get started](https://developer.chrome.com/extensions/getstarted).
 
-# 扩展访问页面
+* manifest.json：配置文件。
+* icon.png：图标。
+* popup.html：点击图标弹出的界面。
+* *.js：js文件。为了安全，popup.html里不能写js代码，只能引用。
+
+# 访问页面
 
 要知道，插件与所访问的网页直接是隔离的，即不能相互访问。如果需要访问，Content scripts。
 
@@ -69,6 +76,8 @@ chrome.tabs.executeScript(null, {file: "content_script.js"});
 
 这就相当于引用了。
 
+* https://developer.chrome.com/extensions/tabs#method-executeScript
+
 ## 运行环境
 即使是注入的content script，其也是与网页隔离的。它们能操控DOM，但是不能访问网页里的js变量或函数，看起来就像只有一个静态页面。
 
@@ -79,8 +88,6 @@ chrome.tabs.executeScript(null, {file: "content_script.js"});
 明白环境隔离很重要。等于是在写两个独立的页面，但静态的东西是一样的。而且content script里的js和extension里的js也是不通的。
 
 * https://developer.chrome.com/extensions/content_scripts
-
-# 参考
 
 # 吐槽
 同样是搜索引擎公司，google对世界做了多大的贡献啊，有Android、Chrome、Go、Angular等开源的项目，有让没有网线的地方上网的热气球，有眼镜，有自动驾驶的车。
