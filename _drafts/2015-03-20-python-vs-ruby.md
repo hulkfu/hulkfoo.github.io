@@ -63,3 +63,18 @@ Rails比较难，是因为它需要有很多其它相关知识：浏览器如何
 
 Python侧重过程，而Ruby都是类。
 
+# PyInstaller
+Python有个pyinstaller，真是个好东西，能打包成方便发行的二进制文件。Ruby也有(ocra)[https://github.com/larsch/ocra]，但只支持windows平台。
+
+```
+pyinstaller -F xxx.py
+```
+
+就能打包成一个可执行文件，否则默认是-D，即打包成一个文件夹。前者在执行时也是在临时目录里先解压成一个文件夹。
+
+是的，我特别喜欢能够分发的二进制文件，所以喜欢终端开发。
+
+# 感想
+我是太爱Ruby了，所以会排斥Python，虽然我掌握了Python。
+
+
