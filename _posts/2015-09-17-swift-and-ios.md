@@ -27,7 +27,6 @@ self.navigationController?.popViewControllerAnimated(true)
 # extension
 很惊奇的发现，extension关键字可以将类打开。
 
-
 Swift更像Java，需要编译，但是代码是运行在虚拟机上的。
 
 
@@ -38,7 +37,7 @@ Java中的接口，只定义行为，实习多继承。
 # 调用Objective-C
 
 * 创建一个.h的头文件，包含所有要开放给Swift的函数声明。
-* 在build settings里设置。在项目—TARGETS，找到Swift Compiler - Code Generation这一项，这里有一项，Objective-C Bridging Header，在其值的地方，填入头文件信息即可。
+* 在build settings里设置。在项目—TARGETS，找到Swift Compiler - Code Generation这一项，这里有一项，Objective-C Bridging Header，在其值的地方，填入头文件信息即可。在这里注意正确的路径。
 
 # 使用[cocoapods](https://cocoapods.org/)
 cocoapods是用Ruby写的，看使用方法就是bundle的路子。
