@@ -77,4 +77,5 @@ pyinstaller -F xxx.py
 # 感想
 我是太爱Ruby了，所以会排斥Python，虽然我掌握了Python。
 
+说实话，写Python的感觉有点儿像js。
 
