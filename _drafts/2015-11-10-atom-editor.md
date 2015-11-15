@@ -10,8 +10,4 @@ title: Atom 编辑器
 
 我写完之后，最后一apm publish，竟然给发布上去了：[ascii-art](https://atom.io/packages/ascii-art)。
 
-主要步骤：
-
-
-
 * https://atom.io/docs/v1.1.0/hacking-atom-package-modifying-text
