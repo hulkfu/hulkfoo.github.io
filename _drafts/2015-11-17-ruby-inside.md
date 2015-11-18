@@ -27,6 +27,34 @@ puts RubyVM::InstructionSequence.compile(code).disassemble
 
 ```
 
+
+
+# Tokenization and Parsing
+将文本格式的代码转成抽象语法树。
+
+Ruby使用[Bison](https://www.gnu.org/software/bison/)来完成，但自己写了寻找token的代码。
+
+按照Bison的语法，Ruby的语法定义在parse.y文件里。
+
+## Token
+
+
+## LALR(Look-Ahead Left Reversed Rightmost Derivation)
+
+* Look Ahead
+* Left Reversed
+* Rightmost Derivation
+
+## AST(Abstract Syntaxre Tree)
+抽象语法树
+
+
+# Compilation
+
+
+
 # 参考
 
 * http://blog.honeybadger.io/how-ruby-interprets-and-runs-your-programs/
+* Ruby Under a Microscope
+* https://www.gnu.org/software/bison/
