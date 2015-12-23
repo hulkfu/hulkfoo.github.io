@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Linux Shell
+title: Bash Shell
 ---
 
 * $#，参数个数。
