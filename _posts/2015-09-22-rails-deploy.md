@@ -178,6 +178,15 @@ server {
 
 重启Nginx就可以访问啦，如果有问题去/log/nginx/error.log 去排出解决。
 
+## 更新
+这里是手动的，当然可以用capistrano自动哦:)，只是明白了手动才知道自动是为什么。
+
+```
+bundle install --deployment --without development test
+bundle exec rake assets:precompile db:migrate RAILS_ENV=production
+passenger-config restart-app $(pwd)
+```
+
 # 参考
 * https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/
 * http://bundler.io/rationale.html
