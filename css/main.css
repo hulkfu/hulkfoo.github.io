@@ -81,7 +81,7 @@ blockquote {
 }
 
 .title a {
-  color: #1D87B9;
+  color: #0000CC;
 }
 
 .title a:hover {
@@ -176,12 +176,19 @@ blockquote {
 }
 
 .post h1 {
+  color: #000000;
   margin-top: 1.5em;
   font-size: 1.5em;
 }
 
 .post h2 {
-  color: gray;
+  color: #006699;
   margin-top: 1.3em;
   font-size: 1.3em;
+}
+
+.post h3 {
+  color: #5099CC;
+  margin-top: 1.1em;
+  font-size: 1.1em;
 }
