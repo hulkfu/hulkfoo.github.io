@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 部署Ruby China
+title: 部署 Ruby China
 ---
 
 把Ruby-China跑到自己的服务器上了。
@@ -156,8 +156,43 @@ bundle exec rake
 只要上面配置好，测试会一遍跑通。
 
 # 部署
-待续...
 
+参考[Rails部署](http://fuhao.im/2015/09/22/rails-deploy.html)和
+[Ruby-China的WiKi](https://github.com/ruby-china/ruby-china/wiki/Ubuntu-14.04-%E4%B8%8A%E4%BD%BF%E7%94%A8-Nginx-Passenger-%E9%83%A8%E7%BD%B2-Ruby-on-Rails)。
+
+但是按照上面会出现两个问题HTTPS和没有资源文件。
+
+## HTTPS
+
+简单粗暴的方法，在 config/environments/production.rb配置文件里关掉https：
+
+```
+config.force_ssl = false
+```
+
+另外则是要配置HTTPS服务器啦。
+
+
+。。。。
+
+## CDN配置
+
+之后可以访问了，虽然已经precompile资源文件，可还是没有css等资源文件。
+
+看源码，发现stylesheet引用的文件NOT FOUND。
+
+因为Ruby-China使用的是upyun的cdn，会发现上面的那个文件是指向upyun的，而不是本地的。
+
+再参考 config/deploy.rb 文件，发现：
+
+```ruby
+task :compile_assets, roles: :web do
+  run "cd #{current_path}; RAILS_ENV=production bundle exec rake assets:precompile"
+  run "cd #{current_path}; RAILS_ENV=production bundle exec rake assets:cdn"
+end
+```
+
+所以需要执行assets:cdn任务，将资源文件传上去，之后就可以正常访问啦！
 
 # 参考
 * https://github.com/ruby-china/ruby-china
