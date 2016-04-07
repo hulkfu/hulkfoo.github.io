@@ -267,6 +267,9 @@ config.action_controller.asset_host = Setting.upload_url
 源代码下下来没用，只有研究明白了，知道是怎么写的，才算是好的。一个好的项目的代码，如同一部精彩的
 文学作品，细细品来，里面有作者的精心设计的框架，有精妙的生花之笔，有漂亮的启承转合，漂亮！
 
+Rails并没有深不可测，它也是一个Ruby项目，虽然有些自己的DSL，分析时要时刻记住这点，Rails并没有
+什么魔法！
+
 # 参考
 * https://github.com/ruby-china/ruby-china
 * http://www.ruanyifeng.com/blog/2013/12/getting_started_with_postgresql.html
