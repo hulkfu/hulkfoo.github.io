@@ -160,24 +160,18 @@ bundle exec rake
 参考[Rails部署](http://fuhao.im/2015/09/22/rails-deploy.html)和
 [Ruby-China的WiKi](https://github.com/ruby-china/ruby-china/wiki/Ubuntu-14.04-%E4%B8%8A%E4%BD%BF%E7%94%A8-Nginx-Passenger-%E9%83%A8%E7%BD%B2-Ruby-on-Rails)。
 
-但是按照上面会出现两个问题HTTPS和没有资源文件。
+但是按照上面会出现两个问题：没有资源文件和HTTPS访问。
 
-## HTTPS
 
-简单粗暴的方法，在 config/environments/production.rb配置文件里关掉https：
+## CDN配置
+
+对于https，简单粗暴的方法，在 config/environments/production.rb配置文件里关掉https：
 
 ```
 config.force_ssl = false
 ```
 
-另外则是要配置HTTPS服务器啦。
-
-
-。。。。
-
-## CDN配置
-
-之后可以访问了，虽然已经precompile资源文件，可还是没有css等资源文件。
+虽然已经precompile资源文件，可还是没有css等资源文件。
 
 看源码，发现stylesheet引用的文件NOT FOUND。
 
@@ -193,6 +187,85 @@ end
 ```
 
 所以需要执行assets:cdn任务，将资源文件传上去，之后就可以正常访问啦！
+
+## HTTPS
+
+如果想使用https呢，那么常规的方法在此。
+
+### 1.生成证书
+
+```
+openssl req -new -newkey rsa:2048 -nodes -keyout myapp.key -out myapp.csr
+
+# 生成证书
+openssl x509 -req -days 3650 -in myapp.csr -signkey myapp.key -out myapp.crt
+```
+
+有钱的话可以申请正规的哦～
+
+### 2.配置Nginx
+
+```
+server {
+        listen 80 default;
+        listen 443 ssl;
+
+        server_name myapp.com;
+
+        root /home/deploy/apps/myapp/public;
+
+        ssl on;
+        ssl_certificate /etc/ssl/myapp.crt;
+        ssl_certificate_key /etc/ssl/myapp.key;
+
+        ssl_session_timeout 5m;
+        ssl_protocols SSLv2 SSLv3 TLSv1;
+        ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+        ssl_prefer_server_ciphers on;
+
+        passenger_enabled on;
+        passenger_ruby /home/deploy/.rbenv/versions/2.3.0/bin/ruby;
+
+}
+
+```
+
+然后重启Nginx。
+
+###
+
+按理说应该OK的，但错误不期而遇，看Chrome里的Log：
+
+```
+xxx was loaded over HTTPS, but requested an insecure stylesheet
+```
+
+原理css文件也要通过https传输，而我们的还是http，就被block了。
+
+于是去config/config.yml里更改upload_url，加个s。
+
+然后重启precompile assets，然后同步传到cdn上。
+
+这样按道理重启Passenger就会又见css的，可是没有，因为我们用的人家Ruby-China的测试cdn，没有开通
+https权限。
+
+好吧，那我把assets改到我自己的服务器上好吧，就改上面的upload_url吧，
+因为它在config/environment/production.rb里是这样被使用的：
+
+```
+config.action_controller.asset_host = Setting.upload_url
+```
+
+很简单，改成“”，那么就会默认使用本机的assets路径啦。
+
+
+# 感想
+从ruby-china能学到很到，代码也紧跟Rails的最新版。
+
+要另开一篇专门研究ruby-china。
+
+源代码下下来没用，只有研究明白了，知道是怎么写的，才算是好的。一个好的项目的代码，如同一部精彩的
+文学作品，细细品来，里面有作者的精心设计的框架，有精妙的生花之笔，有漂亮的启承转合，漂亮！
 
 # 参考
 * https://github.com/ruby-china/ruby-china
