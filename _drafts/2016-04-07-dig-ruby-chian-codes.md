@@ -11,6 +11,10 @@ title: 研究Ruby-China的代码
   config.action_controller.asset_host = Setting.upload_url
 
 
+[rails-settings-cached](https://github.com/huacnlee/rails-settings-cached)是存动态设置的，
+能够在运行时修改保存到数据库中，而已有缓存功能。
+
+
 # 需要修改的地方
 因为是想做出一个大众论坛
 
