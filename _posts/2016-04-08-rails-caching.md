@@ -214,85 +214,109 @@ end
 ```
 
 # Cache Stores
+Rails对Action和Fragment提供不同的Cache储存方案，Page存储在硬盘里。
 
-## 1.ActiveSupport::Cache::Store
-This class provides the foundation for interacting with the cache in Rails. This is an abstract class and you cannot use it on its own. Rather you must use a concrete implementation of the class tied to a storage engine. Rails ships with several implementations documented below.
+可以通过 config.cache_store= 来配置，针对所以的在config/application.rb文件里，针对不同环境的
+在config/environments/*.rb各个文件里。
 
-The main methods to call are read, write, delete, exist?, and fetch. The fetch method takes a block and will either return an existing value from the cache, or evaluate the block and write the result to the cache if no value exists.
+第一个参数是使用的cache store，后面的将会作为参数传给cache store的构造函数。
 
+## ActiveSupport::Cache::Store
+这个类提供Rails与cache交互的方法，但它是一个抽象类，需要相应的cache store的具体实现类才能使用。
 
+主要有read, wreite, delete, exist? 和 fetch 方法。Fetch方法能够接受一个block，这样有值的话
+就会返回，没有的话就会执行block，然后将结果写入到cache并返回。
 
-## 2.ActiveSupport::Cache::MemoryStore
-This cache store keeps entries in memory in the same Ruby process. The cache store has a bounded size specified by the :size options to the initializer (default is 32Mb). When the cache exceeds the allotted size, a cleanup will occur and the least recently used entries will be removed.
+下面分别介绍支持的cache store：
 
+### 1. ActiveSupport::Cache::MemoryStore
+MemoryStore类型的存储方式会把所有内容存到Ruby的同一个进程里。它有一个:size参数来定义最大缓存内存大小，
+默认是32Mb。当cache超过这个值，那么将会执行清理程序，最少使用的内容将被清理。
+
+```ruby
 config.cache_store = :memory_store, { size: 64.megabytes }
-If you're running multiple Ruby on Rails server processes (which is the case if you're using mongrel_cluster or Phusion Passenger), then your Rails server process instances won't be able to share cache data with each other. This cache store is not appropriate for large application deployments, but can work well for small, low traffic sites with only a couple of server processes or for development and test environments.
+```
 
+如果跑了多个Rails进程（就像使用mongrel_cluster or Phusion Passenger的情况下），那么这些Rails
+进程间将不会共享缓存。这种方式不适合大型应用的，但对浏览小的小网站的开发和测试还是适合的。
 
+### 2. ActiveSupport::Cache::FileStore
+FileStore将内容存到文件里，如果需要指定文件路径，需要事先指明：
 
-
-## ActiveSupport::Cache::FileStore
-This cache store uses the file system to store entries. The path to the directory where the store files will be stored must be specified when initializing the cache.
-
+```ruby
 config.cache_store = :file_store, "/path/to/cache/directory"
-With this cache store, multiple server processes on the same host can share a cache. Servers processes running on different hosts could share a cache by using a shared file system, but that set up would not be ideal and is not recommended. The cache store is appropriate for low to medium traffic sites that are served off one or two hosts.
+```
 
-Note that the cache will grow until the disk is full unless you periodically clear out old entries.
+这种方式下，多个Server进程间可以共享同一个缓存。即使不同主机的Servers进程也可以通过文件共享系统
+共享同一个缓存，但这是不推荐的。这种方式时候中低流量的部署在一两个主机下的网站。
 
-This is the default cache store implementation.
+注意：缓存的大小会一直增加到整个磁盘的大小，除非你清理一下。
 
-
-## ActiveSupport::Cache::MemCacheStore
-This cache store uses Danga's memcached server to provide a centralized cache for your application. Rails uses the bundled dalli gem by default. This is currently the most popular cache store for production websites. It can be used to provide a single, shared cache cluster with very high performance and redundancy.
-
-When initializing the cache, you need to specify the addresses for all memcached servers in your cluster. If none is specified, it will assume memcached is running on the local host on the default port, but this is not an ideal set up for larger sites.
-
-The write and fetch methods on this cache accept two additional options that take advantage of features specific to memcached. You can specify :raw to send a value directly to the server with no serialization. The value must be a string or number. You can use memcached direct operation like increment and decrement only on raw values. You can also specify :unless_exist if you don't want memcached to overwrite an existing entry.
+这种方式也是默认的缓存方式。
 
 
+### 3. ActiveSupport::Cache::MemCacheStore
+MemCachStore这种放方式使用memcached server来提供集中的缓存服务。
+
+Rails默认使用dalli gem来对接。这也是当下产品部署最流行的方式。
+
+它能够提供一种单一的共享的缓存集群，并且具有很好的性能和冗余。
+
+当初始化这个cache，需要指定memcached servers的地址和端口。如果没有设置，就默认localhost的默认
+端口，显然对于大型网络是不理想的。
+
+这种方式下，write和fetch方法接受两个额外的参数。你可以使用:raw参数直接传送给server没有序列化的
+数据，但这个值必须是string或数字。可以通过memcached直接操作raw数据，比如加或减。也可以使用
+:unless_exist参数使memcached不覆盖已有的内容。
 
 
-## ActiveSupport::Cache::EhcacheStore
-If you are using JRuby you can use Terracotta's Ehcache as the cache store for your application. Ehcache is an open source Java cache that also offers an enterprise version with increased scalability, management, and commercial support. You must first install the jruby-ehcache-rails3 gem (version 1.1.0 or later) to use this cache store.
+### 4. ActiveSupport::Cache::EhcacheStore
+EhcacheStore是在使用JRuyb下使用的，它以Terracotta's Ehcache为后台。
 
 
+### 5. ActiveSupport::Cache::NullStore
+NullStore用在测试和开发环节，如其名，不存任何东西，所有对cache的访问都将miss。
 
-
-## ActiveSupport::Cache::NullStore
-This cache store implementation is meant to be used only in development or test environments and it never stores anything. This can be very useful in development when you have code that interacts directly with Rails.cache, but caching may interfere with being able to see the results of code changes. With this cache store, all fetch and read operations will result in a miss.
-
+```ruby
 config.cache_store = :null_store
-2.8 Custom Cache Stores
-You can create your own custom cache store by simply extending ActiveSupport::Cache::Store and implementing the appropriate methods. In this way, you can swap in any number of caching technologies into your Rails application.
+```
 
-To use a custom cache store, simple set the cache store to a new instance of the class.
+### 6. 自定义自己的Cache Store
+通过扩展ActiveSupport::Cache::Store类，并实现相应的方法，就可以自定义cache store了。
 
+在配置文件那里新建cache store类的实例即可使用了：
+
+```ruby
 config.cache_store = MyCacheStore.new
-
-
+```
 
 ## Cache Keys
-The keys used in a cache can be any object that responds to either :cache_key or to :to_param. You can implement the :cache_key method on your classes if you need to generate custom keys. Active Record will generate keys based on the class name and record id.
+cache中使用的key可以在任何响应 :cache_key 或 :to_param的对象中生成，你也可以在自己的类定义中定义
+:cache_key方法。ActiveRecord是通过类名和id及更新时间来生成cache key的。
 
 You can use Hashes and Arrays of values as cache keys.
+可以使用Hash和Array的值作为cache key：
 
 ```ruby
 # This is a legal cache key
 Rails.cache.read(site: "mysite", owners: [owner_1, owner_2])
 ```
 
-The keys you use on Rails.cache will not be the same as those actually used with the storage engine. They may be modified with a namespace or altered to fit technology backend constraints. This means, for instance, that you can't save values with Rails.cache and then try to pull them out with the memcache-client gem. However, you also don't need to worry about exceeding the memcached size limit or violating syntax rules.
+在Rails.cache中的key值将因为不同的后台引擎而不同。这些key值可能会加一个namespace或其它改变。所以
+不同的后台，生成的key将不同。
 
 
+# 有条件的 GET 支持
+有条件GETs是HTTP协议的一个功能，它定义一种方法让Server告诉浏览器这次访问的请求与上次的请求相同，所以
+可以直接使用浏览器cache的内容，从而减少了HTTP传输。
 
+通过使用HTTP_IF_NONE_MATCH 和 HTTP_IF_MODIFIED_SINCE头及内容的id和时间戳来工作。如果浏览器请求的内容id（即etag）或
+上次更新时间戳与服务器上的版本相同，那么服务器只需要返回一个带有没有改变的空相应。
 
-# Conditional GET support
-Conditional GETs are a feature of the HTTP specification that provide a way for web servers to tell browsers that the response to a GET request hasn't changed since the last request and can be safely pulled from the browser cache.
+Server通过查看请求的时间戳和 if-none-match 头来决定是否相应全部内容，
+在Rails中，conditional-get如下使用：
 
-They work by using the HTTP_IF_NONE_MATCH and HTTP_IF_MODIFIED_SINCE headers to pass back and forth both a unique content identifier and the timestamp of when the content was last changed. If the browser makes a request where the content identifier (etag) or last modified since timestamp matches the server's version then the server only needs to send back an empty response with a not modified status.
-
-It is the server's (i.e. our) responsibility to look for a last modified timestamp and the if-none-match header and determine whether or not to send back the full response. With conditional-get support in Rails this is a pretty easy task:
-
+```ruby
 class ProductsController < ApplicationController
 
   def show
@@ -312,8 +336,12 @@ class ProductsController < ApplicationController
     # :not_modified. So that's it, you're done.
   end
 end
-Instead of an options hash, you can also simply pass in a model, Rails will use the updated_at and cache_key methods for setting last_modified and etag:
+```
 
+不用hash参数的话，也可以使用实例来代替，Rails会根据updated_at和cache_key来生成
+last_modified和etag的：
+
+```ruby
 class ProductsController < ApplicationController
   def show
     @product = Product.find(params[:id])
@@ -325,8 +353,11 @@ class ProductsController < ApplicationController
     end
   end
 end
-If you don't have any special response processing and are using the default rendering mechanism (i.e. you're not using respond_to or calling render yourself) then you've got an easy helper in fresh_when:
+```
 
+如果你不想对相应做特殊处理，使用默认的模板生成，那么可以简单使用 fresh_when：
+
+```ruby
 class ProductsController < ApplicationController
 
   # This will automatically send back a :not_modified if the request is fresh,
@@ -337,18 +368,14 @@ class ProductsController < ApplicationController
     fresh_when last_modified: @product.published_at.utc, etag: @product
   end
 end
+```
 
-
-
-
-
-# 常用Caching 方案 ———— Memocached + Dalli
+# 常用Caching 方案 —— Memocached + Dalli
 
 ## [memcached](https://memcached.org/)
 
 ## [Dalli](https://github.com/petergoldstein/dalli)
-
-Dalli is a high performance pure Ruby client for accessing memcached servers. It works with memcached 1.4+ only as it uses the newer binary protocol. It should be considered a replacement for the memcache-client gem.
+memcached的Ruby接口。
 
 # 参考
 
