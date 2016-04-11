@@ -177,14 +177,15 @@ blockquote {
 
 .post h1 {
   color: #000000;
-  margin-top: 1.5em;
-  font-size: 1.5em;
+  margin-top: 2.0em;
+  font-size: 2.0em;
+  font-weight: bold;
 }
 
 .post h2 {
   color: #006699;
   margin-top: 1.3em;
-  font-size: 1.3em;
+  font-size: 1.5em;
 }
 
 .post h3 {
