@@ -76,4 +76,10 @@ byzanz-record-window 30 -c output.gif
 
 录30秒，输出为output.gif文件。
 
-* http://askubuntu.com/questions/107726/how-to-create-animated-gif-images-of-a-screencast
+参考：
+
+http://askubuntu.com/questions/107726/how-to-create-animated-gif-images-of-a-screencast
+
+
+# [lftp](http://lftp.yar.ru/)
+比ftp命令好用，封装了 rm 等常用命令。
