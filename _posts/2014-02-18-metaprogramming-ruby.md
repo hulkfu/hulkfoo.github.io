@@ -75,7 +75,16 @@ B.new.test(1, 2) { } #=> called test(1,2)
 * module
 * def
 
-一旦进入新的门，那么之前的变量就被隔离。看下面代码：
+一旦进入新的门，那么之前的变量就被隔离。
+
+也就是说，class里def外的就是class作用域，在里面定义的变量就是类的变量。
+在def里定义的变量就是实例的变量。
+
+如果需要定义类方法，就需要打开类，方法名前加self或class<<self。
+
+其实类的变量或方法是定义在类的隐性父类eigenclass里的，类是其但实例。
+
+看下面代码：
 
 ```ruby
 class A
@@ -280,7 +289,7 @@ C.read  #=> 2
 上面的例子中，定义了两个同名@var的变量，一个在C充当self的时刻，所以是类的实例变量；另一个在对象充当self的时刻，所以是对象的实例变量。它们互不影响。
 
 ## 类变量
-上面的类的实例变量，不能被继承或被其实例访问，而类变量可以，一个变量前加上**@@**就是了。
+上面的类的实例变量，不能被继承或被其实例访问，而类变量可以，一个变量前加上 **@@** 就是了。
 
 把上面的例子中的@var都换为@@var，那么结果就是：
 
@@ -337,6 +346,8 @@ module M
 
 模块混入Concern后，会自动将ClassMethods里方法扩展成类方法。
 
+关于依赖关系，看下面代码：
+
 ```ruby
 module Foo
   def self.included(base)
@@ -360,7 +371,8 @@ class Host
 end
 ```
 
-如上，Host需要include Bar，但是当Bar被included时，Host需要调用Foo扩展的类方法method_injected_by_foo，因此需要首先inclued Foo。
+Foo定义了一个Host的类方法method_injected_by_foo，即Host.method_injected_by_foo，而在
+includeBar时需要调用这个方法。因此需要首先inclued Foo。
 
 而我们实际只需要提供的信息是include Bar，然后由Bar去负责其依赖的module。
 
@@ -406,6 +418,8 @@ class Host
   include Bar # works, Bar takes care now of its dependencies
 end
 ```
+
+在Concern里，included块里就成了base的块，即base.class_eval的块。
 
 Concern的具体实现可参考[源码](https://github.com/rails/rails/blob/master/activesupport/lib/active_support/concern.rb)。
 
