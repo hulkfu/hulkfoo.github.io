@@ -47,6 +47,14 @@ Rails比较难，是因为它需要有很多其它相关知识：浏览器如何
 
 “生活不只是眼前的苟且，还有诗和远方。”
 
+# 包管理
+Ruby require一个文件后，相当于里面代码被复制了进来，里面的类、方法等能够直接使用。
+
+Python import一个文件后，相当于Java里的import，只是引入了包，使用还是需要包名的。
+
+而在Ruby里，这是靠module来实现的，可以在任何位置定义这个module。而Python是根据目录关系来管理。
+
+
 # 方法
 在python中执行方法要加是()，如js中那样，而Ruby不用。就是这一点，造就了很大的代码差异。
 
@@ -78,4 +86,3 @@ pyinstaller -F xxx.py
 我是太爱Ruby了，所以会排斥Python，虽然我掌握了Python。
 
 说实话，写Python的感觉有点儿像js。
-
