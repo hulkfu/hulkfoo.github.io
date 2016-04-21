@@ -2,6 +2,19 @@
 layout: post
 title: Capistrano 3
 ---
+Capistrano是一个通过ssh在远程Server上执行命令的工具。
+
+主要用于自动部署：
+
+* ssh到server
+* 创建所需要文件夹
+* 拉取代码
+* 执行命令
+
+# 使用
+
+
+# 代码分享
 
 代码很清晰，分为配置和任务。在lib中，除了tasks定义的任务外，dsl和templete就是为configuration服务的。
 
