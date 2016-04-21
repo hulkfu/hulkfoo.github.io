@@ -189,6 +189,10 @@ bundle exec rake assets:precompile db:migrate RAILS_ENV=production
 passenger-config restart-app $(pwd)
 ```
 
+# 感想
+把web发布出去，事件让人兴奋的事情。只要有最小可用版本，就要发布出去，然后才有动力持续去改进啊！
+否则很容易成为死项目的，呜呜～
+
 # 参考
 * https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/
 * http://bundler.io/rationale.html
