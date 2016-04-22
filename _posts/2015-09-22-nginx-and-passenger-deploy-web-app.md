@@ -1,22 +1,16 @@
 ---
 layout: post
-title: 部署 Rails 应用
+title: Nginx + Passenger 部署 Web 应用
 ---
 
-不得不说，Rails的发布是个坎，它涉及到自动部署、Nginx配置、缓存、代理等，
-需要对这个Web系统概念有一个明确的了解，否则真的搞不定。
-
-往往遇到搞不定的情况，就是自己的步子迈的太大，理解这一步的基础还没有打好。
-比如还没有把rails应用手动部署成功，就想着用capistrano自动部署。
-
-手动部署，就要对Rack、Rake、Bundler有所了解，然后还需要Linux、Nginx、数据库等的知识。
-
 # Passenger & Nginx
+
+环境是DigitalOcean上的Linux Ubuntu Server 14.04，
+[这里有**$10**的邀请码哦～](https://m.do.co/c/3d496b50e388)。
+
 按着[Passenger的教程](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/digital_ocean/nginx/oss/trusty/install_passenger.html)，还是能够很轻松的deploy的。因为Passenger已经编译好了现成的Nginx。
 
-## 安装软件
-
-### 1. 安装Passenger和Nginx
+## 1. 安装Passenger和Nginx
 ```
 # Install our PGP key and add HTTPS support for APT
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
@@ -29,7 +23,7 @@ sudo apt-get update
 # Install Passenger + Nginx
 sudo apt-get install -y nginx-extras passenger
 ```
-### 2. 开启Nginx的Passenger模式
+## 2. 开启Nginx的Passenger模式
 
 编辑 /etc/nginx/nginx.conf， 删除 passenger_root and passenger_ruby的注释：
 
@@ -51,7 +45,7 @@ passenger_ruby /usr/bin/passenger_free_ruby;
 sudo service nginx restart
 ```
 
-### 3. 检查安装
+## 3. 检查安装
 
 检查Passenger是否正确安装：
 
@@ -87,7 +81,7 @@ PID    VMSize    Private   Name
 ...
 ```
 
-### 4. 经常更新
+## 4. 经常更新
 
 它们的源已经在APT里了，所以经常更新哦：
 
@@ -95,6 +89,16 @@ PID    VMSize    Private   Name
 sudo apt-get update
 sudo apt-get upgrade
 ```
+
+# 部署 Ruby on Rails 应用
+
+不得不说，Rails的发布是个坎，它涉及到自动部署、Nginx配置、缓存、代理等，
+需要对这个Web系统概念有一个明确的了解，否则真的搞不定。
+
+往往遇到搞不定的情况，就是自己的步子迈的太大，理解这一步的基础还没有打好。
+比如还没有把rails应用手动部署成功，就想着用capistrano自动部署。
+
+手动部署，就要对Rack、Rake、Bundler有所了解，然后还需要Linux、Nginx、数据库等的知识。
 
 ## 发布
 
@@ -189,11 +193,76 @@ bundle exec rake assets:precompile db:migrate RAILS_ENV=production
 passenger-config restart-app $(pwd)
 ```
 
+# 部署 Python Flask 应用
+
+安装Nginx与Passenger都一样。
+
+## 1. WSGI文件
+
+Flask使用的是WSGI接口，所以在根目录下创建个WSGI文件，命名为passenger_wsgi.py：
+
+```python
+# passenger_wsgi.py
+from app import MyApp as application
+```
+
+这里的app是自己的文件，在里面创建了一个Flask实例：
+
+```
+MyApp = Flask(__name__)
+```
+
+其实这是已经可以运行了！
+
+```bash
+$ passenger start
+
+# => ======= Phusion Passenger Standalone web server started =======
+# => PID file: /Users/phusion/myapp/passenger.3000.pid
+# => Log file: /Users/phusion/myapp/passenger.3000.log
+# => Environment: development
+# => Accessible via: http://0.0.0.0:3000/
+# =>
+# => You can stop Phusion Passenger Standalone by pressing Ctrl-C.
+# => ===============================================================
+```
+
+## 2. Nginx配置
+
+创建 /etc/nginx/sites-enabled/myapp.conf:
+
+```
+server {
+    listen 80;
+    server_name yourserver.com;
+
+    # Tell Nginx and Passenger where your app's 'public' directory is
+    root /var/www/myapp/code/public;
+
+    # Turn on Passenger
+    passenger_enabled on;
+}
+```
+
+重启Nginx后即可运行。
+
+可以看到，Flask和Rails的Nginx配置一样，主要靠passenger将其归一啦！
+
+# 思考
+为什么要用Nginx呢？
+
+首先它是专业做服务器的，能很好的处理各种连接和权限。而且静态资源不用经过app的调用栈，提高效率。
+
+然后能在同一个80端口开挂几个不同app，因为其的虚拟Server功能。
+
+
 # 感想
 把web发布出去，事件让人兴奋的事情。只要有最小可用版本，就要发布出去，然后才有动力持续去改进啊！
 否则很容易成为死项目的，呜呜～
 
 # 参考
 * https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/
+* https://www.phusionpassenger.com/library/walkthroughs/start/python.html
+* https://www.phusionpassenger.com/library/walkthroughs/deploy/python/digital_ocean/nginx/oss/trusty/deploy_app.html
 * http://bundler.io/rationale.html
 * http://stackoverflow.com/questions/29241053/incomplete-response-received-from-application-from-nginx-passenger
