@@ -219,20 +219,24 @@ fetch(:database_encoding)
     └── <linked_files and linked_dirs>
 ```
 
+current是一个链接，它指向最新的发布版本。当发布完成后，这个链接会自动更新，失败的话就不变。
 
-current is a symlink pointing to the latest release. This symlink is updated at the end of a successful deployment. If the deployment fails in any step the current symlink still points to the old release.
+releases文件夹里是以时间戳命名的版本文件夹。
 
-releases holds all deployments in a timestamped folder. These folders are the target of the current symlink.
+repo里保存的是版本控制系统等仓库。如果是git的话，就是git的原始仓库，里面有objects, refs等。
 
-repo holds the version control system configured. In case of a git repository the content will be a raw git repository (e.g. objects, refs, etc.).
+revisions.log文件是用来记录每次发布和回滚等。记录每次操作等电脑用户名和时间，还有版本控制系统
+等分支等信息。
 
-revisions.log is used to log every deploy or rollback. Each entry is timestamped and the executing user (username from local machine) is listed. Depending on your VCS data like branchnames or revision numbers are listed as well.
-
-shared contains the linked_files and linked_dirs which are symlinked into each release. This data persists across deployments and releases. It should be used for things like database configuration files and static and persistent user storage handed over from one release to the next.
+shared文件夹里面包含着 linked_files 和 linked_dirs，它们会在每次发布后链接到对应的文件或
+文件夹。这些数据在各个版本间保存不变且共享，比如数据库配置文件，静态文件或用户上传的文件等。
 
 ## 任务
+Cap等任务是基于Rake的，只是定义了些类方法。
 
 ### 远程任务
+
+```ruby
 server 'example.com', roles: [:web, :app]
 server 'example.org', roles: [:db, :workers]
 desc "Report Uptimes"
@@ -242,17 +246,24 @@ task :uptime do
     info "Host #{host} (#{host.roles.to_a.join(', ')}):\t#{capture(:uptime)}"
   end
 end
-Note:
+```
 
-tl;dr: execute(:bundle, :install) and execute('bundle install') don’t behave identically!
+注意： execute(:bundle, :install) and execute('bundle install')是不一样的。
 
-execute() has a subtle behaviour. When calling within './directory' { execute(:bundle, :install) } for example, the first argument to execute() is a Stringish with no whitespace. This allows the command to pass through the SSHKit::CommandMap which enables a number of powerful features.
+execute()有一个巧妙的方法。比如：
 
-When the first argument to execute() contains whitespace, for example within './directory' { execute('bundle install') } (or when using a heredoc), neither Capistrano, nor SSHKit can reliably predict how it should be shell escaped, and thus cannot perform any context, or command mapping, that means that the within(){} (as well as with(), as(), etc) have no effect. There have been a few attempts to resolve this, but we don’t consider it a bug although we acknowledge that it might be a little counter intuitive.
+```ruby
+within './directory' { execute(:bundle, :install) }
+```
+
+excute()的第一个参数是没有空格的字符串，这样传给SSHKit::CommandMap后就会有一系列的强大功能。
+
+当定一个参数里面有空格，不管是Capistrano还是SSHKit都不能准确的进行判断，因此不能在任何上下文中执行或进行命令映射，就是说within(){}, with(), as()等都是无效的。
 
 ### 本地任务
-Local tasks can be run by replacing on with run_locally:
+通过run_locally块，可以让任务在本地执行：
 
+```ruby
 desc 'Notify service of deployment'
 task :notify do
   run_locally do
@@ -261,18 +272,21 @@ task :notify do
     end
   end
 end
-Of course, you can always just use standard ruby syntax to run things locally:
+```
 
+或者按照ruby或rake语法：
+
+```ruby
 desc 'Notify service of deployment'
 task :notify do
   %x('RAILS_ENV=development bundle exec rake "service:notify"')
 end
-Alternatively you could use the rake syntax:
 
 desc "Notify service of deployment"
 task :notify do
    sh 'RAILS_ENV=development bundle exec rake "service:notify"'
 end
+```
 
 ## Before/After 钩子
 Where calling on the same task name, executed in order of inclusion
@@ -292,20 +306,27 @@ end
 after :finishing, :notify do
   #
 end
-If it makes sense for your use case (often, that means generating a file) the Rake prerequisite mechanism can be used:
+```
 
+可以利用rake的机制在使用前创建文件：
+
+```ruby
 desc "Create Important File"
 file 'important.txt' do |t|
   sh "touch #{t.name}"
 end
+
 desc "Upload Important File"
 task :upload => 'important.txt' do |t|
   on roles(:all) do
     upload!(t.prerequisites.first, '/tmp')
   end
 end
-The final way to call out to other tasks is to simply invoke() them:
+```
 
+通过invoke()来调用其他任务：
+
+```ruby
 namespace :example do
   task :one do
     on roles(:all) { info "One" }
@@ -315,7 +336,6 @@ namespace :example do
     on roles(:all) { info "Two" }
   end
 end
-This method is widely used.
 ```
 
 # 代码分析
@@ -398,7 +418,7 @@ end
 
 它可以定义在rakefile里单独使用：
 
-```
+```ruby
 require 'sshkit'
 require 'sshkit/dsl'
 
@@ -473,7 +493,7 @@ download!()，使用scp下载。
 
 原因在其[The Command Map](https://github.com/capistrano/sshkit#the-command-map)上有解释：当命令中有空格或是新行时，不能够正确的去组合这个命令。如：
 
-```
+```ruby
 with path: '/usr/local/bin/rbenv/shims:$PATH' do
   execute :ruby, '--version'
 end
@@ -485,7 +505,7 @@ Will execute:
 
 相比之下，下面的代码就不会改变命令:
 
-```
+```ruby
 with path: '/usr/local/bin/rbenv/shims:$PATH' do
   execute 'ruby --version'
 end
