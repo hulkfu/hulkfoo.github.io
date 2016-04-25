@@ -13,8 +13,312 @@ Capistrano是一个通过ssh在远程Server上执行命令的工具。
 
 # 使用
 
+## 安装
 
-# 代码分享
+Gemfile：
+
+```
+group :development do
+  gem "capistrano", "~> 3.4"
+end
+```
+
+然后用bundler安装：
+
+```
+$ bundle install
+```
+
+## “Capify” 项目
+
+```
+$ bundle exec cap install
+```
+
+会生成如下文件：
+
+```
+├── Capfile
+├── config
+│   ├── deploy
+│   │   ├── production.rb
+│   │   └── staging.rb
+│   └── deploy.rb
+└── lib
+    └── capistrano
+            └── tasks
+```
+
+config/deploy.rb文件是全局的配置文件，然后deploy目录里配置的是对应的各个发布版本的。
+
+## 主要配置变量
+配置完这些变量，就能实现基本的发布流程啦！
+
+### :application
+应用的名字。
+
+### :deploy_to
+default: -> { "/var/www/#{fetch(:application)}" }
+
+应用在远程Server发布的路径。
+
+### :scm
+default: :git
+
+代码管理软件，现在支持:git, :hg和:svn。
+
+### :repo_url
+代码的URL地址。
+
+比如：
+
+set :repo_url, 'git@example.com:me/my_repo.git' for a git repo located in /home/git/me
+
+如果不是标准ssh端口需要指明其端口：
+
+set :repo_url, 'ssh://git@example.com:30000/~/me/my_repo.git'
+
+### :branch
+default: 'master'
+
+要发布的代码分支。
+
+### :repo_path
+default: -> { "#{fetch(:deploy_to)}/repo" }
+
+在远程Server上，代码仓库存放的位置，一般不需要改动。
+
+### :repo_tree
+default: None. 所有代码都会被发布。
+
+需要发布的代码的子目录。
+
+### :linked_files
+default: []
+
+在发布时，只会被链接的文件，它们在各个版本间共享，比如database.yml。
+
+### :linked_dirs
+default: []
+
+在发布时，只会被链接的文件夹，它们在各个版本间共享，比如上传文件夹。
+
+### :default_env
+default: {}
+
+执行命令时的默认环境shell。
+
+### :keep_releases
+default: 5
+
+保留的最后发布版本数。
+
+### :tmp_dir
+default: '/tmp'
+
+在发布时用于临时存储数据的文件夹。
+
+如果和别人共享Server，可能需要设置，比如：/home/user/tmp/capistrano。
+
+### :local_user
+default: -> { Etc.getlogin }
+
+当前机器的用户名，用来更新发布日志。
+
+### :pty
+default: false
+Used in SSHKit.
+
+### :log_level
+default: :debug
+Used in SSHKit.
+
+### :format
+default: :pretty
+Used in SSHKit.
+
+## 入口
+
+### 变量
+
+变量用set设置，fetch读取：
+
+```ruby
+set :application, 'MyLittleApplication'
+
+# use a lambda to delay evaluation
+set :application, -> { "SomeThing_#{fetch :other_config}" }
+```
+
+可以在任何时候获取设置：
+
+```ruby
+fetch :application
+# => "MyLittleApplication"
+
+fetch(:special_thing, 'some_default_value')
+# will return the value if set, or the second argument as default value
+```
+
+### 数组
+
+append方法向array中添加元素，remote则是删除：
+
+```ruby
+append :linked_dirs, ".bundle", "tmp"
+
+remove :linked_dirs, ".bundle", "tmp"
+```
+
+### 用户输入
+
+可以用ask来需求用户的输入。
+
+```ruby
+# used in a configuration
+set :database_name, ask('Enter the database name:')
+
+# used in a task
+desc "Ask about breakfast"
+task :breakfast do
+  ask(:breakfast, "pancakes")
+  on roles(:all) do |h|
+    execute "echo \"$(whoami) wants #{fetch(:breakfast)} for breakfast!\""
+  end
+end
+```
+
+可以在输入密码时通过 echo: false 来设置不显示输入：
+
+```ruby
+set :database_password, ask('Enter the database password:', 'default', echo: false)
+```
+
+也可以设置默认值：
+
+```ruby
+ask(:database_encoding, 'UTF-8')
+
+fetch(:database_encoding)
+```
+
+## 用Cap部署后服务器上的目录
+
+```
+├── current -> /var/www/my_app_name/releases/20150120114500/
+├── releases
+│   ├── 20150080072500
+│   ├── 20150090083000
+│   ├── 20150100093500
+│   ├── 20150110104000
+│   └── 20150120114500
+├── repo
+│   └── <VCS related data>
+├── revisions.log
+└── shared
+    └── <linked_files and linked_dirs>
+```
+
+
+current is a symlink pointing to the latest release. This symlink is updated at the end of a successful deployment. If the deployment fails in any step the current symlink still points to the old release.
+
+releases holds all deployments in a timestamped folder. These folders are the target of the current symlink.
+
+repo holds the version control system configured. In case of a git repository the content will be a raw git repository (e.g. objects, refs, etc.).
+
+revisions.log is used to log every deploy or rollback. Each entry is timestamped and the executing user (username from local machine) is listed. Depending on your VCS data like branchnames or revision numbers are listed as well.
+
+shared contains the linked_files and linked_dirs which are symlinked into each release. This data persists across deployments and releases. It should be used for things like database configuration files and static and persistent user storage handed over from one release to the next.
+
+## 任务
+
+### 远程任务
+server 'example.com', roles: [:web, :app]
+server 'example.org', roles: [:db, :workers]
+desc "Report Uptimes"
+task :uptime do
+  on roles(:all) do |host|
+    execute :any_command, "with args", :here, "and here"
+    info "Host #{host} (#{host.roles.to_a.join(', ')}):\t#{capture(:uptime)}"
+  end
+end
+Note:
+
+tl;dr: execute(:bundle, :install) and execute('bundle install') don’t behave identically!
+
+execute() has a subtle behaviour. When calling within './directory' { execute(:bundle, :install) } for example, the first argument to execute() is a Stringish with no whitespace. This allows the command to pass through the SSHKit::CommandMap which enables a number of powerful features.
+
+When the first argument to execute() contains whitespace, for example within './directory' { execute('bundle install') } (or when using a heredoc), neither Capistrano, nor SSHKit can reliably predict how it should be shell escaped, and thus cannot perform any context, or command mapping, that means that the within(){} (as well as with(), as(), etc) have no effect. There have been a few attempts to resolve this, but we don’t consider it a bug although we acknowledge that it might be a little counter intuitive.
+
+### 本地任务
+Local tasks can be run by replacing on with run_locally:
+
+desc 'Notify service of deployment'
+task :notify do
+  run_locally do
+    with rails_env: :development do
+      rake 'service:notify'
+    end
+  end
+end
+Of course, you can always just use standard ruby syntax to run things locally:
+
+desc 'Notify service of deployment'
+task :notify do
+  %x('RAILS_ENV=development bundle exec rake "service:notify"')
+end
+Alternatively you could use the rake syntax:
+
+desc "Notify service of deployment"
+task :notify do
+   sh 'RAILS_ENV=development bundle exec rake "service:notify"'
+end
+
+## Before/After 钩子
+Where calling on the same task name, executed in order of inclusion
+
+```ruby
+# call an existing task
+before :starting, :ensure_user
+
+after :finishing, :notify
+
+
+# or define in block
+before :starting, :ensure_user do
+  #
+end
+
+after :finishing, :notify do
+  #
+end
+If it makes sense for your use case (often, that means generating a file) the Rake prerequisite mechanism can be used:
+
+desc "Create Important File"
+file 'important.txt' do |t|
+  sh "touch #{t.name}"
+end
+desc "Upload Important File"
+task :upload => 'important.txt' do |t|
+  on roles(:all) do
+    upload!(t.prerequisites.first, '/tmp')
+  end
+end
+The final way to call out to other tasks is to simply invoke() them:
+
+namespace :example do
+  task :one do
+    on roles(:all) { info "One" }
+  end
+  task :two do
+    invoke "example:one"
+    on roles(:all) { info "Two" }
+  end
+end
+This method is widely used.
+```
+
+# 代码分析
 
 代码很清晰，分为配置和任务。在lib中，除了tasks定义的任务外，dsl和templete就是为configuration服务的。
 
