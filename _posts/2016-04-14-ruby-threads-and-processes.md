@@ -219,6 +219,10 @@ Child says 'OK'
 
 有时需要开个子进程做工作，然后主线程继续，就可以使用fork和exec了。
 
+其实system()和IO.popen()方法，也是通过fork和exec实现的。
+
+exec的作用就是让当前进程执行新的程序，替换掉原来的。
+
 ```ruby
 exec("du ./") unless fork # nil是子进程
 puts "main wait."  # 主进程继续
