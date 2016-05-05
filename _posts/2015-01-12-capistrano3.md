@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Capistrano 3
+permalink: cap3
 ---
 Capistrano是一个通过ssh在远程Server上执行命令的工具。
 

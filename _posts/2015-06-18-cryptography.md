@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 密码技术
+permalink: cryptography
 ---
 
 在读《图解密码技术》，笔记。
