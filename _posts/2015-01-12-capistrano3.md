@@ -232,7 +232,10 @@ shared文件夹里面包含着 linked_files 和 linked_dirs，它们会在每次
 文件夹。这些数据在各个版本间保存不变且共享，比如数据库配置文件，静态文件或用户上传的文件等。
 
 ## 任务
-Cap等任务是基于Rake的，只是定义了些类方法。
+Cap等任务是基于Rake的，只是定义了些类方法。它是在 **lib/capistrano/tasks** 目录下
+新建文件定义的*.rake文件 。
+
+可以用 cap -T 来查看定义的任务。
 
 ### 远程任务
 
@@ -467,11 +470,11 @@ as()，执行命令的用户名。
 
 with()，用来设置命令执行的环境等。
 
+info()，显示字符串。
+
 ### ssh方法
 
 它们定义在backends/netssh.rb里。
-
-run()，执行之前初始化Local或Netssh定义在其block里的代码。在dsl.rb里已经自动执行了。
 
 test()，加入测试参数，然后execute。
 
