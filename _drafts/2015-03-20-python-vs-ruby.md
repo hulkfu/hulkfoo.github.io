@@ -52,6 +52,8 @@ Python import一个文件后，相当于Java里的import，只是引入了包，
 
 而在Ruby里，这是靠module来实现的，可以在任何位置定义这个module。而Python是根据目录关系来管理。
 
+不管是require还是import包时，都会将代码执行一遍，而且只执行一般，再引入就会提示已经引入了。
+想重新加载，就用load方法。
 
 # 方法
 在python中执行方法要加是()，如js中那样，而Ruby不用。就是这一点，造就了很大的代码差异。
