@@ -3,6 +3,9 @@ layout: post
 title: Python VS. Ruby
 ---
 
+# 引子
+在同时用Python和Ruby，固做总结，用的越多，感悟也越多，随时在变着！
+
 Python没有太多新概念，不像Ruby的元编程、作用域等需要去适应。Python唯一需要适应的就是实例方法的self参数以及继承父类时主动去调用父类的够找函数，这也是全凭self。
 
 Ruby的灵活性让它有了Rails、DSL，所以Ruby更适合去创造创造其它东西的东西。Python的简单让它更适合去探索已知的东西，比如调试器等。
@@ -82,5 +85,13 @@ pyinstaller -F xxx.py
 
 是的，我特别喜欢能够分发的二进制文件，所以喜欢终端开发。
 
+# yield
+两边都有yield。
+
+ruby的是执行块或传入的proc，而python是生成
+
 # 感想
 多掌握一门语言就如同多了个朋友。像Ruby和Pthon都是有十多年历史的语言，所以在批判之前最好要能理解。
+
+# 参考
+* http://stackoverflow.com/questions/231767/what-does-the-yield-keyword-do-in-python
