@@ -27,6 +27,9 @@ PATH=~/.rbenv/shims:/usr/local/bin:/usr/bin:/bin
 
 ~/.rbenv/shimes里的ruby可执行文件，就根据上面的参数或设置来选择版本。
 
+# 问题
+* 需要使用sudo的话，把shims下的bin文件软链接到 /usr/local/bin 目录下即可，否则sudo找不到。
+
 # 感想
 Ruby和Python并不非要二选一，两者可以兼得啊！而且可以相互学习！
 
