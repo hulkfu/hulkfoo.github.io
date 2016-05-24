@@ -1,11 +1,13 @@
 ---
 layout: post
 title: Ruby元编程
+permalink: meta
 ---
 
 又看了一遍[《Ruby元编程》][1]，这次终有所悟。
 
 > 根本没有什么元编程，只有编程而已。
+
 
 为什么在Ruby中元编程是常态呢？因为变量作用域。因为Ruby中变量是有在相同的层里才能访问，而不想Java那样里面的可以访问外面的。
 
@@ -422,6 +424,22 @@ end
 在Concern里，included块里就成了base的块，即base.class_eval的块。
 
 Concern的具体实现可参考[源码](https://github.com/rails/rails/blob/master/activesupport/lib/active_support/concern.rb)。
+
+## 类继承
+理解了Ruby寻找方法的算法，就能清晰分析出方法的调用的路径。
+
+> “向右一步，再向上。”
+
+先找定义自己的类，没有的话再找其父类，直到尽头BasicObject.
+
+所以当父类的方法被子类覆盖(override)时，就不再调用父类的方法，除非用super显性调用。
+
+被include进来的module，也被包装成**包含类(include class)** ，superclass()找不到它们，但是
+它却相当于当前类的父类。include了一个模块，就相当于在当前类和其父类间的继承链中插入了一个类。
+
+所以如果一个类include了几个模块，那么越往后include的被插入的越靠前，即其可以覆盖上面模块的方法，这
+也符合情理。
+
 
 # eval()
 在eval眼里，代码只是文本。
