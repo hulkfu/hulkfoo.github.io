@@ -11,7 +11,7 @@ Rails作为一个成熟的框架，已经默认提供了必要的安全机制，
 
 > HTTP is a stateless protocol. Sessions make it stateful.
 
-Session机制是为了解决web的无状态特性。
+Session机制是为了解决web的无状态特性，通过浏览器回传cookies来确认当前的session。
 
 # XSS
 
@@ -44,6 +44,8 @@ protect_from_forgery with: :exception
 # Redirection
 
 # File Upload/Download
+
+上传下载时，对文件名进行过滤，保证其安分呆在指定的目录里。
 
 # 参考
 * http://guides.rubyonrails.org/security.html
