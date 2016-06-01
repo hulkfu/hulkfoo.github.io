@@ -109,6 +109,12 @@ default: {}
 
 执行命令时的默认环境shell。
 
+比如，加入rbenv环境：
+
+```ruby
+set :default_env, { path: '/opt/rbenv/shims:opt/rbenv/bin:$PATH' }
+```
+
 ### :keep_releases
 default: 5
 
@@ -233,8 +239,8 @@ shared文件夹里面包含着 linked_files 和 linked_dirs，它们会在每次
 文件夹。这些数据在各个版本间保存不变且共享，比如数据库配置文件，静态文件或用户上传的文件等。
 
 ## 任务
-Cap等任务是基于Rake的，只是定义了些类方法。它是在 **lib/capistrano/tasks** 目录下
-新建文件定义的*.rake文件 。
+Cap等任务是基于Rake的，只是定义了些类方法。可以在 **lib/capistrano/tasks** 目录下
+新建文件定义的*.rake文件，也可以在 **Capfile** 或 **config/deploy.rb** 里定义简单任务。
 
 可以用 cap -T 来查看定义的任务。
 
@@ -293,7 +299,22 @@ end
 ```
 
 ## Before/After 钩子
-Where calling on the same task name, executed in order of inclusion
+
+发布的流程的任意阶段，嵌入定义好的任务。
+
+流程见下：
+
+```
+deploy:starting    - start a deployment, make sure everything is ready
+deploy:started     - started hook (for custom tasks)
+deploy:updating    - update server(s) with a new release
+deploy:updated     - updated hook
+deploy:publishing  - publish the new release
+deploy:published   - published hook
+deploy:finishing   - finish the deployment, clean up everything
+deploy:finished    - finished hook
+```
+
 
 ```ruby
 # call an existing task
@@ -332,9 +353,7 @@ end
 
 ```ruby
 namespace :example do
-  task :one do
-    on roles(:all) { info "One" }
-  end
+  task :one doWhere calling on the same task name, executed in order of inclusion
   task :two do
     invoke "example:one"
     on roles(:all) { info "Two" }
@@ -487,36 +506,73 @@ upload!()，使用scp上传。
 
 download!()，使用scp下载。
 
-### 注意
+### Command Map —— 命令映射
 
-上面使用execute，如果使用的是rvm，直接把命令放到一起执行不可，非要如上用参数形式。因为后者其实是执行的
+命令映射，为了解决SSH和Server上的环境变量不同的问题，比如path变量。
 
-~/.rvm/bin/rvm default do bundle exec rails server
-
-对，多了**~/.rvm/bin/rvm default do**.
-
-原因在其[The Command Map](https://github.com/capistrano/sshkit#the-command-map)上有解释：当命令中有空格或是新行时，不能够正确的去组合这个命令。如：
+可以使用with()方法来设置环境变量，它以一个hash作为参数，如：
 
 ```ruby
 with path: '/usr/local/bin/rbenv/shims:$PATH' do
   execute :ruby, '--version'
 end
-
-Will execute:
-
-( PATH=/usr/local/bin/rbenv/shims:$PATH /usr/bin/env ruby --version )
 ```
 
-相比之下，下面的代码就不会改变命令:
+将会被这样执行：
+
+```
+PATH=/usr/local/bin/rbenv/shims:$PATH /usr/bin/env ruby --version
+```
+
+而如果将命令后有空格：
 
 ```ruby
 with path: '/usr/local/bin/rbenv/shims:$PATH' do
   execute 'ruby --version'
 end
+```
 
-# Will execute, without mapping the environmental variables, or querying the command map:
+就不会改变环境变量，就是原样执行：
 
+```
 ruby --version
+```
+
+更常见的是做法是改变command map，它就是一个基于Hash的类型。
+
+默认的前缀是 **/usr/bin/env** 比如：
+
+```ruby
+puts SSHKit.config.command_map[:ruby]
+# => /usr/bin/env ruby
+```
+
+可以直接修改：
+
+```ruby
+SSHKit.config.command_map[:rake] = "/usr/local/rbenv/shims/rake"
+puts SSHKit.config.command_map[:rake]
+# => /usr/local/rbenv/shims/rake
+```
+
+也可以添加前缀：
+
+```ruby
+SSHKit.config.command_map.prefix[:rake].push("bundle exec")
+puts SSHKit.config.command_map[:rake]
+# => bundle exec rake
+
+SSHKit.config.command_map.prefix[:rake].unshift("/usr/local/rbenv/bin exec")
+puts SSHKit.config.command_map[:rake]
+# => /usr/local/rbenv/bin exec bundle exec rake
+```
+
+当然也可以覆盖重写command map，虽然不太明智，因为：
+
+```ruby
+SSHKit.config.command_map = Hash.new do |hash, command|
+  hash[command] = "/usr/local/rbenv/shims/#{command}"
+end
 ```
 
 # 参考
