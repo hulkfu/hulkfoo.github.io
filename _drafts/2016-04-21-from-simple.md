@@ -16,3 +16,11 @@ title: 从最简单开始
 因为可以直接绕过来对action地址发请求。
 
 简单的好处是可以看到核心的东西，而没有那么多外层的迷雾。
+
+Rails的Assets就是一个成熟的方案，参考[大公司的前端在干什么](https://www.zhihu.com/question/20790576).
+
+
+
+
+# 参考
+* https://nokyotsu.com/qscripts/2015/05/deploy-a-python-web-application-on-dreamhost-with-pyenv.html

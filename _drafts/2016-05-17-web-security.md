@@ -13,10 +13,14 @@ Rails作为一个成熟的框架，已经默认提供了必要的安全机制，
 
 Session机制是为了解决web的无状态特性，通过浏览器回传cookies来确认当前的session。
 
-# XSS
+# Cross-Site Scripting (XSS)
+跨站执行脚本，等于别人可以在你的网站页面上写自己的代码。十分恐怖！
+
 
 # Cross-Site Request Forgery (CSRF)
 CSRF，跨站伪装请求。
+
+CSRF的场景是：访问一个黑站，结果在里面有一个链接被浏览器自动加载访问，而这个链接可能执行是删除、关注等操作。
 
 起因：在浏览器请求一个URL时，会顺便得到这个网站的cookies。有了cookies就有了权限，如果请求的那个
 URL是在另一个网站中嵌入的，比如：

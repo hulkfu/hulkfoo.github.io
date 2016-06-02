@@ -40,6 +40,10 @@ TOTP方式，通过扫描生成的二维码，获得双方共同持有的密钥�
 
 所以关键是时间的同步，可以尝试修改服务器上的时间测试，就会验证失败了！
 
+算法是公开的，密钥只有Server和客户端知道，甚至你自己都不知道。
+
+所以网上也有很多类似的程序。
+
 
 # 参考
 * http://sahandsaba.com/two-step-verification-using-python-pyotp-qrcode-flask-and-heroku.html
