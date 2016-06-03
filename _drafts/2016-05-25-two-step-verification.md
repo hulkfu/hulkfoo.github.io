@@ -48,3 +48,4 @@ TOTP方式，通过扫描生成的二维码，获得双方共同持有的密钥�
 # 参考
 * http://sahandsaba.com/two-step-verification-using-python-pyotp-qrcode-flask-and-heroku.html
 * https://garbagecollected.org/2014/09/14/how-google-authenticator-works/
+* http://blog.miguelgrinberg.com/post/two-factor-authentication-with-flask

