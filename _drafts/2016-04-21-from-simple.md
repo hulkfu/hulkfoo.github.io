@@ -20,6 +20,13 @@ title: 从最简单开始
 Rails的Assets就是一个成熟的方案，参考[大公司的前端在干什么](https://www.zhihu.com/question/20790576).
 
 
+# Flask
+
+# Swift iOS
+用Swift写了个类似记事本的App，发现Rails的ActiveRecord已经在潜移默化的影响着我去构造Model，定义属性和方法，
+都有ActiveRecord的影子，这让我感到欣慰，也让我对ActiveRecord有了重新的思考：为什么这么设计，原来就是这么方便。
+
+
 
 
 # 参考
