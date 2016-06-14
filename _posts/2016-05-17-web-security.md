@@ -81,13 +81,13 @@ s = sanitize(user_input, tags: tags, attributes: %w(href title))
 ```
 
 # Redirection
+防止跳到钓鱼网站。
 
 # File Upload/Download
-
 上传下载时，对文件名进行过滤，保证其安分呆在指定的目录里。
 
 # SQL 注入
-
+尽量使用已经封装好的查询语句，而不是自己写SQL。
 
 # 参考
 * http://guides.rubyonrails.org/security.html
