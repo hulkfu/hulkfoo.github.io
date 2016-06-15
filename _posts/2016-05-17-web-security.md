@@ -65,8 +65,11 @@ protect_from_forgery with: :exception
 
 ## 防御
 
-使用escapeHTML()或它的alias h()对二次显示的输入内存进行转义，这样
-字符&,",<,>就变成了&amp;,&quot;&lt;和&rl;了。
+使用escapeHTML()或它的alias h()对二次显示的输入内存进行转义，这样：
+
+```
+字符& " < >就变成了&amp; &quot; &lt;和&rt;了。
+```
 
 能被浏览器还原，但是不能执行。
 
