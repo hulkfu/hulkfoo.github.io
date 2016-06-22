@@ -20,8 +20,11 @@ PATH=~/.rbenv/shims:/usr/local/bin:/usr/bin:/bin
 主要就是版本选择了。
 
 1. rbenv shell，设定当前shell的ruby版本。
-2. rbenv local，设定当前目录的ruby版本，会生成一个.ruby-version文件记录版本。
-3. rbenv global，设定系统默认版本，在~/.rbenv/version里记录。
+2. .ruby-version，在当前脚本的执行目录或上层目录里设置ruby的版本号，直到文件系统的根目录，找到
+就会是以这个版本执行。
+3. rbenv local，设定当前目录的ruby版本，会生成一个.ruby-version文件记录版本。
+4. rbenv global，设定系统默认版本，在~/.rbenv/version里记录。
+
 
 优先级从高到低。
 
