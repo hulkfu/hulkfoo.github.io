@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Rails里MVC的VC的关系
+title: Rails里MVC中VC的关系
 ---
 
 在MVC里，Model算是比较独立的，要写成放在哪里都可以通用，View和Controller其实是比较交合的，C传参给V，V返回结果给C.
