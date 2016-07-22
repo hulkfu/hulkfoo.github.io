@@ -2,6 +2,10 @@
 layout: post
 title: ActionView如何生成HTML
 
+# render
+Rails 5里，ActionView::Render定义在 ** action_view/render/render.rb ** 里。
+
+
 # local var
 
 # partial render
