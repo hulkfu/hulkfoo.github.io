@@ -49,6 +49,16 @@ sudo ssserver -d stop
 sudo less /var/log/shadowsocks.log
 ```
 
+### 自动启动
+这里使用[upstart](http://upstart.ubuntu.com/getting-started.html)，在/etc/init/目录下
+新建ssserver-start.conf文件，内容如下：
+
+```
+start on startup
+task
+exec /path/to/ssserver-start
+```
+
 ## Linux/MacOS Client 使用
 
 1.首先也安装ss：pip install shadowsocks
@@ -245,4 +255,3 @@ COMMIT
 # 关于VPS
 
 我目前用的是DigitalOcean的最低版本（5美元/月），这里有推荐链接，使用可以多得10美元：[https://www.digitalocean.com/?refcode=3d496b50e388](https://www.digitalocean.com/?refcode=3d496b50e388)
-
