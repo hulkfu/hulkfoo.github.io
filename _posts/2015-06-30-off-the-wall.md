@@ -59,6 +59,41 @@ task
 exec /path/to/ssserver-start
 ```
 
+参考： https://www.digitalocean.com/community/tutorials/the-upstart-event-system-what-it-is-and-how-to-use-it
+
+### 命令行也proxy
+使用[proxychains-ng](https://github.com/rofl0r/proxychains-ng)
+
+配置文件$(HOME)/.proxychains/proxychains.conf：
+
+```
+strict_chain
+proxy_dns
+remote_dns_subnet 224
+tcp_read_time_out 15000
+tcp_connect_time_out 8000
+localnet 127.0.0.0/255.0.0.0
+quiet_mode
+
+[ProxyList]
+socks5  127.0.0.1 1080
+```
+
+单独命令使用：
+
+```
+proxychains4 curl https://www.twitter.com/
+proxychains4 git push origin master
+```
+
+proxify bash 使用:
+
+```
+proxychains4 bash
+curl https://www.twitter.com/
+git push origin master
+```
+
 ## Linux/MacOS Client 使用
 
 1.首先也安装ss：pip install shadowsocks
