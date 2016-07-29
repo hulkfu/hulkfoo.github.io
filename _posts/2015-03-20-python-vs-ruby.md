@@ -93,5 +93,7 @@ ruby的是执行块或传入的proc，而python是生成
 # 感想
 多掌握一门语言就如同多了个朋友。像Ruby和Pthon都是有十多年历史的语言，所以在批判之前最好要能理解。
 
+动态语言，本来就不是以效率优先的，而是写代码的人的使用感受。
+
 # 参考
 * http://stackoverflow.com/questions/231767/what-does-the-yield-keyword-do-in-python
