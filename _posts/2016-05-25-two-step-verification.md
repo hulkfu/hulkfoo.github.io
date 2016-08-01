@@ -30,11 +30,36 @@ permalink: two-step-verification
 这就是两步认证了，四两拨千斤，用短的一次性密码（一般6位数）来隐藏复杂的密钥。即使一次性密码被监听盗取，有效期也只有
 很短的时间（比如30s）。
 
-
+所以根据那个“盐”生成方式的不同就有两种算法：
 
 ## HMAC-Based One-Time Password Algorithm (HOTP)
 
+> OTP=Truncate(Hash(k∥C))
+
+这里的C是Client和Server记忆的常数，一般初始化为0,然后每次认证后累加。
+
+Hash采用的是 HMAC-SHA-1 算法。
+
+Truncate将结果截短，生成几位的密码。
+
+然后这个方案有问题：
+
+1. 这一次生成的一次性密码是在下一次一次性密码生成时才过期。这样如果本次这个密码被黑客得到，就可以在很长的
+窗口期里使用。
+2. C的同步问题。
+
+
+所以有了下面基于时间的一次性密码：
+
 ## Time-Based One-Time Password Algorithm (TOTP)
+就是将上面的累加的C缓存了基于时间的T。
+
+> T=（Tcurrent−T0）/X
+
+* Tcurrent: 当前的时间。
+* T0: 初始化的时间，一般是0.
+* X: 一次性密码的有效时间，一般是30.
+
 
 # google authenticator
 TOTP方式，通过扫描生成的二维码，获得双方共同持有的密钥，然后只要双方时间同步，就会根据
@@ -51,6 +76,11 @@ TOTP方式，通过扫描生成的二维码，获得双方共同持有的密钥�
 算法是公开的，密钥只有Server和客户端知道，甚至你自己都不知道。
 
 所以网上也有很多类似的程序。
+
+# 相关库
+
+* [python-totp](https://github.com/sahands/python-totp)
+* [rotp](https://github.com/mdp/rotp)
 
 
 # 参考
