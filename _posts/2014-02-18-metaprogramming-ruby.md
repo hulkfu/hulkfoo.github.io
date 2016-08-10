@@ -125,6 +125,39 @@ A.new.test  #=> out
 
 这样就可以随心选择是否共享作用域了。
 
+而这里主要依靠的是块的闭包作用，能够访问上面定义的变量。这也才是块的主要作用 —— 实现闭包！
+只不过这个功能需要依赖于yield即执行代码。
+
+如果纯是为了传递方法，可以用其它方法，比如method将一个方法编程Method实例，然后用call调用。
+
+## 共享作用域
+如果在一组方法间定义了变量，又不想被其它方法访问呢？
+
+用作用域之门隔离吧！
+
+```rb
+def define_methods
+  shared = 0
+
+  Kernel.send :define_method, :counter do
+    shared
+  end
+
+  Kernel.send :define_method, :inc do
+    shared += 1
+  end
+end
+
+define_methods
+
+counter  #=> 0
+inc
+inc
+counter  #=> 2
+```
+
+这里就使用了def作用域门。
+
 ## 常量作用域
 常量作用域不同于变量作用域，它有自己的规则。
 > 常量像文件系统一样组织成树形结构。其中模块（还有类）像目录，而常量则像文件。

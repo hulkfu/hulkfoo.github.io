@@ -3,6 +3,12 @@ layout: post
 title: Duck Typing
 ---
 
+> If it walks like a duck and quacks like a duck, it must be a duck.
+
+# respond_to?
+通过respond_to?方法来判断是否有要执行的方法，然后用send(method_name)去执行，而不是用kind_of?
+来判断是什么类型。
+
 
 # 从&:to_s说起
 
@@ -34,7 +40,8 @@ class Symbol
 end
 ```
 
-然后“&”会调用对象的to_proc方法，返回了带有一个参数，并且这个参数会调用当前的symbol方法的块，而map的参数也是一个块。
+然后“&”会调用对象的to_proc方法，把生成的proc转换成块，然后就
+返回了带有一个参数，并且这个参数会调用当前的symbol方法的块，而map的参数也是一个块。
 
 这样就合理了。
 
