@@ -5,6 +5,8 @@ title: Rails里的ActiveRecord
 
 ActiveRecord是  提出的。
 
+# ActiveModel
+ActiveModel是从ActiveRecord分离出来的，主要负责模型相关，而后者主要负责数据库等其它工作。
 
 # 一些参数
 
