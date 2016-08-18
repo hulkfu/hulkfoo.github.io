@@ -35,7 +35,8 @@ threads.each { |aThread|  aThread.join }
 说明：
 
 * Thread.new 后的参数会传到块里，这样块就能单独保有变量而不会与其它线程冲突了。
-* join方法，从字面上理解就是“我加入了，等我！”。所以等所以线程执行完，这个脚本进程才会结束。
+* join方法，从字面上理解就是“我加入了，等我！”。所以等调用join的线程执行完和时间到指定的等待时间，
+这个方法才会返回，使后续代码继续执行。
 
 ## 线程变量
 线程的定义也是一个块，所以它们共用scope里的变量，块里的是单独变量。
@@ -123,6 +124,9 @@ puts "difference : #{difference}"
 
 其实在2.0以上，执行出来difference都是0，但用锁后效率确实低了些。
 
+用Mutex的实例变量建立互斥区，lock的话就是互斥锁，不用lock而用ConditionVariable的实例变量
+来声明条件了就是条件锁，如下：
+
 ## 条件锁
 
 ```ruby
@@ -159,6 +163,9 @@ B: Now I am critical, but am done with cv
 B: I am still critical, finishing up
 A: I have critical section again! I rule!
 ```
+
+ConditionVariable需要在Mutex里使用，因为它其实也是打开锁的一种方式，只是可以指定在什么条件下打开，
+更灵活。
 
 # 进程
 
