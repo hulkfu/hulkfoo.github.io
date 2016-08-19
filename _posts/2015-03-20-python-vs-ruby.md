@@ -88,7 +88,13 @@ pyinstaller -F xxx.py
 # yield
 两边都有yield。
 
-ruby的是执行块或传入的proc，而python是生成
+ruby的是执行方法后的程序块，而python是用来定义生成器。
+
+# 分与合
+分：开发软件时，为了去耦合会将代码分开写到各个文件里，修改时也只会影响这个文件。
+
+合：把分开的模块合到一起使用，完成需求。不管是require还是import，都是把代码“copy and load”。
+Ruby可以用include或extend模块来扩展类的方法，Python则偏向于使用self来在各个功能模块见传递变量。
 
 # 感想
 多掌握一门语言就如同多了个朋友。像Ruby和Pthon都是有十多年历史的语言，所以在批判之前最好要能理解。
