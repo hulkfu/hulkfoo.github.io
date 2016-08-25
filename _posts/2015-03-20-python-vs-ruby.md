@@ -101,5 +101,7 @@ Ruby可以用include或extend模块来扩展类的方法，Python则偏向于使
 
 动态语言，本来就不是以效率优先的，而是写代码的人的使用感受。
 
+为什么安全工作者喜欢脚本语言呢，因为知道怎么做更重要！
+
 # 参考
 * http://stackoverflow.com/questions/231767/what-does-the-yield-keyword-do-in-python

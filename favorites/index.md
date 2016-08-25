@@ -1,7 +1,6 @@
 ---
-layout: post
+layout: default
 title: 收藏夹
-permalink: favorites
 ---
 
 # Blog
@@ -33,5 +32,8 @@ permalink: favorites
 
 ## Android
 * [ApkLeecher](http://apkleecher.com/)
+
+## Net
+* [西刺免费代理IP](http://www.xicidaili.com/)
 
 # Ohters
