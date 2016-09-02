@@ -21,6 +21,7 @@ title: 收藏夹
 
 * [it-ebooks](http://www.it-ebooks.info/)
 * [DropPDF](http://droppdf.com)
+* [看看豆](http://kankandou.com/)
 
 # Tools
 
@@ -35,5 +36,8 @@ title: 收藏夹
 
 ## Net
 * [西刺免费代理IP](http://www.xicidaili.com/)
+
+## Linux
+* [Simple Screen Recorder](http://www.maartenbaert.be/simplescreenrecorder/)
 
 # Ohters

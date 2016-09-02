@@ -86,3 +86,58 @@ ARGV.include?('-c') && ARGV[ARGV.index('-c') + 1]
 
 # 进程有名字
 在Ruby里，是$PROGRAM_NAME或$0。
+
+# 退出进程
+
+## exit
+
+退出，并且可以返回一个代码，而且at_exit里的代码将被执行。
+
+```rb
+# This will exit the program with the success status code (0).
+exit
+# You can pass a custom exit code to this method
+exit 22
+# When Kernel#exit is invoked, before exiting Ruby invokes any blocks
+# defined by Kernel#at_exit.
+at_exit { puts 'Last!' }
+exit
+```
+
+## exit!
+与exit相比就是不会执行at_exit里的代码。
+
+## abort
+程序运行失败时的退出。
+
+```rb
+# Will exit with exit code 1.
+abort
+# You can pass a message to Kernel#abort. This message will be printed
+# to STDERR before the process exits.
+abort "Something went horribly wrong."
+# Kernel#at_exit blocks are invoked when using Kernel#abort.
+at_exit { puts 'Last!' }
+abort "Something went horribly wrong."
+```
+
+## raise
+如果异常没有被rescue，那么将abort。
+
+
+# fork
+fork会返回两次，子进程返回nil，父进程返回子进程的pid。
+
+```rb
+if fork
+  # parent
+  puts "entered the if block"
+else
+  # child
+  puts "entered the else block"
+end
+
+child_pid = fork do
+  # 子进程
+end
+```
