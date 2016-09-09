@@ -1,7 +1,10 @@
 ---
 layout: post
-title: 自动化测试
+title: 自动化操作
+permalink: automation
 ---
+
+自动化操作，就是模仿人的一系列操作。
 
 # [Watir](http://watir.github.io/)
 
@@ -28,6 +31,13 @@ browser.quit
 
 ## 等待
 
+## 经验
+有些内容是动态加载的，因此需要等待，但通过判断浏览器的title更快。
+
+
+# [RAutomation](https://github.com/jarmo/RAutomation)
+Windows上像Watir控制浏览器那样控制Windows程序。
+
 
 # [PyAutoGUI](https://github.com/asweigart/pyautogui)
-可以模拟键盘鼠标的输入。
+可以模拟键盘鼠标的输入，所有操作系统通用！
