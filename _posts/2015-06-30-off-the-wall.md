@@ -111,9 +111,6 @@ sslocal -s IP -p PORT -b 127.0.0.1 -l 1080 -k PASSWORD -t 600 -m aes-256-cfb
 
 去下载官方应用，[iTunes走起](https://itunes.apple.com/us/app/shadowsocks/id665729974?ls=1&mt=8)。
 
-### 浏览器使用
-可以通过**+**来设置自己的代理，默认会用公用的代理。
-
 ### 本地全局PAC代理
 
 但有以下限制：
@@ -144,6 +141,27 @@ ssh -qTfnN -D 7070 user@server.address -p 443
 
 # VPN
 VPN用着很方便，还能发放帐号呢。
+
+VPN目前有PPTP、L2TP、IPSec 和 IKEv2，推荐IKEv2.
+
+## IKEv2
+
+IKEv2 (Internet Key Exchange v2) 是一款新版的安全协议。
+它有着一个独有的特性，就是在移动客户端改变网络状态的情况下，
+加密通讯不会因此中断，因此特别适应便携设备的安全。
+
+IKEv2 是 IKE(v1) 的全新改良版，传输效率大大超于 PPTP 和 L2TP，使用公钥证书和密码等多重认证，
+支持硬件加速，保持了高效的传输效率。
+
+如果出门在外，(手机) 网络环境 (IP 地址) 经常变动的情况下， IKEv2 是唯一使用 “MOBIKE” – Mobility and Multihoming 技术来达到加密通讯不中断目的的。
+所以用户再也无需考虑手动开启或者关闭 VPN，或者担心因网络环境变化而导致的 VPN 连接中断了。
+
+而且这里有方便一键安装脚本 —— [one-key-ikev2](https://github.com/quericy/one-key-ikev2-vpn).
+
+
+## PPTP
+
+老技术了，虽然还经常被用，但已经被慢慢淘汰，瞧iOS 10就不支持了。
 
 ### 1. 安装PPTPD
 
@@ -286,6 +304,7 @@ COMMIT
 * http://www.cviorel.com/2009/02/09/how-to-set-up-a-vpn-server-on-ubuntu/
 * http://askubuntu.com/questions/119534/easiest-way-to-setup-ubuntu-as-a-vpn-server
 * http://ubuntuforums.org/showthread.php?t=1113911
+* https://i.ssvpn.me/blog/id=5
 
 # 关于VPS
 

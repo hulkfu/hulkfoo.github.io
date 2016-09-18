@@ -96,12 +96,28 @@ ruby的是执行方法后的程序块，而python是用来定义生成器。
 合：把分开的模块合到一起使用，完成需求。不管是require还是import，都是把代码“copy and load”。
 Ruby可以用include或extend模块来扩展类的方法，Python则偏向于使用self来在各个功能模块见传递变量。
 
+# 优秀项目
+
+## Ruby
+发现越来越多的安全项目和管理项目使用Ruby来做。
+
+* [metasploit-framework](https://github.com/rapid7/metasploit-framework)：渗透。
+* [Chef](),[Puppet]()：节点部署。
+
+## Python
+而Python主要集中在具体的功能领域。
+
+* [PyAutoGUI]()：自动操作。
+
 # 感想
 多掌握一门语言就如同多了个朋友。像Ruby和Pthon都是有十多年历史的语言，所以在批判之前最好要能理解。
+
+掌握多种语言，就可以使用更多的资源。
 
 动态语言，本来就不是以效率优先的，而是写代码的人的使用感受。
 
 为什么安全工作者喜欢脚本语言呢，因为知道怎么做更重要！
+
 
 # 参考
 * http://stackoverflow.com/questions/231767/what-does-the-yield-keyword-do-in-python
