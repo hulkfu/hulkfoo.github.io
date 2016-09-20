@@ -12,6 +12,10 @@ permalink: shuangpin
 
 # 对应表
 
+这里使用的是自然码，通用，Linux的fctix默认就是这个。
+
+![自然码](/img/ZiRanMa_DoublePinyinSchemas.png)
+
 # 声母
 
 ## 平舌音
@@ -50,8 +54,8 @@ N: in            nn，您
 O: uo            哦
 P: un            un，否定，屁
 Q: iu            KQ的发音
-R: uan er        er，人的后缀
-S: ong iong      song，歌
+R: uan er        round，圆；R的发音，er，人的后缀
+S: ong iong      song，歌，
 T: ve ue         土额
 V: ui            ui,视觉接口，View
 W: ia ua         唉啊，唔啊
