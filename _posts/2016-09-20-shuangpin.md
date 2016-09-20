@@ -8,7 +8,7 @@ permalink: shuangpin
 
 # 规则
 
-* 只有韵母发音，先打o，比如昂，ang，就是o-ang，即oh。
+* 只有韵母发音，先打o，比如：“昂”，ang，就是o-ang，即oh。
 
 # 对应表
 
@@ -40,14 +40,14 @@ permalink: shuangpin
 # 记忆方法
 
 ```
-B: ou            呕乐B
+B: ou            呕乐B，“bow”，爆炸的声音
 C: iao           咬，C像牙
 D: iang uang     成龙，duang，duang
 F: en            ff，奋
 G: eng           gg，更
 H: ang           hh，航
 J: an            打牌A
-K: ao            kk，靠
+K: ao            kk，靠，嗷嗷嗷
 L: ai            ll，来
 M: ian           mm，眠
 N: in            nn，您
@@ -60,7 +60,7 @@ T: ve ue         土额
 V: ui            ui,视觉接口，View
 W: ia ua         唉啊，唔啊
 X: ie            谢
-Y: uai ing       英
+Y: uai ing       uai，Y的发音;ing，英
 Z: ei            贼，佐罗
 ```
 
