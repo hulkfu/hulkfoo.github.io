@@ -41,7 +41,7 @@ C: iao           咬，C像牙
 D: iang uang     成龙，duang，duang
 F: en            ff，奋
 G: eng           gg，更
-H: ang           航
+H: ang           hh，航
 J: an            打牌A
 K: ao            kk，靠
 L: ai            ll，来
@@ -53,7 +53,8 @@ Q: iu            KQ的发音
 R: uan er        er，人的后缀
 S: ong iong      song，歌
 T: ve ue         土额
-W: ia ua         唔啊，唉啊
+V: ui            ui,视觉接口，View
+W: ia ua         唉啊，唔啊
 X: ie            谢
 Y: uai ing       英
 Z: ei            贼，佐罗
