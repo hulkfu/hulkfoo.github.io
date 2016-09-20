@@ -26,11 +26,11 @@ permalink: shuangpin
 
 # 韵母
 
-* ang:H   an:J    ao:K   ai:L  
-* ong:S   ou:B    
-* en:F    eng:G   ei:Z  
-* ia:W    ie:X    iu:Q    in:N    iao:C    ian:M   ing:Y  iang:D   iong:S    
-* ue:T    uai:Y   uo:O    un:P    ua:W     uang:D  uan:R   ui:V    
+* ang:H   an:J    ao:K   ai:L
+* ong:S   ou:B
+* en:F    eng:G   ei:Z
+* ia:W    ie:X    iu:Q    in:N    iao:C    ian:M   ing:Y  iang:D   iong:S
+* ue:T    uai:Y   uo:O    un:P    ua:W     uang:D  uan:R   ui:V
 * ve:T    vn:P    van：R
 
 # 记忆方法
