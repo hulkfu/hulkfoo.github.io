@@ -44,4 +44,10 @@ ahi() {
 echo $(hi), baby!
 ```
 
+# 常用指令
+
+## xargs
+
+用管道时，能把显示的内容当作参数分别传入，而不是作为整个文本传入。
+
 * http://linuxconfig.org/bash-scripting-tutorial
