@@ -59,7 +59,7 @@ S: ong iong      song，歌，
 T: ve ue         土额
 V: ui            ui,视觉接口，View
 W: ia ua         唉啊，唔啊
-X: ie            谢
+X: ie            谢，ie浏览器，X如网
 Y: uai ing       uai，Y的发音;ing，英
 Z: ei            贼，佐罗
 ```
@@ -72,6 +72,8 @@ hjkl，ang、an、ao和ai，昂安奥爱，都是a开头的。
 **懒！**
 
 像我之前那样，觉得全拼挺好的，不用改变，直到改变了才知道需要。
+
+学着真的很快，半个小时上手，两个小时就熟练能够记住指法了。
 
 # 参考
 
