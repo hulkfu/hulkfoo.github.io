@@ -226,7 +226,8 @@ Child says 'OK'
 
 有时需要开个子进程做工作，然后主线程继续，就可以使用fork和exec了。
 
-其实system()和IO.popen()方法，也是通过fork和exec实现的。
+其实system()和IO.popen()方法，也是通过fork和exec实现的。如`ls`，就是fork后在子进程里执行
+ps命令，然后主进程等待执行结果。
 
 exec的作用就是让当前进程执行新的程序，替换掉原来的。
 
