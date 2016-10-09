@@ -369,6 +369,19 @@ namespace :example do
 end
 ```
 
+# ignore on Server
+
+有时我们不想让git目录里的所有文件发布到服务器上，如相关文档，那么就使用 **.gitattributes** 吧。
+
+在根目录下创建.gitattributes文件，里面如下：
+
+```
+config/deploy/deploy.rb   export-ignore
+config/deploy/            export-ignore
+```
+
+不过，cap默认就不会发布deploy相关的文件或文件夹。
+
 # 代码分析
 
 代码很清晰，分为配置和任务。在lib中，除了tasks定义的任务外，dsl和templete就是为configuration服务的。
