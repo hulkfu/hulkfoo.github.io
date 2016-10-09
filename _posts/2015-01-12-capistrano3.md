@@ -583,6 +583,11 @@ SSHKit.config.command_map = Hash.new do |hash, command|
 end
 ```
 
+# 感想
+用了Capistrno等自动化部署工具，才会发现部署原来可以如此的方便。
+
+发现重复的事情，然后用代码去流程化，这样就能构建出越来越省力的系统，从而能够去干更重要的事情。
+
 # 参考
 http://stackoverflow.com/questions/6018591/capistrano-deploy-with-thin-servers
 https://github.com/jesson/capistrano3-nginx_unicorn
