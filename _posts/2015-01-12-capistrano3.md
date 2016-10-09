@@ -3,14 +3,22 @@ layout: post
 title: Capistrano 3
 permalink: cap3
 ---
-Capistrano是一个通过ssh在远程Server上执行命令的工具。
+Capistrano是一个通过ssh在远程Server上部署Web应用的工具。
 
-主要用于自动部署：
+主要过程是：
 
-* ssh到server
-* 创建所需要文件夹
-* 拉取代码
-* 执行命令
+* ssh到server，上传git脚本
+* 如有需要，创建所需要文件夹，包括：shared和releases
+* 从git拉取项目代码到repo目录里并更新
+* 在release里创建当前版本的目录，比如20161008094807
+* 使用“git archive master | tar -x -f - -C”命令来从repo解压最新代码到上面创建的发布文件夹里
+* 把当前repo的最新head存到REVISION里，这个REVISION会保存在current目录里
+* 在releases目录里用绝对路径创建指向最新版本的soft link，名为current
+* 把上面的current移到应用根目录里
+
+通过以上步骤，就把最新代码发布成功，并保留了之前的代码。
+
+什么重启Nginx、更新数据库的事情，就需要通过HOOK来在Server上执行了。
 
 # 使用
 
