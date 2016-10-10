@@ -4,8 +4,6 @@ title: 双拼输入法
 permalink: shuangpin
 ---
 
-这是早该学的了。宁可累着也不学习，就是懒惰！
-
 # 规则
 
 * 只有韵母发音，先打o，比如：“昂”，ang，就是o-ang，即oh。
