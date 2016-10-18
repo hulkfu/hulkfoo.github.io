@@ -22,7 +22,7 @@ psql exampledb < exampledb.sql
 \q
 ```
 
-## 控制台命令
+# 控制台命令
 
 ```sh
 \h：查看SQL命令的解释，比如\h select。
@@ -36,6 +36,10 @@ psql exampledb < exampledb.sql
 \conninfo：列出当前数据库和连接的信息。
 ```
 
+# 权限
+
+md5: 密码方式
+peer
 
 # 参考
 
