@@ -6,7 +6,7 @@ permalink: shuangpin
 
 # 规则
 
-* 只有韵母发音，先打o，比如：“昂”，ang，就是o-ang，即oh。
+* 只有韵母发音，先打o，比如：“昂”，ang，就是o-ang，即oh。好像也就只有ang，在百度 输入法里是打的ah。
 
 # 对应表
 
