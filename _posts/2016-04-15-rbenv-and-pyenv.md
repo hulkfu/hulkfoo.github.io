@@ -33,6 +33,14 @@ PATH=~/.rbenv/shims:/usr/local/bin:/usr/bin:/bin
 # 问题
 * 需要使用sudo的话，把shims下的bin文件软链接到 /usr/local/bin 目录下即可，否则sudo找不到。
 
+rbevn install 2.3.1 error:
+
+rbenv configure: error: C compiler cannot create executables
+
+```
+apt-get install build-essential
+```
+
 # 感想
 Ruby和Python并不非要二选一，两者可以兼得啊！而且可以相互学习！
 

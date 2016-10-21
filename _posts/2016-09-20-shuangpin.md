@@ -64,6 +64,11 @@ Z: ei            贼，佐罗
 
 hjkl，ang、an、ao和ai，昂安奥爱，都是a开头的。
 
+# [Ubuntu下搜狗输入法安装](http://pinyin.sogou.com/linux/)
+
+1. 安装fcitx
+2. 下载deb包，安装
+
 # 感想
 这么好的双拼输入法为什么没有全拼用的多呢？
 

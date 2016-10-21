@@ -41,6 +41,13 @@ psql exampledb < exampledb.sql
 md5: 密码方式
 peer
 
+# 问题
+gem install pg error:
+
+```
+sudo apt-get install libpq-dev
+```
+
 # 参考
 
 * http://www.ruanyifeng.com/blog/2013/12/getting_started_with_postgresql.html
