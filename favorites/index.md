@@ -23,6 +23,10 @@ title: 收藏夹
 * [DropPDF](http://droppdf.com)
 * [看看豆](http://kankandou.com/)
 
+# Resources
+
+- [The Pirate Bay](http://thepiratebay.cd/)
+
 # Tools
 
 ## YouTube download
