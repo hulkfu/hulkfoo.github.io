@@ -5,7 +5,7 @@ title: Rails里的Controller和Router
 
 Router定义了外部访问时URL的样子，通过筛选后，交给对应的Controller处理。
 
-
+玩转了它们，就可以构造自己想要的url，并对相应的请求进行处理。
 
 # Router
 
