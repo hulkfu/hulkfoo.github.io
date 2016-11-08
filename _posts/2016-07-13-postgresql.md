@@ -41,6 +41,12 @@ psql exampledb < exampledb.sql
 md5: 密码方式
 peer
 
+# auto start
+
+```
+sudo update-rc.d postgresql enable
+```
+
 # 问题
 gem install pg error:
 
