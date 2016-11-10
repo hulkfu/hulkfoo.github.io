@@ -125,19 +125,32 @@ bundle install --deployment --without development test
 
 #### b.配置database.yml和secrets.yml
 
-生成secret：
+用Capistrano部署时，这两个文件都会在linked_files里：
+
+```rb
+append :linked_files, 'config/database.yml', 'config/secrets.yml'
+```
+
+linked_files里的文件是共享的，即使传到了git上，部署是也会删除，然后链到shared目录里。
+
+然后在Rails 4.1 后，可以在程序里用**Rails.application.secrets.key** 来读取里面的配置文件。
+这里的key就是secrets.yml里的属性字段，它会根据不同的环境来读取相应的值的。
+
+
+1. 生成secret：
 
 ```
 bundle exec rake secret
 ```
-修改产品环境的secret：
+
+2. 修改产品环境的secret：
 
 ```
 production:
   secret_key_base: <%=ENV["SECRET_KEY_BASE"]%>
 ```
 
-设置文件权限：
+3. 设置文件权限：
 
 ```
 chmod 700 config db
