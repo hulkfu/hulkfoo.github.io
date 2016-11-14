@@ -217,11 +217,12 @@ end
 Rails对Action和Fragment提供不同的Cache储存方案，Page存储在硬盘里。
 
 可以通过 config.cache_store= 来配置，针对所以的在config/application.rb文件里，针对不同环境的
-在config/environments/*.rb各个文件里。
+在config/environments/里各个文件里。
 
 第一个参数是使用的cache store，后面的将会作为参数传给cache store的构造函数。
 
 ## ActiveSupport::Cache::Store
+
 这个类提供Rails与cache交互的方法，但它是一个抽象类，需要相应的cache store的具体实现类才能使用。
 
 主要有read, wreite, delete, exist? 和 fetch 方法。Fetch方法能够接受一个block，这样有值的话
@@ -376,6 +377,12 @@ end
 
 ## [Dalli](https://github.com/petergoldstein/dalli)
 memcached的Ruby接口。
+
+在Gemfile里添加dalli，然后去环境里配置：
+
+```
+config.cache_store = :dalli_store
+```
 
 # 参考
 
