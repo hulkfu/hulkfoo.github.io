@@ -97,7 +97,7 @@ kNN就是根据样本来学习的，为了准确率，我们又要提供足够�
 - 缺点： 可能会产生过度匹配问题。
 - 适用数据类型： 数值型和标称型。
 
-那么如何选择特征呢？信息论里的熵越大越好，越大说明这个特征的区分度越高。
+那么如何选择特征呢？信息论里的熵越大说明这个信息的信息量越多。
 
 信息熵的公式：
 
@@ -120,6 +120,100 @@ def calcShannonEnt(dataSet):
 
     return shannonEnt
 ```
+
+### 划分数据集
+
+```py
+def splitDataSet(dataSet, axis, value):
+    """根据指定维度axis，筛选出其值是value的子数据集。
+
+    Args:
+      dataSet: 待划分数据集。
+      axis: 划分数据集的特征。
+      value: 特征值。
+    return:
+      筛选的子集。
+    """
+    retDataSet = []
+    for featVec in dataSet:
+        if featVec[axis] == value:
+
+            # 这两行的意思就是这个vec，除了axis那个元素的value不要，前后的都要
+            reducedFeatVec = featVec[:axis]
+            reducedFeatVec.extend(featVec[axis+1:])
+
+            retDataSet.append(reducedFeatVec)
+    return retDataSet
+```
+
+### 选择最优的特征
+
+关于dataSet的格式：
+
+1. 由列表组成，且所有列表长度相同。
+2. 列表的最后一个元素是当前实例的类别标签。
+
+```py
+def chooseBestFeatureToSplit(dataSet):
+    numFeatures = len(dataSet[0]) - 1
+    baseEntropy = calcShannonEnt(dataSet)
+    bestInfoGain = 0.0;
+    bestFeature = -1;
+    # 遍历每个特征
+    for i in range(numFeatures):
+        # 获取所有唯一特征值
+        featList = [item[i] for item in dataSet]
+        uniqueVals = set(featList)
+        newEntropy = 0.0
+        for value in uniqueVals:
+            subDataSet = splitDataSet(dataSet, i, value)
+            prob = len(subDataSet)/float(len(dataSet))
+            newEntropy += prob * calcShannonEnt(subDataSet)
+        # 信息增益，
+        infoGain = baseEntropy - newEntropy
+        if (infoGain > bestInfoGain):
+            bestInfoGain = infoGain
+            bestFeature = i
+    return bestFeature
+```
+
+### 递归构建决策树
+
+递归结束的条件是：程序遍历完所有划分数据集的属性，或者每个分支下的实例都具有相同的分类。
+
+如果已经处理了所有属性，但是标签依然不是唯一的，那么可以采用多数表决法决定该叶子节点的分类。
+
+```py
+def majorityCnt(classList):
+    classCount = {}
+    for vote in classList:
+        classList[vote] = classList.get(vote, 0) + 1
+    sortedClassCount = sorted(classCount.items(), key=operator(1), reverse=True)
+    return sortedClassCount[0][0]
+```
+
+```py
+def createTree(dataSet, labels):
+    classList = [item[-1] for item in dataSet]
+    # 所有数据集一个类别
+    if classList.count(classList[0]) == len(classList):
+        return classList[0]
+    # 已经遍历完了所有特征，但剩下的还是不一个类别
+    if len(dataSet[0]) == 1:
+        return majorityCnt(classList)
+    bestFeature = chooseBestFeatureToSplit(dataSet)
+    bestFeatureLable = labels[bestFeature]
+    myTree = {bestFeatureLable:{}}
+    del(labels[bestFeature])
+    featureValues = [item[bestFeature] for item in dataSet]
+    uniqueVals = set(featureValues)
+    for value in uniqueVals:
+        subLabels = labels[:]
+        myTree[bestFeatureLable][value] = createTree(splitDataSet\
+            (dataSet, bestFeature, value), subLabels)
+    return myTree
+```
+
 
 
 # 感想
