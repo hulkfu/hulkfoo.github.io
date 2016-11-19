@@ -167,7 +167,7 @@ myData <- data.frame(col1, col2, col3, ...)
 
 ```
 
-### 因子（factor
+### 因子 (factor)
 类别（名义型）和有序类别（有序型）变量在R中称为因子（factor）。
 
 - 名义型变量是没有顺序之分的类别变量。
