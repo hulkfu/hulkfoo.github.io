@@ -38,6 +38,12 @@ $$\sum_{i=1}^n \frac{1}{i^2} \quad and \quad \prod_{i=1}^n \frac{1}{i^2} \quad a
 
 # LaTex 速学
 
+嵌入markdown：
+
+```
+- 行间 $$ 公式 $$
+```
+
 常用代码：
 
 - \frac 分子分母之间的横线
