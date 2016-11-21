@@ -185,6 +185,7 @@ def chooseBestFeatureToSplit(dataSet):
 
 ```py
 def majorityCnt(classList):
+    import operator
     classCount = {}
     for vote in classList:
         classList[vote] = classList.get(vote, 0) + 1
