@@ -38,8 +38,8 @@ psql exampledb < exampledb.sql
 
 # 权限
 
-md5: 密码方式
-peer
+md5: 密码方式。
+peer: 当前Linux的用户名，比如默认的postgres用户，需要切换到postgres用户去访问设置数据库。
 
 # auto start
 
