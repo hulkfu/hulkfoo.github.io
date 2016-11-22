@@ -47,6 +47,14 @@ peer: 当前Linux的用户名，比如默认的postgres用户，需要切换到p
 sudo update-rc.d postgresql enable
 ```
 
+# 安装
+
+## Mac
+Mac下直接下载[Postgres.app](http://postgresapp.com/)，拉到应用目录里就可以使用。
+
+当然也可以用brew或直接安装，只是Mac一般开发用，没有必要一直开着数据库服务。
+
+
 # 问题
 gem install pg error:
 
