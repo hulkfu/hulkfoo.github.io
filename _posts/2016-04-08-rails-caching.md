@@ -379,6 +379,7 @@ Mac下用brew安装：
 
 ```
 brew install memcached --with-sasl
+# 用brew安装之后下面会提示怎么启动
 ```
 
 里面的参数是为了配合[dalli gem](https://github.com/petergoldstein/dalli).

@@ -52,13 +52,15 @@ sudo update-rc.d postgresql enable
 # 安装
 
 ## Mac
-Mac下直接下载[Postgres.app](http://postgresapp.com/)，拉到应用目录里就可以使用。
+直接下载[Postgres.app](http://postgresapp.com/)，拉到应用目录里就可以使用。
 
 然后在.bash_profile里配置PATH:
 
 ```
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
 ```
+
+Postgres.app默认是trust认证，所以只需要有用户名和host就可以连接。
 
 当然也可以用brew或直接安装，只是Mac一般开发用，没有必要一直开着数据库服务。
 
