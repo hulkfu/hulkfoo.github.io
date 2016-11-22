@@ -38,7 +38,9 @@ psql exampledb < exampledb.sql
 
 # 权限
 
-md5: 密码方式。
+trust: 只要知道数据库用户名就不需要密码或ident就能登录。
+password: 明文密码方式，一般用md5.
+md5: md5密码方式。
 peer: 当前Linux的用户名，比如默认的postgres用户，需要切换到postgres用户去访问设置数据库。
 
 # auto start
@@ -51,6 +53,12 @@ sudo update-rc.d postgresql enable
 
 ## Mac
 Mac下直接下载[Postgres.app](http://postgresapp.com/)，拉到应用目录里就可以使用。
+
+然后在.bash_profile里配置PATH:
+
+```
+export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
+```
 
 当然也可以用brew或直接安装，只是Mac一般开发用，没有必要一直开着数据库服务。
 
