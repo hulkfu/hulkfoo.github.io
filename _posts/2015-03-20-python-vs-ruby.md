@@ -4,7 +4,7 @@ title: Python VS. Ruby
 ---
 
 # 引子
-在同时用Python和Ruby，固做总结，用的越多，感悟也越多，随时在变着！
+在同时用Python和Ruby，固做总结，用的越多，感悟也越多，比较乱，随时在变着！
 
 Python没有太多新概念，不像Ruby的元编程、作用域等需要去适应。Python唯一需要适应的就是实例方法的self参数以及继承父类时主动去调用父类的够找函数，这也是全凭self。
 
@@ -33,11 +33,15 @@ Ruby社区的东西都很漂亮，对比一想Python的官网就知道了。可�
 
 很多时候，动态语言是对现有C库的封装或重新实现。
 
-在python中，通过self也就是当前实例，可以很容易的指定变量。python的其它代码都是围绕着self转的，像self的衣服，self可以穿自己的，也可以穿它爸的。
+在Python中，通过self也就是当前实例，可以很容易的指定变量。Python的其它代码都是围绕着self转的，像self的衣服，self可以穿自己的，也可以穿它爸的。
 
-在ruby中，实例变量就是以@开头的变量。
+在Ruby中，实例变量就是以@开头的变量。
 
 动态语言与静态语言的一个很大区别就是变量不需要提前定义了。当然都需要初始化。
+
+# 感观
+Python里面大写开头的单词比较少，即使是类，也用小心，用的时候就像调用方法。
+
 
 # 更高的层面
 站在哪个位置，看到哪个层面，就说哪个层面的事情。对程序员，就说编程语言、程序设计等，对于项目经理就是功能的实现，对于老板就说挣钱。
@@ -59,16 +63,16 @@ Python import一个文件后，相当于Java里的import，只是引入了包，
 想重新加载，就用load方法。
 
 # 方法
-在python中执行方法要加是()，如js中那样，而Ruby不用。就是这一点，造就了很大的代码差异。
+在Python中执行方法要加是()，如js中那样，而Ruby不用。就是这一点，造就了很大的代码差异。
 
 加括号的好处是，方法的执行很明确，那么不加方法就是对这个方法的访问。
 
 而Ruby因为不用加括号，更适合写出DSL。
 
-想把一个方法作为参数传递，python就传方法名即可，ruby则要传Proc，要么是块。
+想把一个方法作为参数传递，Python就传方法名即可，Ruby则要传Proc，要么是块。
 
 # 领域
-从社区的贡献看，Ruby适合做框架，因为有Rails，而python比较多科学运算、功能实现。
+从社区的贡献看，Ruby适合做框架，因为有Rails，而Python比较多科学运算、功能实现。
 
 想想这也是因为这两种语言的语法格式适合的。
 
@@ -88,7 +92,7 @@ pyinstaller -F xxx.py
 # yield
 两边都有yield。
 
-ruby的是执行方法后的程序块，而python是用来定义生成器。
+Ruby的是执行方法后的程序块，而Python是用来定义生成器。
 
 # 分与合
 分：开发软件时，为了去耦合会将代码分开写到各个文件里，修改时也只会影响这个文件。
@@ -120,4 +124,4 @@ Ruby可以用include或extend模块来扩展类的方法，Python则偏向于使
 
 
 # 参考
-* http://stackoverflow.com/questions/231767/what-does-the-yield-keyword-do-in-python
+* http://stackoverflow.com/questions/231767/what-does-the-yield-keyword-do-in-Python
