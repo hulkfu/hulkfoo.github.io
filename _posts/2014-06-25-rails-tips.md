@@ -17,6 +17,33 @@ Rails确实很方便，一句scaffold命令就可以生成一个博客应用。
 
 controller与view中的实例变量即@开头的变量是相通的。
 
+# 枚举——Enum
+
+```rb
+class Conversation < ActiveRecord::Base
+  enum status: [ :active, :archived ]
+end
+
+# conversation.update! status: 0
+conversation.active!
+conversation.active? # => true
+conversation.status  # => "active"
+
+# conversation.update! status: 1
+conversation.archived!
+conversation.archived? # => true
+conversation.status    # => "archived"
+
+# conversation.status = 1
+conversation.status = "archived"
+
+conversation.status = nil
+conversation.status.nil? # => true
+conversation.status      # => nil
+```
+
+参考：http://edgeapi.rubyonrails.org/classes/ActiveRecord/Enum.html
+
 # Rails runner
 
 runner可以用来在Rails的环境下运行不需要交互的代码。它算是简单的Rake任务。
@@ -84,5 +111,3 @@ $ bin/rails runner -e staging "Model.long_running_method"
 其实在view中使用的path等，都是helper。
 
 * http://mixandgo.com/blog/the-beginner-s-guide-to-rails-helpers
-
-
