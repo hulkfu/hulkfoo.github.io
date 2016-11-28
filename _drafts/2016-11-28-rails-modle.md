@@ -1,8 +1,11 @@
 ---
 layout: post
-title: Rails中多态数据关联
+title: Rails Model
 ---
 
+# Assocaiation
+
+## polymorphic-association
 多态是面向对象的基石，它使程序能够把不同种类的东西当作相同的东西来处理，从而做到更高层的抽象。
 
 实现上Java用接口，Ruby用了Duck Type。
