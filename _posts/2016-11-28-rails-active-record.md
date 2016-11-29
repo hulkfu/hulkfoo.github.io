@@ -52,6 +52,13 @@ polymorphic 翻译来就是“多态”，它是面向对象的基石。
 所以它还能实现继承，
 也就是[单表继承](http://api.rubyonrails.org/classes/ActiveRecord/Inheritance.html)让所有子类在一张表里。
 
+只不过继承里 xxxxable 是父类（就不叫 xxxxable 了），而 xxxxable 是组合关系，而且是被多个类拥有，比如
+文章和照片都可以有评论。其实都可以理解为一对多的关系，被多个子类继承，或被多个类拥有。在设计模式里，更倾向于
+使用组合，因为这样更耦合。
+
+只有理解了各个类之间的关系，比如是继承还是耦合，才能更好的给类起名字。一个好的类名说明你对它们的
+关系理解了。
+
 实现上Java用接口，Ruby用了Duck Type。
 
 那么在表数据中，如何来表示这条记录是哪个态呢？多加一个type字段，一般是xxxxable_type.
@@ -81,6 +88,18 @@ end
 class Event < ActiveRecord::Base
   has_many :comments, :as => :commentable
 end
+```
+
+比如 a_phote.comments 将会进行如下查询：
+
+```sql
+ SELECT "comments".* FROM "comments" WHERE "comments"."commentable_id" = $1 AND "comments"."commentable_type" = $2  [["commentable_id", 1], ["commentable_type", "Phote"]]
+```
+
+所以最好把 commentable_id 和 commentable_type 一起加入到数据框的索引，在 migration里：
+
+```rb
+add_index :comments, [:commentable_id, :commentable_type]
 ```
 
 使用belongs_to和has_many这么“通俗”的方法就搞定了，关键是下面的参数。
