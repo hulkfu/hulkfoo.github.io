@@ -9,10 +9,12 @@ ActiveModel 是 ActiveRecord 的一部分，主要负责模型相关，而后者
 
 # 关系
 
-- has_many
 - belongs_to
 - has_one
-- ...
+- has_many
+- has_many :through
+- has_one :through
+- has_and_belongs_to_many
 
 ## 主要参数
 
