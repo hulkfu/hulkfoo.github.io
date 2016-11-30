@@ -44,7 +44,7 @@ ActiveModel 是 ActiveRecord 的一部分，主要负责模型相关，而后者
 ## polymorphic
 主要解决一张表要记录多种类型的数据。这样方便筛选。
 
-比如一张评论表，我想记录照片的评论，又想记录文章的评论，那么就用polymorphic吧，而不是建两张表。
+比如一张评论表，想记录照片的评论，又想记录文章的评论，那么就用polymorphic吧，而不是建两张表。
 
 polymorphic 翻译来就是“多态”，它是面向对象的基石。
 它使程序能够把不同种类的东西当作相同的东西来处理，从而做到更高层的抽象。
@@ -55,8 +55,6 @@ polymorphic 翻译来就是“多态”，它是面向对象的基石。
 只不过继承里 xxxxable 是父类（就不叫 xxxxable 了），而 xxxxable 是组合关系，而且是被多个类拥有，比如
 文章和照片都可以有评论。其实都可以理解为一对多的关系，被多个子类继承，或被多个类拥有。在设计模式里，更倾向于
 使用组合，因为这样更耦合。
-
-
 
 只有理解了各个类之间的关系，比如是继承还是耦合，才能更好的给类起名字。一个好的类名说明你对它们的
 关系理解了。
@@ -92,23 +90,59 @@ class Event < ActiveRecord::Base
 end
 ```
 
+
+在数据库migration里，可以用 t.references 来创建表结构：
+
+```rb
+class CreatePictures < ActiveRecord::Migration[5.0]
+  def change
+    create_table :comments do |t|
+      t.string :content
+      t.references :commentable, polymorphic: true, index: true
+      t.timestamps
+    end
+  end
+end
+```
+
 比如 a_phote.comments 将会进行如下查询：
 
 ```sql
  SELECT "comments".* FROM "comments" WHERE "comments"."commentable_id" = $1 AND "comments"."commentable_type" = $2  [["commentable_id", 1], ["commentable_type", "Phote"]]
 ```
 
-所以最好把 commentable_id 和 commentable_type 一起加入到数据框的索引，在 migration里：
+上面的 t.references :commentable, polymorphic: true, index: true
+已经把 commentable_id 和 commentable_type 一起加入到数据框的索引了，相当于在 migration里：
 
 ```rb
 add_index :comments, [:commentable_id, :commentable_type]
 ```
 
-使用belongs_to和has_many这么“通俗”的方法就搞定了，关键是下面的参数。
+使用belongs_to和has_many这么“通俗”的方法就搞定了。可以看到不像非多态时，belongs_to 后的
+参数是具体的 Owner，比如 user，这里直接是 commentable，并且 polymorphic 为 true。
+正式这样将其多态了，因为没有指明具体的类，而是一个需要有评论功能的类，比如 Photo。当然，也就不用
+belongs_to 给每个可能的 Owner 了，都在 commentable 里了。
 
-belongs_to后面的polymorphic为true，has_many后的as为那个多态的东西。
+而这个 Photo 类通过 has_many（拥有） comments，并且 as（当做）commentable 来变成可以被评论的。
+然后这个 commentable 可以通过 comments 表里的 commentable_id 和 commentable_type 来定位。如：
 
-可以想象，当rails发现一个modle的belongs_to后的polymorphic为true时，它就会把前面的多态东西commentable记下来，生成动态方法，当生成数据时就会记录下commentable_type和commentable_id。
+```rb
+comment.commentable # 将得到一个实例，比如 photo
+```
+
+创建评论的话，用：
+
+```rb
+# has_many
+phote.comments.create
+
+# has_one 的情况
+phote.create_comment
+```
+
+> 一次 belongs_to，多次被 has_many. 值！
+
+可以想象，当 Rails 发现一个 modle 的 belongs_to 后的 polymorphic 为 true 时，它就会把前面的多态东西 commentable 记下来，生成动态方法，当生成数据时就会记录下 commentable_type 和 commentable_id。
 
 has_many中的as指明了comments的类别，这样就能有相应的动态方法了。
 
@@ -125,7 +159,7 @@ commentable_type属性来区分，同时通过commentable_id来记录是哪个ar
 comment。如果是article的，那么commentable_type就是"atricle"，commentable_id就是article
 的id。
 
-comments的controller如下：
+comments 的 controller 如下：
 
 ```ruby
 def index
@@ -156,31 +190,7 @@ def find_commentable
 end
 ```
 
-
-在数据库migration里，可以用 t.references 来创建表结构：
-
-```rb
-class CreatePictures < ActiveRecord::Migration[5.0]
-  def change
-    create_table :comments do |t|
-      t.string :content
-      t.references :commentable, polymorphic: true, index: true
-      t.timestamps
-    end
-  end
-end
-```
-
-创建 comment:
-
-```rb
-# has_many
-phote.comments.create
-
-# has_one
-phote.create_comment
-
-```
+这里的 constantize 方法能获得字符串的常量，即在变成环境里能用的变量。
 
 # 参考
 
