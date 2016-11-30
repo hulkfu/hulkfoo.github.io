@@ -56,6 +56,8 @@ polymorphic 翻译来就是“多态”，它是面向对象的基石。
 文章和照片都可以有评论。其实都可以理解为一对多的关系，被多个子类继承，或被多个类拥有。在设计模式里，更倾向于
 使用组合，因为这样更耦合。
 
+
+
 只有理解了各个类之间的关系，比如是继承还是耦合，才能更好的给类起名字。一个好的类名说明你对它们的
 关系理解了。
 
@@ -169,9 +171,21 @@ class CreatePictures < ActiveRecord::Migration[5.0]
 end
 ```
 
+创建 comment:
+
+```rb
+# has_many
+phote.comments.create
+
+# has_one
+phote.create_comment
+
+```
+
 # 参考
 
 [1]: http://railscasts.com/episodes/154-polymorphic-association
 [2]: http://guides.rubyonrails.org/association_basics.html#polymorphic-associations
 
 - http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html
+- https://tomafro.net/2009/08/using-indexes-in-rails-index-your-associations
