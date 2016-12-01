@@ -30,7 +30,7 @@ ActiveModel 是 ActiveRecord 的一部分，主要负责模型相关，而后者
 - foreign_type: 如果这个类是 polymorphic，指明相关的列名。默认是as的参数加上_type，比如：一个类定义一个 taggable， has_one :tag, as: :taggable，那么会用 “taggable_type” 为默认的 :foreign_type.
 - primary_key: 指定属性名，比如select where primary_key = id。
 - polymorphic: 配合 belongs_to 使用，指明当前类是否是多态。
-- as: 别名，配合 has_many 使用，指明多态的 polymorphic “父类”。
+- as: 当做，配合 has_many 使用，指明多态的 polymorphic “父类”。
 - through: Specifies a Join Model through which to perform the query. Options for :class_name, :primary_key, and :foreign_key are ignored, as the association uses the source reflection. You can only use a :through query through a has_one or belongs_to association on the join model.
 - source: Specifies the source association name used by has_one :through queries. Only use it if the name cannot be inferred from the association. has_one :favorite, through: :favorites will look for a :favorite on Favorite, unless a :source is given.
 - source_type: Specifies type of the source association used by has_one :through queries where the source association is a polymorphic belongs_to.
@@ -39,6 +39,9 @@ ActiveModel 是 ActiveRecord 的一部分，主要负责模型相关，而后者
   - Note that ActiveRecord::NestedAttributes::ClassMethods#accepts_nested_attributes_for sets :autosave to true.
 - inverse_of: Specifies the name of the belongs_to association on the associated object that is the inverse of this has_one association. Does not work in combination with :through or :as options. See ActiveRecord::Associations::ClassMethods's overview on Bi-directional associations for more detail.
 - required: When set to true, the association will also have its presence validated. This will validate the association itself, not the id. You can use :inverse_of to avoid an extra query during validation.
+
+## has_many through
+多对多的关系。
 
 
 ## polymorphic
