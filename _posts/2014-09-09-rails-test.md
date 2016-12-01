@@ -5,6 +5,8 @@ title: Rails Test
 
 把经常在做的测试过程抽象成测试用例代码，比如功能函数、操作过程、性能等任何能想到的。
 
+首先亮明观点，我觉得 Rails 自带的 Minitest 和 Fixture 就很好用。
+
 # Minitest
 Minitest 是默认的，也挺好用的，而且还简单。
 
@@ -24,7 +26,7 @@ end
 
 常用测试判断 [assertion](http://docs.seattlerb.org/minitest/Minitest/Assertions.html):
 
-```
+```rb
 assert( test, [msg] )	Ensures that test is true.
 assert_not( test, [msg] )	Ensures that test is false.
 assert_equal( expected, actual, [msg] )	Ensures that expected == actual is true.
@@ -56,6 +58,69 @@ assert_not_predicate ( obj, predicate, [msg] )	Ensures that obj.predicate is fal
 assert_send( array, [msg] )	Ensures that executing the method listed in array[1] on the object in array[0] with the parameters of array[2 and up] is true, e.g. assert_send [@user, :full_name, 'Sam Smith']. This one is weird eh?
 flunk( [msg] )	Ensures failure. This is useful to explicitly mark a test that isn't finished yet.
 ```
+
+# Fixture
+Rails 自带的 Fixture 也是简单好用，不要为了生成几个数据而且引入一个生成框架，而且它还很准确。
+
+比如  <your-rails-app>/test/fixtures/web_sites.yml 文件：
+
+```rb
+rubyonrails:
+  id: 1
+  name: Ruby on Rails
+  url: http://www.rubyonrails.org
+
+google:
+  id: 2
+  name: Google
+  url: http://www.google.com
+```  
+
+然后在 test_helper.rb 里，Fixtures 会在执行测试前装入数据库：
+
+```rb
+class ActiveSupport::TestCase
+  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
+  fixtures :all
+end
+
+```
+
+通过声明 self.use_instantiated_fixtures = true 来实例化 fixtures：
+
+```rb
+# 可以直接用 yml 里的名字来找到数据
+test "find" do
+  assert_equal "Ruby on Rails", web_sites(:rubyonrails).name
+end
+
+# 或者直接用 @实例名
+test "find_alt_method_2" do
+  assert_equal "Ruby on Rails", @rubyonrails.name
+end
+```
+
+## 嵌入 erb 动态数据
+
+```rb
+<% 1.upto(1000) do |i| %>
+fix_<%= i %>:
+  id: <%= i %>
+  name: guy_<%= i %>
+<% end %>
+```
+
+可以在 test_helper.rb 里定义公用的 help：
+
+```rb
+module FixtureFileHelpers
+  def file_sha(path)
+    Digest::SHA2.hexdigest(File.read(Rails.root.join('test/fixtures', path)))
+  end
+end
+ActiveRecord::FixtureSet.context_class.include FixtureFileHelpers
+```
+
 
 # RSpec
 在Rails下需要使用[rspec-rails](https://github.com/rspec/rspec-rails)，其官网参考文档很详细。
@@ -160,3 +225,5 @@ FactoryGirl.define do
 
 # 参考
 - http://edgeguides.rubyonrails.org/testing.html
+- http://brandonhilkert.com/blog/7-reasons-why-im-sticking-with-minitest-and-fixtures-in-rails/
+- http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
