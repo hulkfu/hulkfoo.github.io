@@ -142,10 +142,6 @@ phote.create_comment
 
 > 一次 belongs_to，多次被 has_many. 值！
 
-可以想象，当 Rails 发现一个 modle 的 belongs_to 后的 polymorphic 为 true 时，它就会把前面的多态东西 commentable 记下来，生成动态方法，当生成数据时就会记录下 commentable_type 和 commentable_id。
-
-has_many中的as指明了comments的类别，这样就能有相应的动态方法了。
-
 这里也可以理解为Comment通过：
 
 ```rb
