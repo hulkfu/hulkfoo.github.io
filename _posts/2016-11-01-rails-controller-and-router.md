@@ -1,19 +1,41 @@
 ---
 layout: post
-title: Rails里的Controller和Router
+title: Rails 里的 Controller 和 Router
 ---
 
-Router定义了外部访问时URL的样子，通过筛选后，交给对应的Controller处理。
+Router定义了外部访问时URL的样子，通过匹配筛选后，交给对应的Controller处理。
 
-玩转了它们，就可以构造自己想要的url，并对相应的请求进行处理。
+玩转了它们，就可以构造自己想要的url，并对相应的请求指定 Controller 进行处理。
+
+其实，一个 Controller 不一定需要 Model， 因为它只是处理 Route 传来的请求，它也不需要 View，因为
+它可以 render 任何 views 目录的模板。
+
+Rails 是很灵活的，它里面的 MVC 可以单独活动，只是秉着“惯例胜过配制”的原则：
+
+> CONVENTIONS OVER CONFIGURATIONS
+
+默认了很多根据名字的方便，比如 PostsController 的 view 就在 view/posts 目录里，而它有个
+Model 是 Post，数据库建的表是 posts。然后在 config/routes.rb 里：
+
+```rb
+resources :posts
+```
+
+就会建好指向 PostController 的 CURD 操作，并定义好 RESTful 的 url。
+
+是的，很方便，也符合信息论理论，用短的编码实现常用的操作。非常用的就用参数配制嘛！
 
 # Router
 
 ## Resourceful Routes
 
+就是我们常见的，Rails 默认的规则。
+
 ## Non-Resourceful Routes
 
 而往往我们构造的页面，不会像脚手架生成的那样死板。
+
+### 定义 url
 
 - :controller 对应app里的一个Controller
 - :action 对应Controller里的Action
@@ -43,12 +65,35 @@ get ':controller/:action/:id/with_user/:user_id'
 - 路径： /photos/show/1/with_user/2
 - 得到： params = { controller: 'photos', action: 'show', id: '1', user_id: '2' }
 
+### 改变 Controller
 
+```rb
+# 关于 photes 的处理，就会交给 ImagesController 来处理，但是 path helper 还是 photos。
+resources :photos, controller: 'images'
+
+# 改变 path helper 的名字
+resources :photos, as: 'images'
+
+# 那么这个意思就是 —— 只改变 url
+resources :photos, controller: 'images', as: 'images'
+
+# 只有符合条件的 id 才能传给 Controller
+resources :photos, constraints: { id: /[A-Z][A-Z][0-9]+/ }
+
+# 覆盖 Actions
+resources :photos, path_names: { new: 'make', edit: 'change' }
+
+```
 
 
 # Controller
+Controller 根据 Router 传来的请求，操作 Model，并生成 View。
 
+但这里注意了，生成的 View 是由模板和 Model 一起生成的。
 
+传到 Router 的请求，也是用户在 View 上点击传来的。
+
+因此，这是一个蛇咬尾巴的故事。
 
 ## ActionController::Parameters
 
@@ -89,3 +134,4 @@ permitted_params[:person][:name]
 # 参考
 - http://guides.rubyonrails.org/routing.html
 - http://api.rubyonrails.org/classes/ActionController/Parameters.html
+- http://www.nascenia.com/ruby-on-rails-development-principles/

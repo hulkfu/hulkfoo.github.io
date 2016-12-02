@@ -191,6 +191,16 @@ end
 
 这里的 constantize 方法能获得字符串的常量，即在变成环境里能用的变量。
 
+## Mixin —— 混入
+其实上面的多态，可以理解为一种混入方式。只不过这次需要存入数据库里。
+
+在 Rails 里，一般的混入是在 models/concerns 里定义的 module，并 extend ActiveSupport::Concern，
+后者让 module 更规范化，更容易被 extended。
+
+对，混入有一个好记的特征 —— 名字以 able 结尾。表示有了它就有了某种能力。
+
+混入是一种多父类继承的一种实现方式，对于类里共同的功能进行抽象。
+
 # 参考
 
 [1]: http://railscasts.com/episodes/154-polymorphic-association
