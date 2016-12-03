@@ -65,7 +65,7 @@ get ':controller/:action/:id/with_user/:user_id'
 - 路径： /photos/show/1/with_user/2
 - 得到： params = { controller: 'photos', action: 'show', id: '1', user_id: '2' }
 
-### 改变 Controller
+### 改变 url 的样子 或对应的 Controller
 
 ```rb
 # 关于 photes 的处理，就会交给 ImagesController 来处理，但是 path helper 还是 photos。
@@ -77,6 +77,12 @@ resources :photos, as: 'images'
 # 那么这个意思就是 —— 只改变 url
 resources :photos, controller: 'images', as: 'images'
 
+# 上面情况，另一种简单的方法
+resources :photos, path: 'images'
+
+# 这么表示 /:id 直接传到 PhotosController
+resources :photos, path: ''
+
 # 只有符合条件的 id 才能传给 Controller
 resources :photos, constraints: { id: /[A-Z][A-Z][0-9]+/ }
 
@@ -85,6 +91,8 @@ resources :photos, path_names: { new: 'make', edit: 'change' }
 
 ```
 
+namespace 和 scope，它们都是给 url 加给前缀，而 namespace 也给 helper 加个前缀，
+scope就只是给 url 加前缀。
 
 # Controller
 Controller 根据 Router 传来的请求，操作 Model，并生成 View。
