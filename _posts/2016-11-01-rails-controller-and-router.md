@@ -89,10 +89,20 @@ resources :photos, constraints: { id: /[A-Z][A-Z][0-9]+/ }
 # 覆盖 Actions
 resources :photos, path_names: { new: 'make', edit: 'change' }
 
+# 默认就是用 name 代替 id，比如 show action 就成了 、photos/:name
+resources :photos, param: :name
+# 当然相应要 通知 model，咱不用 id 了，用 name 了。就是需要覆盖 to_param 方法
+class Phote < ApplicationRecode
+  def to_param
+    name
+  end
+end
+
 ```
 
 namespace 和 scope，它们都是给 url 加给前缀，而 namespace 也给 helper 加个前缀，
 scope就只是给 url 加前缀。
+
 
 # Controller
 Controller 根据 Router 传来的请求，操作 Model，并生成 View。
@@ -143,3 +153,4 @@ permitted_params[:person][:name]
 - http://guides.rubyonrails.org/routing.html
 - http://api.rubyonrails.org/classes/ActionController/Parameters.html
 - http://www.nascenia.com/ruby-on-rails-development-principles/
+- http://stackoverflow.com/questions/2837102/changing-the-id-parameter-in-rails-routing

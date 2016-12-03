@@ -201,6 +201,9 @@ end
 
 混入是一种多父类继承的一种实现方式，对于类里共同的功能进行抽象。
 
+
+# 数据验证
+
 # 参考
 
 [1]: http://railscasts.com/episodes/154-polymorphic-association
