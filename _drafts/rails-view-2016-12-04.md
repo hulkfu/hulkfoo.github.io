@@ -5,6 +5,23 @@ title: Rails View
 
 # Form
 
+Rails 里有两种方法创建 form：
+
+- form_tag
+- form_for
+
+form_tag 就是自己指定 form 的 action url，而 form_for 是根据 model 实例自动指定 action url。
+
+有文件需要上传时，需要给 form 加：
+
+```html
+enctype="multipart/form-data"
+
+# 或
+
+multipart: true
+```
+
 ## 在Rails Form里使用嵌套属性
 
 在模型里，用accepts_nested_attributes_for声明要嵌入的其它模型，比如has_many的。
@@ -42,8 +59,10 @@ JavaScript 在 Rails 里有两种：
 
 # 参考
 
-- http://guides.rubyonrails.org/working_with_javascript_in_rails.html
-- https://github.com/rails/rails/issues/1370#issuecomment-42947111
+- http://api.rubyonrails.org/classes/ActionView/Helpers/FormTagHelper.html
 - http://api.rubyonrails.org/classes/ActiveRecord/NestedAttributes/ClassMethods.html
 - https://www.youtube.com/watch?v=a61yKxi3pL0
 - http://railscasts.com/episodes/196-nested-model-form-part-1
+- http://guides.rubyonrails.org/working_with_javascript_in_rails.html
+- https://github.com/rails/rails/issues/1370#issuecomment-42947111
+- http://stackoverflow.com/questions/14250678/rails-file-field-tag-not-uploading-file
