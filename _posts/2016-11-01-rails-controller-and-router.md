@@ -74,11 +74,15 @@ resources :photos, controller: 'images'
 # 改变 path helper 的名字
 resources :photos, as: 'images'
 
-# 那么这个意思就是 —— 只改变 url
+# 那么这个意思就是 —— 只改变 url 为 /photos/xxxx
+# Controller 还是 ImagesController，helper 也是 images_path
 resources :photos, controller: 'images', as: 'images'
 
-# 上面情况，另一种简单的方法
+# 上面情况的相反，url 是 /images/xxxx，其他是 photos
 resources :photos, path: 'images'
+
+# 所以上上可以写作
+resources :images, path: 'photes'
 
 # 这么表示 /:id 直接传到 PhotosController
 resources :photos, path: ''
