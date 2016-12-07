@@ -65,6 +65,16 @@ get ':controller/:action/:id/with_user/:user_id'
 - 路径： /photos/show/1/with_user/2
 - 得到： params = { controller: 'photos', action: 'show', id: '1', user_id: '2' }
 
+自定义路径时记得指定 action，要不路由不知道指到 Controller 的哪个方法：
+
+```rb
+# /photos/:id/:index(.:format), preview_photo_path(@photo, 1)
+get ':preview', to: "photos#show", as: :preview
+```
+
+- 路径：/photos/1/1
+- 得到：params = {controller: 'photos', action: 'show', id: '1', index: '1' }
+
 ### 改变 url 的样子 或对应的 Controller
 
 ```rb
