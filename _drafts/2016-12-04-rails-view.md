@@ -3,9 +3,9 @@ layout: post
 title: Rails View
 ---
 
-# View Helper
+# View Helpers
 
-## Form
+## Form Helpers
 
 Rails 里有两种方法创建 form：
 
@@ -30,6 +30,13 @@ enctype="multipart/form-data"
 multipart: true
 ```
 
+如果需要输入一个 Array，那么它们的name 的最后一个都是 []，这样 Rails 就会知道：
+
+```
+# 选取多张图片，上传，在 Controller 可以通过 params[:gallery][:image_array] 得到这个数组
+<%= file_field_tag "gallery[image_array][]", type: :file, multiple: true %>
+```
+
 ### 在Rails Form里使用嵌套属性
 
 在模型里，用accepts_nested_attributes_for声明要嵌入的其它模型，比如has_many的。
@@ -38,11 +45,10 @@ multipart: true
 
 用build在new里动态生成属性。
 
-## 自定义helper
+## 自定义 helper
 
-Rails中，同名实例变量数据在controller、view和helper间是同一个，
-因为他们都是当前controller的实例变量，helper是include的文件，view只是controller的模板文件，
-实现上像是block。
+Rails中，同名实例变量数据在controller、view和helper 间访问到的数据是同一个，
+因为 controller 里的实例变量会被复制到 view里，helper是include的文件。
 
 在Rails 4之前，helpers只被包含在和它同名的controller和view里，比如：
 
@@ -52,6 +58,7 @@ BooksHelper只在BooksController和/view/books/* 里能够使用。
 
 ```ruby
 config.action_controller.include_all_helpers = false
+```
 
 # JavaScript
 

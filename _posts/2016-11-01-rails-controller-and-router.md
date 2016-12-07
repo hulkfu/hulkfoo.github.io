@@ -82,7 +82,7 @@ resources :photos, controller: 'images', as: 'images'
 resources :photos, path: 'images'
 
 # 所以上上可以写作
-resources :images, path: 'photes'
+resources :images, path: 'photos'
 
 # 这么表示 /:id 直接传到 PhotosController
 resources :photos, path: ''
@@ -96,7 +96,7 @@ resources :photos, path_names: { new: 'make', edit: 'change' }
 # 默认就是用 name 代替 id，比如 show action 就成了 、photos/:name
 resources :photos, param: :name
 # 当然相应要 通知 model，咱不用 id 了，用 name 了。就是需要覆盖 to_param 方法
-class Phote < ApplicationRecode
+class Photo < ApplicationRecode
   def to_param
     name
   end
