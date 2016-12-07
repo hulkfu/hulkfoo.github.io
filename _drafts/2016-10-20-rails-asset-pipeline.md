@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Assets Pipeline
+title: Rails Assets Pipeline
 ---
 
 assets pipeline，翻译过来就是“资源管道”，处理app/assets里的文件。
