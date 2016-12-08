@@ -37,10 +37,14 @@ resources :posts
 
 ### 定义 url
 
+在 url 定义里，冒号 —— ":" 后面的就是传到 Controller params 里的 key，所有有：
+
 - :controller 对应app里的一个Controller
 - :action 对应Controller里的Action
 - :其他 可以自定义，会传到params里
 - () 表示这是可选的
+
+自定义参数的 url 需要明确指明 Controller 和 Action，否则它不知道参数传到哪里。
 
 比如：
 
@@ -69,7 +73,7 @@ get ':controller/:action/:id/with_user/:user_id'
 
 ```rb
 # /photos/:id/:index(.:format), preview_photo_path(@photo, 1)
-get ':preview', to: "photos#show", as: :preview
+get ':index', to: "photos#show", as: :preview
 ```
 
 - 路径：/photos/1/1

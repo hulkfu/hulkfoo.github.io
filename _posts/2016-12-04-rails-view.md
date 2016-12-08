@@ -2,8 +2,10 @@
 layout: post
 title: Rails View
 ---
+View 负责 Model 如何被展示出来。
 
 # View Helpers
+在 erb 文件里帮助生成 html。
 
 ## Form Helpers
 
@@ -32,7 +34,7 @@ multipart: true
 
 如果需要输入一个 Array，那么它们的name 的最后一个都是 []，这样 Rails 就会知道：
 
-```
+```rb
 # 选取多张图片，上传，在 Controller 可以通过 params[:gallery][:image_array] 得到这个数组
 <%= file_field_tag "gallery[image_array][]", type: :file, multiple: true %>
 ```
@@ -88,6 +90,27 @@ JavaScript 在 Rails 里有两种：
 就是想你按照它提供的默认模式，把带数据的 JS 代码写在 View 里，作为 View 的延伸，需要是用 Unobtrusive 的
 方法在 Server 里生成，然后返回。
 
+## escape_javascript helper
+eacape，漏过，这里就是让 js 代码漏过来，按照下面这个 hash：
+
+```
+JS_ESCAPE_MAP	=	{ '\\' => '\\\\', '</' => '<\/', "\r\n" => '\n', "\n" => '\n', "\r" => '\n', '"' => '\\"', "'" => "\\'" }
+```
+
+就是把字符串里出现的 key，替换成 value，比如 '</'，变成 '<\/'，就是加上 \ 来转义，这样才能被
+js 读进来，否则就是一个 html 标签啊。
+
+escape_javascript，简写 j, 像这样用：
+
+```js
+# view/items/create_item.js.erb
+item = "<%=j render "item" %>"
+$("#items").append(item)
+```
+
+把 render 的 html 代码，赋值给 js 里的变量，外面还得加 “”，因为它就只是 render 而已。
+
+有了 生成的 html 代码，就可以
 
 # 参考
 
