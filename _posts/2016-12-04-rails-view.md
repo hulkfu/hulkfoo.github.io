@@ -169,6 +169,8 @@ $.ajax({
 ```
 
 
+虽然还没有看 Unobtrusive 的源码，我觉得它的实现就是 handle 了过滤后的 Server 发来的 js，然后执行。
+
 # 参考
 
 - http://api.rubyonrails.org/classes/ActionView/Helpers/FormTagHelper.html

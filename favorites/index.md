@@ -8,6 +8,11 @@ title: 收藏夹
 * [阮一峰](http://www.ruanyifeng.com/blog)
 * [F's Blog](http://fuhao.im)
 
+# Study
+
+- [Drift Ruby](https://www.driftingruby.com)
+
+
 # News
 
 ## Security
@@ -28,6 +33,9 @@ title: 收藏夹
 - [The Pirate Bay](http://thepiratebay.cd/)
 
 # Tools
+
+## Ruby
+- [Ruby Toolbox]https://www.ruby-toolbox.com/
 
 ## YouTube download
 * [clipconverter](http://www.clipconverter.cc/)
