@@ -110,7 +110,64 @@ $("#items").append(item)
 
 把 render 的 html 代码，赋值给 js 里的变量，外面还得加 “”，因为它就只是 render 而已。
 
-有了 生成的 html 代码，就可以
+有了 生成的 html 代码，就可以 apprend 或 after 等操作了。
+
+## Ajax
+虽然 Unobtrusive 写异步很方便，但它有一个局限：请求是浏览器用户的点击触发的。
+那么如果一个文本编辑器想实现拖拽上传呢，那就需要被动监听编辑器的事件了，然后在
+事件的回调函数里执行 post，上传文件。
+
+即如何触发到 Controller？在事件回调里用 Ajax 发送 post 请求。
+
+下面是发送 Ajax 请求：
+
+```js
+form = new FormData;
+form.append("key", key);
+form.append("Content-Type", file.type);
+form.append("file", file);
+xhr = new XMLHttpRequest;
+// 定义方式
+xhr.open("POST", host, true);
+// 放入 CSRF
+xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
+
+// 进度条回调
+xhr.upload.onprogress = function(event) {
+  var progress;
+  progress = event.loaded / event.total * 100;
+  return attachment.setUploadProgress(progress);
+};
+
+// 执行成功，Server 返回了 JSON 格式的数据
+xhr.onload = function() {
+  var href, url;
+  if (xhr.status === 200) {
+    // 如果定义了xhr.responseType = 'json'，这里就可以直接用了
+    url = href = JSON.parse(xhr.response).url;
+    console.log(url)
+    return attachment.setAttributes({
+      url: url,
+      href: href
+    });
+  }
+};
+
+// 开始执行请求
+xhr.send(form);
+```
+
+Ajax 的 JQuery 的方式：
+
+```js
+$.ajax({
+  method: "POST",
+  url: url_path,
+  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+  data: { name: "Jack" }
+});
+```
+
 
 # 参考
 
@@ -122,3 +179,4 @@ $("#items").append(item)
 - http://guides.rubyonrails.org/working_with_javascript_in_rails.html
 - https://github.com/rails/rails/issues/1370#issuecomment-42947111
 - http://stackoverflow.com/questions/14250678/rails-file-field-tag-not-uploading-file
+- http://copytime.org/posts/200
