@@ -86,7 +86,13 @@ end
 
 ```
 
-通过声明 self.use_instantiated_fixtures = true 来实例化 fixtures：
+可以用 Fixture 的文件名和里面实例的名字来引用：
+
+```rb
+web_sites(:rubyonrails)
+```
+
+也通过声明 self.use_instantiated_fixtures = true 来实例化 fixtures：
 
 ```rb
 # 可以直接用 yml 里的名字来找到数据
@@ -121,6 +127,9 @@ end
 ActiveRecord::FixtureSet.context_class.include FixtureFileHelpers
 ```
 
+# 数据库清理
+
+
 
 # RSpec
 在Rails下需要使用[rspec-rails](https://github.com/rspec/rspec-rails)，其官网参考文档很详细。
@@ -135,7 +144,7 @@ ActiveRecord::FixtureSet.context_class.include FixtureFileHelpers
 
 使用前可以在rspec里配置includeFactoryGirl的DSL，这样就不需要在测试时前面每次都加FactoryGirl了。
 
-```
+```rb
 # RSpec
 # spec/support/factory_girl.rb
 # 可以在rails_helper.rb里require
