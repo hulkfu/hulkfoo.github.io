@@ -5,9 +5,12 @@ title: Atom 编辑器
 
 号称21世纪的编辑器用着真不是盖的。
 
+首先我比较喜欢 emacs 的快捷键，用着直爽，用的是 [atom-emacs-plus](https://github.com/aki77/atom-emacs-plus) 这个插件。
+
+
 # Snippets
-可以自定义代码片段，一个 trigger 健，后接 tab 键就出来了。可以在 ~/.atom/snippets.cson 里
-定义，默认 Atom 也带了主流语言的 snippets，可以在已经安装的 packages 里查看。
+可以自定义代码片段，一个 trigger 健，后接 tab 键就出来了。
+可以在 ~/.atom/snippets.cson 里定义，默认 Atom 也带了主流语言的 snippets，可以在已经安装的 packages 里查看。
 
 比如下面我定义写 markdown 的 snippet：
 
