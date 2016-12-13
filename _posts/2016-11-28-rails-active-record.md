@@ -204,6 +204,28 @@ end
 
 # 数据验证
 
+# Query
+
+### find_each
+
+The find_each method retrieves a batch of records and then yields each record to the block individually as a model. In the following example, find_each will retrieve 1000 records (the current default for both find_each and find_in_batches) and then yield each record individually to the block as a model. This process is repeated until all of the records have been processed:
+
+```rb
+User.find_each do |user|
+ NewsMailer.weekly(user).deliver_now
+end
+```
+
+### find_in_batches
+The find_in_batches method is similar to find_each, since both retrieve batches of records. The difference is that find_in_batches yields batches to the block as an array of models, instead of individually. The following example will yield to the supplied block an array of up to 1000 invoices at a time, with the final block containing any remaining invoices:
+
+```rb
+# Give add_invoices an array of 1000 invoices at a time
+Invoice.find_in_batches do |invoices|
+  export.add_invoices(invoices)
+end
+```
+
 # 参考
 
 [1]: http://railscasts.com/episodes/154-polymorphic-association
