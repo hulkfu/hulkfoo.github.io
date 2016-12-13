@@ -19,7 +19,7 @@ ActiveModel 是 ActiveRecord 的一部分，主要负责模型相关，而后者
 ## 主要参数
 
 - class_name: 对应的类名，比如 has_many :clients, class_name: 'Person'
-- dependent: 当它的 owner 被 destroyed 时，它该如何处理。
+- dependent: 当它的 owner 被 destroyed 时，它该如何处理。没有时就是不管，被拥有者照常存在。
   - :destroy causes the associated object to also be destroyed
   - :delete causes the associated object to be deleted directly from the database (so callbacks will not execute)
   - :nullify causes the foreign key to be set to NULL. Callbacks are not executed.
@@ -39,6 +39,8 @@ ActiveModel 是 ActiveRecord 的一部分，主要负责模型相关，而后者
   - Note that ActiveRecord::NestedAttributes::ClassMethods#accepts_nested_attributes_for sets :autosave to true.
 - inverse_of: Specifies the name of the belongs_to association on the associated object that is the inverse of this has_one association. Does not work in combination with :through or :as options. See ActiveRecord::Associations::ClassMethods's overview on Bi-directional associations for more detail.
 - required: When set to true, the association will also have its presence validated. This will validate the association itself, not the id. You can use :inverse_of to avoid an extra query during validation.
+
+其中 dependent 是需要好好仔细考虑的，弄不好可能会有循环，把所有内容给删除掉。
 
 ## has_many through
 多对多的关系。
