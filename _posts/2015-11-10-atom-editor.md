@@ -5,7 +5,7 @@ title: Atom 编辑器
 
 号称21世纪的编辑器用着真不是盖的。
 
-首先我比较喜欢 emacs 的快捷键，用着直爽，用的是 [atom-emacs-plus](https://github.com/aki77/atom-emacs-plus) 这个插件。
+它其实就是一个浏览器，Linux 下 **ctrl-shift-i** 就会调出它的调试窗口。
 
 
 # Snippets
@@ -31,6 +31,7 @@ title: Atom 编辑器
 可以总结：
 
 - 要填内容的地方用 $1,$2, 等指代，如果有默认值，用 $1{1: default} 来表示。
+- 当多个相同变量同时出现的话，就会被同时编辑。
 - 多行用 """ 开始和结尾。
 - 一个 snippet 有四部分：
   - 作用的代码
@@ -45,6 +46,12 @@ title: Atom 编辑器
 
 我写完之后，最后一apm publish，竟然给发布上去了：[ascii-art](https://atom.io/packages/ascii-art)。
 
+# Keymap
+
+首先我比较喜欢 emacs 的快捷键，用着直爽，用的是 [atom-emacs-plus](https://github.com/aki77/atom-emacs-plus) 这个插件。
+
 # 参考
 - http://flight-manual.atom.io/using-atom/sections/snippets/
 - https://atom.io/docs/v1.1.0/hacking-atom-package-modifying-text
+- http://xiaolai.li/2016/06/17/makecs-atom-advanced/
+- http://flight-manual.atom.io/

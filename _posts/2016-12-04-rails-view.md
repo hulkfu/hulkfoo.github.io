@@ -7,6 +7,40 @@ View 负责 Model 如何被展示出来。
 # View Helpers
 在 erb 文件里帮助生成 html。
 
+erb 里的 Ruby 代码：
+
+- <%= EXPRESSION %> — Inserts the value of an expression.
+  - With -%> — Trims the following line break.
+- <% CODE %> — Executes code, but does not insert a value.
+  - With <%- — Trims the preceding indentation.
+  - With -%> — Trims the following line break.
+- <%# COMMENT %> — Removed from the final output.
+  - With -%> — Trims the following line break.
+- <%% or %%> — A literal <% or %>, respectively.
+
+## link
+
+- link_to
+- button_to
+
+link_to 就是生成一个简单的 <a>，默认 get 方法。
+
+button_to 会生成一个 form，默认 post。form 的好处是带 **protect_from_forgery**，它能
+防止欺诈攻击。
+
+所有对资源进行操作的 action，都需要是防止欺诈的，只有静态的资源才用 get，比如图片、主页等，就是
+只能浏览或下载，不能被更改的。
+
+多说一句 Rails 是怎么防止欺诈的，凡是 form 的，它会多加一个 authenticity_token 隐藏属性：
+
+```html
+<input name="authenticity_token" type="hidden" value="J7CBxfHalt49OSHp27hblqK20c9PgwJ108nDHX/8Cts=" />
+```
+
+这个属性是 Rails 在生成 form 时用 secret_base 和用户特征等生成的，就是除了 Server，用户是
+伪造不了的。它像一把钥匙，只有用它才能开启 Post 请求的大门，把数据放进去，否则是不被 Server 接受的。
+而且这个钥匙只能用在当前用户的当前 Action 里。
+
 ## Form Helpers
 
 Rails 里有两种方法创建 form：
