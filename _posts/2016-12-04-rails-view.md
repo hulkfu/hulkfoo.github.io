@@ -48,21 +48,19 @@ Rails 里有两种方法创建 form：
 - form_tag
 - form_for
 
-form_for后的参数是一个Rails Modle的实例或其类，这样在block里，使用text_field时会自动生成
-相关属性。
+form_tag 后的参数是一个提交 form 的地址字符串，比如 "/posts"， 也可以是 posts_path 这样的路径 helper。其 block 内的 input 的 name 属性也不会自动生成，使用text_field_tag 等定义时需要指明。
 
-form_tag后的参数是一个字符串，一般是在router里定义好的路径，所以不会自动生存，使用text_field_tag
-来生成具体的表单输入元素。
+而 form_for 是更智能化的 form_tag，其后的参数是一个Rails Modle的实例，这样 form_for 就能根据那个实例来生成 block 里的 input 的 name 的值了，所以在 block 里有一个 f 参数，使用 f.text_field 时会自动生成相关属性。
 
-form_tag 就是自己指定 form 的 action url，而 form_for 是根据 model 实例自动指定 action url。
+form_tag 就是自己指定 form 的 action url 和 input name，而 form_for 是根据 model 实例自动搞定。
+
+### Form 参数
 
 有文件需要上传时，需要给 form 加：
 
 ```html
 enctype="multipart/form-data"
-
 # 或
-
 multipart: true
 ```
 
