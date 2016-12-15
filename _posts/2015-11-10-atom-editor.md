@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Atom 编辑器
+permalink: atom
 ---
 
 号称21世纪的编辑器用着真不是盖的。
