@@ -7,6 +7,54 @@ permalink: coffeescrit
 
 # 语法
 
+下面是官方的概览例子：
+
+```coffee
+# Assignment:
+number   = 42
+opposite = true
+
+# Conditions:
+number = -42 if opposite
+
+# Functions:
+square = (x) -> x * x
+
+# Arrays:
+list = [1, 2, 3, 4, 5]
+
+## Objects:
+# 定义对象，里面用 hash 的方式定义，而不能用等号。
+math =
+  root:   Math.sqrt
+  square: square
+  cube:   (x) -> x * square x
+
+# Splats:
+race = (winner, runners...) ->
+  print winner, runners
+
+# Existence:
+alert "I knew it!" if elvis?
+
+# Array comprehensions:
+cubes = (math.cube num for num in list)
+```
+
+## 变量
+默认的变量都带 var，被封进了局部里。
+
+@开头的变量，如 Ruby 里，是实例变量的意思。在实现上就是在前面加上 this.。
+当然 js 里方法名也是变量。
+
+```coffee
+# this.a = 1
+@a = 1
+
+# this.m()
+@m()
+```
+
 ## 函数
 
 ```coffee
@@ -74,7 +122,9 @@ setTimeout(function() {
 ```
 
 ### 胖箭头 =>
-胖箭头会传当前环境的 this 到相应的方法里，代替事件方法里的 this（这个 this 指的相应这个事件的东西，比如按钮）。
+胖箭头会传当前环境上一层的 this 到相应的方法里，代替事件方法里的 this（这个 this 指的相应这个事件的东西，比如按钮）。
+
+在 JS 里，上一层意味着调用这个函数的函数。
 
 比如点击一个按键想执行 setTimeout 方法，而这个是方法是上层 window 的，所以要把它传到 setTimeout 的this 里。
 
@@ -86,4 +136,31 @@ setTimeout((function(_this) {
     return console.log("delay");
   };
 })(this), 1000);
+```
+
+又如：
+
+```coffee
+Account = (customer, cart) ->
+  @customer = customer
+  @cart = cart
+
+  $('.shopping_cart').on 'click', (event) =>
+    @customer.purchase @cart
+```
+
+生成：
+
+```js
+var Account;
+
+Account = function(customer, cart) {
+  this.customer = customer;
+  this.cart = cart;
+  return $('.shopping_cart').on('click', (function(_this) {
+    return function(event) {
+      return _this.customer.purchase(_this.cart);
+    };
+  })(this));
+};
 ```

@@ -228,6 +228,8 @@ Invoice.find_in_batches do |invoices|
 end
 ```
 
+# Active Record Callbacks
+
 # 参考
 
 [1]: http://railscasts.com/episodes/154-polymorphic-association
@@ -235,3 +237,4 @@ end
 
 - http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html
 - https://tomafro.net/2009/08/using-indexes-in-rails-index-your-associations
+- http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html

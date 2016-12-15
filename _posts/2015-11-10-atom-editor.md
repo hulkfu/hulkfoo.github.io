@@ -7,6 +7,26 @@ title: Atom 编辑器
 
 它其实就是一个浏览器，Linux 下 **ctrl-shift-i** 就会调出它的调试窗口。
 
+浏览器天生的适合做编辑器啊，因为有 css，能够很好的渲染出文字，有 html，可以显示界面的框架。看来
+界面被 HTML 统一是在所难免了。
+
+编辑器就是让我们自己去依赖的，能有实现自己任何的想法，所有有了：
+
+- 快捷键，常用功能一键即达。
+- 代码片段，不重复劳动，同时又是自己的编程积累。
+- 自定命令，让编辑器执行自己想要的操作。
+
+在 Atom 都有。
+
+# keymaps
+快捷键很非常重要，它关系到最直接的编程体验，最好的感觉是手不用离键盘，把所有搞定。
+
+快捷键方案有很多家，没有最好的一种，都可以参考，只有适合自己的，毕竟是自己在用键盘写代码。
+
+有人喜欢 vim 的编辑模式和命令模式间的频繁切换，而我喜欢 emacs 的直接，而且在 sh 里也是通用的。
+我配合用的是 [atom-emacs-plus](https://github.com/aki77/atom-emacs-plus) 这个插件，然后自定义。
+
+快捷键有个原则：常用的要快。这也是符合信息论的。
 
 # Snippets
 可以自定义代码片段，一个 trigger 健，后接 tab 键就出来了。
@@ -40,15 +60,64 @@ title: Atom 编辑器
   - body
 
 
+## 框架
+编写 snippets 需要指定其作用域，就是用 css 选择器选出来。
+
+- body
+  - atom-workspace
 
 # Package
+
+Atom 使用一个 package 的过程：
+
+Atom starts up
+Atom starts loading packages
+Atom reads your package.json
+Atom loads keymaps, menus, styles and the main module
+Atom finishes loading packages
+At some point, the user executes your package command your-name-word-count:toggle
+Atom executes the activate method in your main module which sets up the UI by creating the hidden modal view
+Atom executes the package command your-name-word-count:toggle which reveals the hidden modal view
+At some point, the user executes the your-name-word-count:toggle command again
+Atom executes the command which hides the modal view
+Eventually, Atom is shut down which can trigger any serializations that your package has defined
+
+
+
+active 方法只在第一次调用时执行，初始化实例变量，包括UI等，还有注册 command 及 command 执行的事件。
+
+```coffee
+# Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
+@subscriptions = new CompositeDisposable
+
+# Register command that toggles this view
+@subscriptions.add atom.commands.add 'atom-workspace', 'your-name-word-count:toggle': => @toggle()
+```
+
+上面的代码用 atom.commands.add 在 'atom-workspace' 空间里注册了命令 "your-name-word-count:toggle"，
+当触发这个命令（快捷键或命令面板）时，它会去执行 toggle 方法。
+
+然后用 @subscriptions.add 将这个命令添加到命令事件集合里，
+这样其他命令就可以知道它被执行，也可以在这里订阅其他命令。
+
+虽然命令在 active 里注册了，但怎么触发 active 方法呢？在 package.json 里注册：
+
+```js
+"activationCommands": {
+  "atom-workspace": "your-name-word-count:toggle"
+}
+```
+
+这样 Atom 就会只加载这个方法名，只有当用户第一次触发时才调用 active。
+
+
 参考官方的教程就很容易写一个package了。
 
 我写完之后，最后一apm publish，竟然给发布上去了：[ascii-art](https://atom.io/packages/ascii-art)。
 
-# Keymap
-
-首先我比较喜欢 emacs 的快捷键，用着直爽，用的是 [atom-emacs-plus](https://github.com/aki77/atom-emacs-plus) 这个插件。
+# 感想
+Atom 是 github 搞出来的，而 github 最初是基于 Rails 的，可以看到 Atom 受 Rails 的影响很大，
+比如 用 CoffeeScript 和 Less，这是 Rails 默认的 js 和 css 的高级语言。
 
 # 参考
 - http://flight-manual.atom.io/using-atom/sections/snippets/
