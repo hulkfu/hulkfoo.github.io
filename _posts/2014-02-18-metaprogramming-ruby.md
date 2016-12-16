@@ -299,7 +299,7 @@ String.hi  #=> hi
 
 class_eval()只有类能够调用，但instance_eval()类和对象都能调用，然后前者里生成了类方法，后者里生成了单件方法。
 
-## 类实例变量
+## 类的实例变量
 Ruby解释器假定所有的实例变量都属于当前对象self。所以要牢记：
 
 > 类也是对象，而且需要自己在程序中追踪**self**。
@@ -328,7 +328,7 @@ C.read  #=> 2
 
 上面的例子中，定义了两个同名@var的变量，一个在C充当self的时刻，所以是类的实例变量；另一个在对象充当self的时刻，所以是对象的实例变量。它们互不影响。
 
-## 类变量
+## 类的变量
 上面的类的实例变量，不能被继承或被其实例访问，而类变量可以，一个变量前加上 **@@** 就是了。
 
 把上面的例子中的@var都换为@@var，那么结果就是：
@@ -337,6 +337,40 @@ C.read  #=> 2
 c.read  #=> 3
 C.read  #=> 3
 ```
+
+## 类的方法
+类的实例方法只有在创建出实例时才能够调用，类的方法在外不需要创建实例就能执行：
+
+```rb
+class C
+  def self.hi
+    puts "HI"
+  end
+end
+
+C.hi #=> HI
+```
+
+类的方法，在法术上又叫“类宏” —— Class Macro，因为它在类内有一个功能：
+
+> 在类 block 里执行。
+
+对上面的类进行扩展：
+
+```rb
+class<<C
+  def my_macro(arg)
+    "my_macro(#{arg} called)"
+  end
+end
+
+class C
+  my_macro action: "update" #=> "my_macro({:action=>\"update\"} called)"
+end
+```
+
+直接就可以在类的定义空间里执行，这其实就是 attr_accessor, mount, has_many 等看起来很像
+关键字的方法的背后的技术：调用类宏，在类的空间里用 define_method 生成实例方法。
 
 ## Eigenclass
 一个看不见的类，像JavaScript的原型类。通过它，可以为单个实例创建方法。
