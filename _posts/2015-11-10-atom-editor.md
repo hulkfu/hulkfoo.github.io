@@ -19,7 +19,6 @@ permalink: atom
 
 在 Atom 都有。
 
-
 # keymaps
 快捷键很非常重要，它关系到最直接的编程体验，最好的感觉是手不用离键盘，把所有搞定。
 
@@ -44,7 +43,7 @@ permalink: atom
 当然因人和键盘而异，我喜欢 emacs，用的是 HHKB2，Cap 改成了 Ctrl.
 系统是 Mac 和 Linux 通用，所有尽量不使用 Cmd 键。
 
-而且快捷键只有自己用了才知道是否合适，而且是在不短改进中的，追求的目的就是 —— 爽！不爽呢？那就改！它是你完全可控的，不用将就自己，放弃这个权利。把常用的换上来，不常用的换下去。
+而且快捷键只有自己用了才知道是否合适，而且是在不短改进中的，追求的目的就是 —— 爽！不爽呢？那就改！它是你完全可控的，不用将就自己，放弃这个权利。这是一个学习的过程，把常用的换上来，不常用的换下去。
 
 # Snippets
 可以自定义代码片段，一个 trigger 健，后接 tab 键就出来了。
@@ -88,21 +87,19 @@ permalink: atom
 
 Atom 使用一个 package 的过程：
 
-Atom starts up
-Atom starts loading packages
-Atom reads your package.json
-Atom loads keymaps, menus, styles and the main module
-Atom finishes loading packages
-At some point, the user executes your package command your-name-word-count:toggle
-Atom executes the activate method in your main module which sets up the UI by creating the hidden modal view
-Atom executes the package command your-name-word-count:toggle which reveals the hidden modal view
-At some point, the user executes the your-name-word-count:toggle command again
-Atom executes the command which hides the modal view
-Eventually, Atom is shut down which can trigger any serializations that your package has defined
+- Atom starts up
+- Atom starts loading packages
+- Atom reads your package.json
+- Atom loads keymaps, menus, styles and the main module
+- Atom finishes loading packages
+- At some point, the user executes your package command your-name-word-count:toggle
+- Atom executes the activate method in your main module which sets up the UI by creating the hidden modal view
+- Atom executes the package command your-name-word-count:toggle which reveals the hidden modal view
+- At some point, the user executes the your-name-word-count:toggle command again
+- Atom executes the command which hides the modal view
+- Eventually, Atom is shut down which can trigger any serializations that your package has defined
 
-
-
-active 方法只在第一次调用时执行，初始化实例变量，包括UI等，还有注册 command 及 command 执行的事件。
+active 方法是必须有的，它只在第一次调用时执行，初始化实例变量，包括UI等，还有注册 command 及 command 执行的事件。
 
 ```coffee
 # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
