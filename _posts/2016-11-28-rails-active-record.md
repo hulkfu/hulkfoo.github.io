@@ -238,3 +238,4 @@ end
 - http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html
 - https://tomafro.net/2009/08/using-indexes-in-rails-index-your-associations
 - http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html
+- http://guides.rubyonrails.org/active_record_callbacks.html
