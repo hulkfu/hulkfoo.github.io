@@ -3,6 +3,8 @@ layout: post
 title: Rails 里的 Controller 和 Router
 ---
 
+功能是在 Action Pack 里实现的。
+
 Router定义了外部访问时URL的样子，通过匹配筛选后，交给对应的Controller处理。
 
 玩转了它们，就可以构造自己想要的url，并对相应的请求指定 Controller 进行处理。
