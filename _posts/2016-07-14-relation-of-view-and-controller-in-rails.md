@@ -20,11 +20,12 @@ Rails中Controller里实例变量，可以直接在相应的View里使用，这�
 ## 1. 在Controller里读取实例变量及其值，返回一个包含它们的Hash
 
 ```rb
-#actionpack/lib/abstract_controller/rendering.rb
+#actionpack/lib/abstract_controller/rendering.rb  line:67
 def view_assigns
   protected_vars = _protected_ivars
   variables      = instance_variables
 
+  # 除去保护的变量
   variables.reject! { |s| protected_vars.include? s }
   variables.each_with_object({}) { |name, hash|
     hash[name.slice(1, name.length)] = instance_variable_get(name)
@@ -32,7 +33,7 @@ def view_assigns
 end
 ```
 
-## 2. 生成ActiveView实例时将上面的assigns hash 赋值为其实例变量
+## 2. 生成ActiveView实例时将上面的 hash 赋值为其实例变量
 
 ```rb
 #actionview/lib/action_view/base.rb
@@ -57,6 +58,46 @@ def initialize(context = nil, assigns = {}, controller = nil, formats = nil) #:n
   assign(assigns)
   assign_controller(controller)
   _prepare_context
+end
+```
+
+而上面的初始化函数在 actionview/lib/action_view/rendering 里被使用：
+
+```rb
+# An instance of a view class. The default view class is ActionView::Base.
+#
+# The view class must have the following methods:
+# View.new[lookup_context, assigns, controller]
+#   Create a new ActionView instance for a controller and we can also pass the arguments.
+# View#render(option)
+#   Returns String with the rendered template
+#
+# Override this method in a module to change the default behavior.
+def view_context
+  view_context_class.new(view_renderer, view_assigns, self)
+end
+```
+
+```rb
+# Find and render a template based on the options given.
+# :api: private
+def _render_template(options)
+  variant = options.delete(:variant)
+  assigns = options.delete(:assigns)
+  context = view_context
+
+  context.assign assigns if assigns
+  lookup_context.rendered_format = nil if options[:formats]
+  lookup_context.variants = variant if variant
+
+  view_renderer.render(context, options)
+end
+```
+
+```rb
+def render_to_body(options = {})
+  _process_options(options)
+  _render_template(options)
 end
 ```
 
