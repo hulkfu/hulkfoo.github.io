@@ -33,6 +33,15 @@ resources :posts
 
 就是我们常见的，Rails 默认的规则。
 
+其实也应该尽量用这些 Resourceful 路由：
+
+- Route Map 里把访问的东西看成资源，不出现动词（都在 HTTP 的方法里了）
+- Controller 里用七种方法：index, new, create, show, edit, update, delete
+- 用规范的 HTTP 方法：GET, POST, PUT/PATCH, DELETE
+
+如果用 resource 的话，是没有 index 的，而且 member 里也不用指明 id 了，因为就那一个资源。
+
+
 ## Non-Resourceful Routes
 
 而往往我们构造的页面，不会像脚手架生成的那样死板。
@@ -174,3 +183,4 @@ permitted_params[:person][:name]
 - http://api.rubyonrails.org/classes/ActionController/Parameters.html
 - http://www.nascenia.com/ruby-on-rails-development-principles/
 - http://stackoverflow.com/questions/2837102/changing-the-id-parameter-in-rails-routing
+- https://www.youtube.com/watch?v=MjHO-LjhuL4
