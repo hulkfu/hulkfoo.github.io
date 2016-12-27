@@ -344,6 +344,10 @@ end
 
 ActiveRecord 里也有 validates.rb，进行比如 uniqueness 等的验证。
 
+## [Client Side validations](https://github.com/DavyJonesLocker/client_side_validations)
+能够映射 model 的 validates，在 view 里生成 js 来提前验证输入。
+
+
 
 # Query
 
