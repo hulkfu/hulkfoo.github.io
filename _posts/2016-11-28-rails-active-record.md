@@ -204,7 +204,146 @@ end
 混入是一种多父类继承的一种实现方式，对于类里共同的功能进行抽象。
 
 
-# 数据验证
+# Validate 数据验证
+
+## Validator
+
+rails/active_model/lib/active_model/validator.rb
+
+验证器的父类，每个验证器需要继承 ActiveModel::EachValidator，实现里面的
+
+```rb
+def validate_each(record, attribute, value)
+  raise NotImplementedError, "Subclasses must implement a validate_each(record, attribute, value) method"
+end
+
+# 调用 validate_each 进行验证.
+def validate(record)
+  attributes.each do |attribute|
+    value = record.read_attribute_for_validation(attribute)
+    next if (value.nil? && options[:allow_nil]) || (value.blank? && options[:allow_blank])
+    # 回调
+    validate_each(record, attribute, value)
+  end
+end
+```
+
+自带的放在 validations 目录里。
+
+比如最简单的 validations/presence.rb
+
+```rb
+
+module ActiveModel
+  module Validations
+    class PresenceValidator < EachValidator
+      def validate_each(record, attr_name, value)
+        record.errors.add(attr_name, :blank, options) if value.blank?
+      end
+    end
+
+    module HelperMethods
+      def validates_presence_of(*attr_names)
+        validates_with PresenceValidator, _merge_attributes(attr_names)
+      end
+    end
+  end
+end
+```
+
+而我们在使用时一般都是:
+
+```rb
+validates :name, presence: true
+```
+
+这是为什么呢？因为在 validates/validates.rb 里定义了：
+
+```rb
+module ActiveModel
+  module Validations
+    module ClassMethods
+      def validates(*attributes)
+        defaults = attributes.extract_options!.dup
+        # 取出 validates hash
+        validations = defaults.slice!(*_validates_default_keys)
+
+        raise ArgumentError, "You need to supply at least one attribute" if attributes.empty?
+        raise ArgumentError, "You need to supply at least one validation" if validations.empty?
+
+        defaults[:attributes] = attributes
+
+        validations.each do |key, options|
+          next unless options
+          # 根据 validate 的 key，定位 validator
+          key = "#{key.to_s.camelize}Validator"
+
+          begin
+            validator = key.include?("::".freeze) ? key.constantize : const_get(key)
+          rescue NameError
+            raise ArgumentError, "Unknown validator: '#{key}'"
+          end
+
+          # 验证
+          validates_with(validator, defaults.merge(_parse_validates_options(options)))
+        end        
+      end
+      # ...
+    end
+  end
+end
+```
+
+提一下，这里的 **_parse_validates_options** 解释了为什么不用 :in 就可以传 range：
+
+```rb
+def _parse_validates_options(options)
+  case options
+  when TrueClass
+    {}
+  when Hash
+    options
+  when Range, Array
+    { in: options }
+  else
+    { with: options }
+  end
+end
+```
+
+而在 validations/with.rb 里：
+
+```rb
+module ActiveModel
+  module Validations
+    module ClassMethods
+      def validates_with(*args, &block)
+        options = args.extract_options!
+        options[:class] = self
+
+        args.each do |klass|
+          validator = klass.new(options, &block)
+
+          if validator.respond_to?(:attributes) && !validator.attributes.empty?
+            validator.attributes.each do |attribute|
+              _validators[attribute.to_sym] << validator
+            end
+          else
+            _validators[nil] << validator
+          end
+
+          validate(validator, options)
+        end
+      end
+    end
+  end
+end
+```
+
+所有抓住了 validates/validates.rb 文件，就得到了 validate 的核心。
+
+ActiveRecord 里也有 validates.rb，进行比如 uniqueness 等的验证。
+
 
 # Query
 
