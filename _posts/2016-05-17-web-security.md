@@ -92,5 +92,19 @@ s = sanitize(user_input, tags: tags, attributes: %w(href title))
 # SQL 注入
 尽量使用已经封装好的查询语句，而不是自己写SQL。
 
+# mass assigns
+
+不要把 id 也允许用户修改。
+
+当然默认都不会，可如果自己重新了 model 的 to_param 函数，换了 id 呢，比如 name。
+
+一般会允许用户修改 name， 那它就能改成别人的 name 啊！
+
+但如果进行了 uniqueness 验证，修改相同的 name id 是过不了，除非不相同，那么
+在提交了修改 name id form 后，Rails 会需要调用 update 方法，就不找不到 user 了。
+但还是会产生 nil error，这也算被动防御了。
+
+而且关系都是用 id 关联的，所以影响不大。
+
 # 参考
 * http://guides.rubyonrails.org/security.html
