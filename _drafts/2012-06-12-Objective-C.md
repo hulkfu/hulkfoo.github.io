@@ -72,9 +72,9 @@ getter 方法不用加“get”前缀。因为 get 在 Cocoa 中意味着这个�
 ### 可变字符串：
 NSMutableString，相当于 Java 中的 StringBuffer，可以使用类方法 stringWithCapacity:来创建。常见操作：
 
-* appendString: (NSString *) aString;
-* appendFormat: (NSString *) format, ...;
-* deleteCharactersInRange: (NSRange) range;
+- appendString: (NSString *) aString;
+- appendFormat: (NSString *) format, ...;
+- deleteCharactersInRange: (NSRange) range;
 
 ### NSArray
 一个泛型的数组类，可以存入任何 OC 类。
