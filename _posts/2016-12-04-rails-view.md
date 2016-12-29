@@ -87,6 +87,53 @@ html: { multipart: true }
 
 用build在new里动态生成属性。
 
+### collection_check_boxes
+能够让 collection 里的实例调用指定的 value_method, text_method 来显示 check_boxes 的 value 和 text。
+
+同理还有其他 collection_xxxx, grouped_collection_xxxx 等。
+
+把要调用的方法名传进来真是个 Good Idea！
+
+```rb
+collection_check_boxes(object, method, collection, value_method, text_method, options = {}, html_options = {}, &block)
+
+# Model
+class Post < ActiveRecord::Base
+  has_and_belongs_to_many :authors
+end
+class Author < ActiveRecord::Base
+  has_and_belongs_to_many :posts
+  def name_with_initial
+    "#{first_name.first}. #{last_name}"
+  end
+end
+
+# view
+collection_check_boxes(:post, :author_ids, Author.all, :id, :name_with_initial)
+
+# HTML
+<input id="post_author_ids_1" name="post[author_ids][]" type="checkbox" value="1" checked="checked" />
+<label for="post_author_ids_1">D. Heinemeier Hansson</label>
+<input id="post_author_ids_2" name="post[author_ids][]" type="checkbox" value="2" />
+<label for="post_author_ids_2">D. Thomas</label>
+<input id="post_author_ids_3" name="post[author_ids][]" type="checkbox" value="3" />
+<label for="post_author_ids_3">M. Clark</label>
+<input name="post[author_ids][]" type="hidden" value="" />
+
+# 用 simple form
+simple_form_for :post do |f|
+  f.input :author_ids, collection: Author.all, value_method: :id, label_method: :name_with_initial
+end
+```
+
+### [simple form](https://github.com/plataformatec/simple_form)
+simple form 还是很好用的，能让 form 很 simple，无关的东西都移到外面去，比如 label，hint，
+placeholder 等，还能 i18n。
+
+在一个文件里，只显示其主要逻辑，这个很重要，能让复杂的东西也易于管理，一目了然，有点儿像杠杆。
+
+用库的好处就是学会后极大的提高开发效率，站在别人的肩膀上。
+
 ## 自定义 helper
 
 Rails中，同名实例变量数据在controller、view和helper 间访问到的数据是同一个，
@@ -102,13 +149,7 @@ BooksHelper只在BooksController和/view/books/* 里能够使用。
 config.action_controller.include_all_helpers = false
 ```
 
-### [simple form](https://github.com/plataformatec/simple_form)
-simple form 还是很好用的，能让 form 很 simple，无关的东西都移到外面去，比如 label，hint，
-placeholder 等，还能 i18n。
 
-在一个文件里，只显示其主要逻辑，这个很重要，能让复杂的东西也易于管理，一目了然，有点儿像杠杆。
-
-用库的好处就是学会后极大的提高开发效率，站在别人的肩膀上。
 
 # JavaScript
 
