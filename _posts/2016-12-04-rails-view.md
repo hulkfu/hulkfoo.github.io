@@ -54,15 +54,23 @@ form_tag 后的参数是一个提交 form 的地址字符串，比如 "/posts"�
 
 form_tag 就是自己指定 form 的 action url 和 input name，而 form_for 是根据 model 实例自动搞定。
 
-### Form 参数
+## Form 参数
 
+### 上传文件
 有文件需要上传时，需要给 form 加：
 
 ```html
 enctype="multipart/form-data"
 # 或
 multipart: true
+
+# simple form 要用 html 包起来
+html: { multipart: true }
 ```
+
+如果不，就只会把文件名当做 value POST 过去。
+
+### Array 参数
 
 如果需要输入一个 Array，那么它们的name 的最后一个都是 []，这样 Rails 就会知道：
 
@@ -71,7 +79,7 @@ multipart: true
 <%= file_field_tag "gallery[image_array][]", type: :file, multiple: true %>
 ```
 
-### 在Rails Form里使用嵌套属性
+### 嵌套属性
 
 在模型里，用accepts_nested_attributes_for声明要嵌入的其它模型，比如has_many的。
 
@@ -93,6 +101,14 @@ BooksHelper只在BooksController和/view/books/* 里能够使用。
 ```ruby
 config.action_controller.include_all_helpers = false
 ```
+
+### [simple form](https://github.com/plataformatec/simple_form)
+simple form 还是很好用的，能让 form 很 simple，无关的东西都移到外面去，比如 label，hint，
+placeholder 等，还能 i18n。
+
+在一个文件里，只显示其主要逻辑，这个很重要，能让复杂的东西也易于管理，一目了然，有点儿像杠杆。
+
+用库的好处就是学会后极大的提高开发效率，站在别人的肩膀上。
 
 # JavaScript
 
