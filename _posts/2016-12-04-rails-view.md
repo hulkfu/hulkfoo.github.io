@@ -74,7 +74,7 @@ html: { multipart: true }
 
 如果需要输入一个 Array，那么它们的name 的最后一个都是 []，这样 Rails 就会知道：
 
-```rb
+```
 # 选取多张图片，上传，在 Controller 可以通过 params[:gallery][:image_array] 得到这个数组
 <%= file_field_tag "gallery[image_array][]", type: :file, multiple: true %>
 ```
@@ -94,7 +94,7 @@ html: { multipart: true }
 
 把要调用的方法名传进来真是个 Good Idea！
 
-```rb
+```ruby
 collection_check_boxes(object, method, collection, value_method, text_method, options = {}, html_options = {}, &block)
 
 # Model
