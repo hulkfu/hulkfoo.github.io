@@ -286,7 +286,7 @@ module ActiveModel
 
           # 验证
           validates_with(validator, defaults.merge(_parse_validates_options(options)))
-        end        
+        end
       end
       # ...
     end
@@ -350,6 +350,32 @@ ActiveRecord 里也有 validates.rb，进行比如 uniqueness 等的验证。
 
 
 # Query
+
+### or
+
+```ruby
+Post.where("id = 1").or(Post.where("author_id = 3"))
+# SELECT `posts`.* FROM `posts`  WHERE (('id = 1' OR 'author_id = 3'))
+
+```
+
+### merge
+
+Merges in the conditions from other, if other is an ActiveRecord::Relation. Returns an array representing the intersection of the resulting records with other, if other is an array.
+
+Post.where(published: true).joins(:comments).merge( Comment.where(spam: false) )
+# Performs a single join query with both where conditions.
+
+recent_posts = Post.order('created_at DESC').first(5)
+Post.where(published: true).merge(recent_posts)
+# Returns the intersection of all published posts with the 5 most recently created posts.
+# (This is just an example. You'd probably want to do this with a single query!)
+Procs will be evaluated by merge:
+
+Post.where(published: true).merge(-> { joins(:comments) })
+# => Post.where(published: true).joins(:comments)
+This is mainly intended for sharing common conditions between multiple associations.
+
 
 ### find_each
 
