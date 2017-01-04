@@ -142,6 +142,10 @@ Controller 根据 Router 传来的请求，操作 Model，并生成 View。
 
 因此，这是一个蛇咬尾巴的故事。
 
+Controller 是执行操作的地方，比如 render，redirect_to 等，而不是处理逻辑的地方。
+Model 才是处理逻辑的地方，还方便在其他地方使用。所有如果在这里出现了复杂的逻辑，就应该考虑重构代码
+换个地方了。
+
 ## ActionController::Parameters
 
 为了安全，一般不在Controller里直接使用params这个变量，而是通过permit筛选一遍后只提取许可的参数。

@@ -212,7 +212,7 @@ rails/active_model/lib/active_model/validator.rb
 
 验证器的父类，每个验证器需要继承 ActiveModel::EachValidator，实现里面的
 
-```rb
+```ruby
 def validate_each(record, attribute, value)
   raise NotImplementedError, "Subclasses must implement a validate_each(record, attribute, value) method"
 end
@@ -232,8 +232,7 @@ end
 
 比如最简单的 validations/presence.rb
 
-```rb
-
+```ruby
 module ActiveModel
   module Validations
     class PresenceValidator < EachValidator
@@ -253,13 +252,13 @@ end
 
 而我们在使用时一般都是:
 
-```rb
+```ruby
 validates :name, presence: true
 ```
 
 这是为什么呢？因为在 validates/validates.rb 里定义了：
 
-```rb
+```ruby
 module ActiveModel
   module Validations
     module ClassMethods
@@ -296,7 +295,7 @@ end
 
 提一下，这里的 **_parse_validates_options** 解释了为什么不用 :in 就可以传 range：
 
-```rb
+```ruby
 def _parse_validates_options(options)
   case options
   when TrueClass
@@ -313,7 +312,7 @@ end
 
 而在 validations/with.rb 里：
 
-```rb
+```ruby
 module ActiveModel
   module Validations
     module ClassMethods
@@ -350,6 +349,10 @@ ActiveRecord 里也有 validates.rb，进行比如 uniqueness 等的验证。
 
 
 # Query
+
+## joins
+
+## includes
 
 ### or
 

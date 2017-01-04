@@ -41,14 +41,32 @@ permalink: regexp
 # 锚点
 
 - ^  行首
-- $
-- \A
-- \Z
-- \z
-- \b
+- $  行尾（若含换行，则是其前面的字符）
+- \A 字符串头
+- \Z 字符串尾（若含换行，匹配前一字符）
+- \z 字符串尾
+- \b 词头或词尾（[]外）
 - (?=) 用模式来指定位置
 - (?!) 用否定模式来指定位置
 - (?#) 注释
+
+# 例子
+
+Rails string underscore:
+
+```ruby
+unless String.method_defined? :underscore
+  String.class_eval do
+    def underscore
+      self.to_s.gsub(/::/, '/').
+        gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+        gsub(/([a-z\d])([A-Z])/,'\1_\2').
+        tr("-", "_").
+        downcase
+    end
+  end
+end
+```
 
 # 参考
 - 《松本行宏的程序世界》
