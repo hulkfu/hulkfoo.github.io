@@ -39,6 +39,20 @@ resources :posts
 - Controller 里用七种方法：index, new, create, show, edit, update, delete
 - 用规范的 HTTP 方法：GET, POST, PUT/PATCH, DELETE
 
+[devise](https://github.com/plataformatec/devise) 就是一个很好的例子：
+
+```ruby
+devise_for :users, controllers: {
+  registrations: 'users/registrations',
+  sessions: 'users/sessions',
+  passwords: 'users/passwords'
+}
+```
+
+看它把 sessions 从 registrations 里分离处理，登录就是 create 一个 session，登出就是
+destroy 当前的 session，而不出写两个 action：sign_in 和 sing_out。这样路由表里就出现了
+动词，而我们需要的只是名词，因为名词才能被抽象成资源。
+
 如果用 resource 的话，是没有 index 的，而且 member 里也不用指明 id 了，因为就那一个资源。
 
 
