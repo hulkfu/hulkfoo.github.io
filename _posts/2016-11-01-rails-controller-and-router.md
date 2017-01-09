@@ -196,6 +196,26 @@ permitted_params[:person][:name]
 => "Francesco"
 ```
 
+## 其他
+
+[helper_method(*meths)](http://api.rubyonrails.org/classes/AbstractController/Helpers/ClassMethods.html#method-i-helper_method) 可以让 Controller 里方法在 View 也可以使用。
+
+```ruby
+# File actionpack/lib/abstract_controller/helpers.rb, line 61
+def helper_method(*meths)
+  meths.flatten!
+  self._helper_methods += meths
+
+  meths.each do |meth|
+    _helpers.class_eval "def #{meth}(*args, &blk)          # def current_user(*args, &blk)
+      controller.send(%(#{meth}), *args, &blk)             #   controller.send(:current_user, *args, &blk)
+    end                                                    # end
+  ", __FILE__, __LINE__ + 1
+  end
+end
+```
+
+
 # 参考
 - http://guides.rubyonrails.org/routing.html
 - http://api.rubyonrails.org/classes/ActionController/Parameters.html
