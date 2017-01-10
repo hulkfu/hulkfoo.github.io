@@ -27,12 +27,15 @@ Ruby Make，用来处理依赖关系。在Rails中如数据库迁移、测试等
 
 通过依赖**:environment**就可以引用自己程序里Rails的东西了。这里的:environment也是一个任务，它会准备task运行的环境。
 
+记住：在 task 前用 desc 定义说明，否则在 Rails 的 "rake -T" 不显示。
+
 ## 参数
 向任务传递参数。
 
 ### 环境变量ENV
 
 ```ruby
+desc "Say what."
 task :say do
   puts ENV['what']
 end
@@ -45,6 +48,7 @@ rake say what="Hello World!" #=> Hello World
 ### 方法参数
 
 ```ruby
+desc "Add two thing."
 task :add, [:one, :two] do |t, args|
   result = args[:one].to_i + args[:two].to_i
   puts "#{args[:one]} #{t} #{args[:two]} equal #{result}"
