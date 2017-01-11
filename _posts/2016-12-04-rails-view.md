@@ -41,7 +41,7 @@ button_to 会生成一个 form，默认 post。form 的好处是带 **protect_fr
 伪造不了的。它像一把钥匙，只有用它才能开启 Post 请求的大门，把数据放进去，否则是不被 Server 接受的。
 而且这个钥匙只能用在当前用户的当前 Action 里。
 
-## Form Helpers
+## Form
 
 Rails 里有两种方法创建 form：
 
@@ -54,9 +54,11 @@ form_tag 后的参数是一个提交 form 的地址字符串，比如 "/posts"�
 
 form_tag 就是自己指定 form 的 action url 和 input name，而 form_for 是根据 model 实例自动搞定。
 
-## Form 参数
+### [Form Helpers](http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html)
 
-### 上传文件
+### Form 参数
+
+#### 上传文件
 有文件需要上传时，需要给 form 加：
 
 ```html
@@ -70,7 +72,7 @@ html: { multipart: true }
 
 如果不，就只会把文件名当做 value POST 过去。
 
-### Array 参数
+#### Array 参数
 
 如果需要输入一个 Array，那么它们的name 的最后一个都是 []，这样 Rails 就会知道：
 
@@ -79,15 +81,36 @@ html: { multipart: true }
 <%= file_field_tag "gallery[image_array][]", type: :file, multiple: true %>
 ```
 
-### 嵌套属性
+#### [嵌套属性](http://api.rubyonrails.org/classes/ActiveRecord/NestedAttributes/ClassMethods.html)
+比如一个 user 有一个 profile，而想在一个页面里一起更新呢？就需要使用嵌套属性了。
 
-在模型里，用accepts_nested_attributes_for声明要嵌入的其它模型，比如has_many的。
+在模型里，用 accepts_nested_attributes_for 声明要嵌入的其它模型，比如has_many的。
 
-在controller里params里permit相应的属性，注意，需要包含id，否则只会插入而不会更新。
+使用后要**注意** validate 的问题，它也会跟着一起来验证的，所以要么满足，要么跳过。因为子属性的
+error 还不会在这里显示出来。
 
-用build在new里动态生成属性。
+在controller里params里permit相应的属性，比如：
 
-### collection_check_boxes
+```ruby
+params.require(:user).permit(:name, profile_attributes: [:location])
+```
+
+view 里用 fields_for 嵌入下一级的属性的类别，比如：
+
+```ruby
+form_for(@user) do |f|
+  f.text_field :name
+  f.files_for :profile do |profile_form|
+    profile_form.text_field :location
+  end
+end
+```
+
+更新的时候，会自动把子属性的内容读出来，就像它们是在一张表里那样。
+
+这里有 [railscast](http://railscasts.com/episodes/196-nested-model-form-part-1)。
+
+#### collection_check_boxes
 能够让 collection 里的实例调用指定的 value_method, text_method 来显示 check_boxes 的 value 和 text。
 
 同理还有其他 collection_xxxx, grouped_collection_xxxx 等。
