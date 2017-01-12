@@ -19,12 +19,12 @@ ActiveModel 是 ActiveRecord 的一部分，主要负责模型相关，而后者
 ## 主要参数
 
 - class_name: 对应的类名，比如 has_many :clients, class_name: 'Person'
-- dependent: 当它的 owner 被 destroyed 时，它该如何处理。没有时就是不管，被拥有者照常存在。
-  - :destroy causes the associated object to also be destroyed
-  - :delete causes the associated object to be deleted directly from the database (so callbacks will not execute)
-  - :nullify causes the foreign key to be set to NULL. Callbacks are not executed.
-  - :restrict_with_exception causes an exception to be raised if there is an associated record
-  - :restrict_with_error causes an error to be added to the owner if there is an associated object
+- dependent: 当它被 destroyed 时，它该如何处理它拥有的东西（has_many, has_one)。没有时就是不管，被拥有者照常存在。
+  - :destroy 拥有的东西也被 destroyed。
+  - :delete 拥有的东西直接在数据库中被删除而不会执行它们的 callbacks。
+  - :nullify 拥有的东西的 foreign key 会被设为 NULL。
+  - :restrict_with_exception 如果还有拥有的东西则异常。
+  - :restrict_with_error 如果还有拥有的东西则在这个 owner 里添加错误。
   - Note that :dependent option is ignored when using :through option.
 - foreign_key: 关联使用的外键，默认是 #{class_name}_id，如user_id。
 - foreign_type: 如果这个类是 polymorphic，指明相关的列名。默认是as的参数加上_type，比如：一个类定义一个 taggable， has_one :tag, as: :taggable，那么会用 “taggable_type” 为默认的 :foreign_type.
