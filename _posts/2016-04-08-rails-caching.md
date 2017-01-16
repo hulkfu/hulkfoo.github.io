@@ -27,7 +27,11 @@ Caching服务就是一个key-value服务：
 
 根据要缓存数据的特征及时**更新key值**，比如总体数目、更新时间等信息，只要能反应出数据变了。
 
-这种基于key的缓存机制，是被动缓存的思想。想想如果基于value，那么维护value是多么的麻烦！
+这种基于key的缓存机制，是被动缓存的思想。
+
+如果基于value，那么当这个 value 过期时,去主动过期它的 key ,就是把 value 置空了,下次就会从新读数据了。
+
+基于 key 或 value 是两种思路。但基于不同数据不同 key 的思路会更方便些，不用去主动过期数据。
 
 ### 问题二，Rails中的种缓存粒度
 
@@ -42,6 +46,43 @@ Caching服务就是一个key-value服务：
 # 基本Caching
 
 ## Fragment Caching
+就是在 view 里用 cache 方法来包着要 cache 的 fragment，一般指明生成 cache_key 的实例或直接的 cache_key 生成方法，或直接字符串。
+
+### cache_key
+
+cache_key 是关键，它关系着这个 cache 是否有效，如果内容已经更新了，cache 却没有还是显示的之前的内容，那就不好了。所以要考虑生成这个 fragment 的所以数据来生成 cache_key。
+
+对于一个Active model 实例，会有一个默认的 cache_key 方法，它的生成策略是：
+
+1. 实例的 table name
+2. 实例的 id
+3. 最后更新的时间戳
+
+所以如下的 cache，会生成一个 products/23-20130109142513 样的字符串：
+
+```
+<% Product.all.each do |p| %>
+  <% cache(p) do %>
+    <%= link_to p.name, product_url(p) %>
+  <% end %>
+<% end %>
+```
+
+因此当这个product更新时，会自动生成一个新的fragment，因为新的 cache_key 没有命中。
+
+而对于不仅是只含有一个实例的 fragment，就要考虑里面所有的实例来生成 cache_key 了，方法有二：
+
+1. 把所有要考虑的因素弄到一个数组里，比如 cache([p, p.comment.count])
+2. 自己定义 helper
+
+当然查询结果也是有 cache_key 的，比如 Product.all.cache_key，它是根据：
+
+1. sql 语句
+2. sql 结果的 count
+3. 最新的一条的结果的时间
+
+
+### 使用
 
 * Page Caching：整个页面，不经过Rails栈。
 * Action Caching：Action后的内容，通过Rails判断是否符合条件，比如认证。
@@ -58,7 +99,7 @@ actionpack-page_caching和actionpack-action_caching两个gem里了。
 
 比如缓存所有的Product：
 
-```ruby
+```
 <% Order.find_recent.each do |o| %>
   <%= o.buyer.name %> bought <%= o.product.name %>
 <% end %>
@@ -71,11 +112,11 @@ actionpack-page_caching和actionpack-action_caching两个gem里了。
 <% end %>
 ```
 
-这个cache块将会和action绑定，而且这里面的所以cache都将是同一个名字，所以需要用
+这个cache块将会和action绑定，而且这里面的所有 cache 都将是同一个名字，所以需要用
 action_suffix来区分：
 
 
-```ruby
+```
 <% cache(action: 'recent', action_suffix: 'all_products') do %>
   All available products:
 ```
@@ -90,7 +131,7 @@ expire_fragment(controller: 'products', action: 'recent', action_suffix: 'all_pr
 
 如果不想将cache块和action绑定，也可以为那个fragment起一个全局的key：
 
-```ruby
+```
 <% cache('all_available_products') do %>
   All available products:
 <% end %>
@@ -98,8 +139,7 @@ expire_fragment(controller: 'products', action: 'recent', action_suffix: 'all_pr
 
 那么这个fragment将会在ProductsController的所有action里可用，同样可以用expire_fragment过期它：
 
-
-```ruby
+```
 expire_fragment('all_available_products')
 ```
 
@@ -117,8 +157,7 @@ end
 
 这个方法根据所有products的个数生成一个cache key，然后可以这样使用：
 
-
-```ruby
+```
 <% cache(cache_key_for_products) do %>
   All available products:
 <% end %>
@@ -126,30 +165,15 @@ end
 
 如果想根据条件来判断是否需要cache，可以使用cache_if：
 
-```ruby
+```
 <% cache_if (condition, cache_key_for_products) do %>
   All available products:
 <% end %>
 ```
 
-也可以用一个Active model来作为cache key：
+可以将多个 cache_key 嵌套组合起来，这就叫 "Russian Doll Caching"，就是“俄罗斯套娃”:
 
-
-```ruby
-<% Product.all.each do |p| %>
-  <% cache(p) do %>
-    <%= link_to p.name, product_url(p) %>
-  <% end %>
-<% end %>
 ```
-
-在这种情况下，一个叫 cache_key 的方法将会被这个实例调用，并返回一个像 products/23-20130109142513
-的字符串。这个 cache_key 包含实例的name、id及最后更新的时间戳。因此当这个product更新时，会自动
-生成一个新的fragment。
-
-也可以将以上两种策略结合起来，叫 "Russian Doll Caching":
-
-```ruby
 <% cache(cache_key_for_products) do %>
   All available products:
   <% Product.all.each do |p| %>
@@ -160,9 +184,29 @@ end
 <% end %>
 ```
 
-之所以叫"Russian Doll Caching"，是因为它嵌入了多层fragment。优点是，如果只有一个fragment更新了，
-其它的可以继续使用缓存。
+之所以叫"俄罗斯套娃"，是因为它嵌入了多层fragment。优点是，如果外层 cache 更新了，
+里面的 cache 还可以继续使用缓存。
 
+### [touch 方法](http://api.rubyonrails.org/classes/ActiveRecord/Persistence.html#method-i-touch)
+
+touch 方法在缓冲里很有用，能够更新当面的 updated_at 为 当前时间。
+
+如果在 belongs_to 时 touch: true，那么它的 owner 也会执行 touch，比如：
+
+```ruby
+class Brake < ActiveRecord::Base
+  belongs_to :car, touch: true
+end
+
+class Car < ActiveRecord::Base
+  belongs_to :corporation, touch: true
+end
+
+# triggers @brake.car.touch and @brake.car.corporation.touch
+@brake.touch
+```
+
+这样就保证一个零件更新时，整体都更新，从而能够生成新的 cache_key 了。
 
 ## Low-Level Caching
 
@@ -212,6 +256,8 @@ class ProductsController < ApplicationController
 
 end
 ```
+
+所以就不必为了少查询而重新使用一个变量了，直接用重复的就行，而且可能性能更好，因为不用新建一个变量而用的是缓存。
 
 # Cache Stores
 Rails对Action和Fragment提供不同的Cache储存方案，Page存储在硬盘里。
