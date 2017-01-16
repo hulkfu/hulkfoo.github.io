@@ -84,7 +84,9 @@ html: { multipart: true }
 #### [嵌套属性](http://api.rubyonrails.org/classes/ActiveRecord/NestedAttributes/ClassMethods.html)
 比如一个 user 有一个 profile，而想在一个页面里一起更新呢？就需要使用嵌套属性了。
 
-在模型里，用 accepts_nested_attributes_for 声明要嵌入的其它模型，比如has_many的。
+在模型里，用 [accepts_nested_attributes_for](http://api.rubyonrails.org/classes/ActiveRecord/NestedAttributes/ClassMethods.html#method-i-accepts_nested_attributes_for) 声明要嵌入的其它模型，比如has_many的。
+
+设置了 update_only: true 后,就会不删除旧的更新了,所有也就不需要 nested_attributes 的 :id 了.
 
 使用后要**注意** validate 的问题，它也会跟着一起来验证的，所以要么满足，要么跳过。因为子属性的
 error 还不会在这里显示出来。
