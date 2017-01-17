@@ -45,6 +45,10 @@ Caching服务就是一个key-value服务：
 
 # 基本Caching
 
+## 策略
+- 缓存尽可能多的使用。
+- 因用户不同而不同的状态，比如：关注、点赞数等异步加载。
+
 ## Fragment Caching
 就是在 view 里用 cache 方法来包着要 cache 的 fragment，一般指明生成 cache_key 的实例或直接的 cache_key 生成方法，或直接字符串。
 
@@ -165,7 +169,7 @@ end
 
 如果想根据条件来判断是否需要cache，可以使用cache_if：
 
-```
+```coffee
 <% cache_if (condition, cache_key_for_products) do %>
   All available products:
 <% end %>
@@ -173,7 +177,7 @@ end
 
 可以将多个 cache_key 嵌套组合起来，这就叫 "Russian Doll Caching"，就是“俄罗斯套娃”:
 
-```
+```coffee
 <% cache(cache_key_for_products) do %>
   All available products:
   <% Product.all.each do |p| %>
@@ -479,5 +483,6 @@ config.cache_store = :dalli_store
 
 # 参考
 
-* http://guides.rubyonrails.org/caching_with_rails.html
-* https://signalvnoise.com/posts/3113-how-key-based-cache-expiration-works
+- http://guides.rubyonrails.org/caching_with_rails.html
+- https://signalvnoise.com/posts/3113-how-key-based-cache-expiration-works
+- http://shiningray.cn/cheap-high-scalability-architecture.html

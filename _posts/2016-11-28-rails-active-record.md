@@ -349,6 +349,14 @@ ActiveRecord 里也有 validates.rb，进行比如 uniqueness 等的验证。
 
 
 # Query
+查询返回的结果是 [ActiveRecord::Relation]()，它有很多方法，比如 maximum，joins 等等。
+
+如何从 Array 到 Relation 呢？只能再来一次查询了：
+
+```ruby
+User.where(id: posts.map(&:user_id))
+```
+
 
 ## joins
 
