@@ -208,6 +208,43 @@ end
 
 这样就保证一个零件更新时，整体都更新，从而能够生成新的 cache_key 了。
 
+### 不同用户权限的操作显示
+肯定不能为每个用户都建一个 fragment 缓存，虽然这也能起到 cache 的作用，但是 cache 的东西就太多了，而且只是一点儿不一样。
+
+[gorails](https://gorails.com/episodes/advanced-caching-user-permissions-and-authorization)对于不同 role 用户权限有[一种解决方案](https://github.com/gorails-screencasts/gorails-episode-114)：
+
+1. 在总 layout/application.html.erb 的 head 里嵌入 current_user 及其 role 的数据：
+
+```coffee
+<% if user_signed_in? %>
+  <meta name="current-user" content="<%= current_user.id %>" data-role="<%= current_user.role %>">
+<% end %>
+```
+
+2. 在只有相应的 role 能 操作的 view 里插入代码，默认是 hidden 的，并用 data 指明能操作的权限：
+
+```coffee
+<%= link_to "Edit", edit_list_path(list), class: "hidden", data: {role: "admin"} %>
+```
+
+```coffee
+.hidden {
+  display: none;
+}
+```
+
+3. 在被动的 js 代码，比如 assets/javascripts/roles.js.coffee 里，显示出相应权限的相应操作：
+
+```coffee
+$ ->
+  role = $("meta[name='current-user']").data("role")
+  $("[data-role='#{role}']").removeClass("hidden")
+```
+
+上面的方案是 view 层面上的权限，但是决不能少了 Controller 层的权限控制，比如 Pundit，否则就是掩耳盗铃。本来 view 就是为了给用户方便的，显示出用户能的操作，反过来即使显示出了他不能的操作，它也不能操作。所以就不怕修改嵌入的 current_user meta data 了。
+
+对于上面的 role 方案，我其实把 data-role 换成 data-user-id 就能达到只对特定用户显示的效果了。这样所有用户就可以用同一份 fragment 了。
+
 ## Low-Level Caching
 
 有时需要缓存一块数据或查询结果等更低一级的信息，而不是view fragment。
