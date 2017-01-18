@@ -191,6 +191,21 @@ end
 之所以叫"俄罗斯套娃"，是因为它嵌入了多层fragment。优点是，如果外层 cache 更新了，
 里面的 cache 还可以继续使用缓存。
 
+那么问题来了，比如同一个 user，在不同 view 里被 cache 呢，按理说应该调用的同一个 cache_key，那么返回的 fragment 就应该相同啊，可这显然不是想要的结果，其实得到的 cache_key 是：
+
+```coffee
+"views/users/123-20120806214154/7a1156131a6928cb0026877f8b749ac9"
+#       ^class   ^id ^updated_at    ^template tree digest
+```
+
+在最后加了 template tree digest 来区分的，保证不同的 template 的 digest 也不同。
+
+template digest 是通过计算当前模板文件**所有内容**（不仅 cache do/end 块里的，而且还包括子模板的内容哦）的 md5 得到到，所以即使同一个文件，内容改了 cache_key 也会自动变。
+
+可以用 skip_digest: true 跳过。
+
+可以在 action_view/helpers/cache_helper.rb 源文件里看到。
+
 ### [touch 方法](http://api.rubyonrails.org/classes/ActiveRecord/Persistence.html#method-i-touch)
 
 touch 方法在缓冲里很有用，能够更新当面的 updated_at 为 当前时间。
@@ -248,6 +263,8 @@ $ ->
 上面的方案是 view 层面上的权限，但是决不能少了 Controller 层的权限控制，比如 Pundit，否则就是掩耳盗铃。本来 view 就是为了给用户方便的，显示出用户能的操作，反过来即使显示出了他不能的操作，它也不能操作。所以就不怕修改嵌入的 current_user meta data 了。
 
 对于上面的 role 方案，我其实把 data-role 换成 data-user-id 就能达到只对特定用户显示的效果了。这样所有用户就可以用同一份 fragment 了。
+
+精髓就是把信息写到 html 里，后期让 js 判断。还是那句老话，没有银弹，不在 view 里用 ruby 判断，也要留下信息在 js 里用。
 
 ## Low-Level Caching
 
@@ -486,3 +503,4 @@ config.cache_store = :dalli_store
 - http://guides.rubyonrails.org/caching_with_rails.html
 - https://signalvnoise.com/posts/3113-how-key-based-cache-expiration-works
 - http://shiningray.cn/cheap-high-scalability-architecture.html
+- https://signalvnoise.com/posts/3113-how-key-based-cache-expiration-works
