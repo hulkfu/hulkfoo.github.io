@@ -266,11 +266,11 @@ $ ->
 
 精髓就是把信息写到 html 里，后期让 js 判断。还是那句老话，没有银弹，不在 view 里用 ruby 判断，也要留下信息在 js 里用。
 
-## Low-Level Caching
+## 底层 Caching
 
 有时需要缓存一块数据或查询结果等更低一级的信息，而不是view fragment。
 
-最有效的方法就是使用Rails.cache.fetch方法了，这个方法可以读或写cache。
+那么就用 它的底层，更灵活的 **Rails.cache.fetch** 方法了，这个方法可以读或写cache。
 
 当只传一个key参数，那么如果fetched就会返回。
 
@@ -293,8 +293,10 @@ end
 
 当然你也可以实现自己的cache_key方法。
 
+也可以直接用底层 cache 返回 view helper 生成的 view，在里面 cache 不太好用。
 
-## SQL Caching
+
+## 自动的 SQL Caching
 
 Rails能自动缓存SQL查询数据，并自动返回重复的查询结果，比如：
 
