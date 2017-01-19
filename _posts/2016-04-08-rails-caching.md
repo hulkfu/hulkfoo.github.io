@@ -270,7 +270,7 @@ $ ->
 
 有时需要缓存一块数据或查询结果等更低一级的信息，而不是view fragment。
 
-那么就用 它的底层，更灵活的 **Rails.cache.fetch** 方法了，这个方法可以读或写cache。
+那么就用 view cache 的底层实现方法吧：更灵活的 **Rails.cache.fetch** 方法了，这个方法可以读或写cache，所以也很方便的查看缓存的东西。
 
 当只传一个key参数，那么如果fetched就会返回。
 
