@@ -266,7 +266,9 @@ $ ->
 
 精髓就是把信息写到 html 里，后期让 js 判断。还是那句老话，没有银弹，不在 view 里用 ruby 判断，也要留下信息在 js 里用。
 
-## 底层 Caching
+## 底层 Caching 接口
+
+### fetch
 
 有时需要缓存一块数据或查询结果等更低一级的信息，而不是view fragment。
 
@@ -295,8 +297,10 @@ end
 
 也可以直接用底层 cache 返回 view helper 生成的 view，在里面 cache 不太好用。
 
+### 其他
+- clear 删除所有的 cache
 
-## 自动的 SQL Caching
+## 自动缓存 SQL 查询
 
 Rails能自动缓存SQL查询数据，并自动返回重复的查询结果，比如：
 
@@ -506,3 +510,4 @@ config.cache_store = :dalli_store
 - https://signalvnoise.com/posts/3113-how-key-based-cache-expiration-works
 - http://shiningray.cn/cheap-high-scalability-architecture.html
 - https://signalvnoise.com/posts/3113-how-key-based-cache-expiration-works
+- https://devcenter.heroku.com/articles/caching-strategies
