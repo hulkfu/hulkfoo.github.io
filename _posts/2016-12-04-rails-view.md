@@ -205,6 +205,10 @@ JavaScript 在 Rails 里有两种：
 方法在 Server 里生成，然后返回。
 
 ## escape_javascript helper
+存的 string 和显示出的 string 虽然都是 string，但显示的是经过存的解码后的。
+
+比如 js 存的是 '\\'，显示出来就是 \，对不带外面的引号的，虽然在 chrome 里调试时还会看到，可想想网页上的内容，其实都是显示出来的 string，只不过这个 string 又被浏览器解析了一遍。这就是计算机的一层有一层的关系。
+
 eacape，漏过，这里就是让 js 代码漏过来，按照下面这个 hash：
 
 ```
