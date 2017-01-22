@@ -266,6 +266,9 @@ $ ->
 
 精髓就是把信息写到 html 里，后期让 js 判断。还是那句老话，没有银弹，不在 view 里用 ruby 判断，也要留下信息在 js 里用。
 
+把常变的，比如排名，因用户不同而不同的状态先用 div 占位，之后用 Ajax 请求更新。
+Ajax 更新时，可以用 Unobtrusive 的 js 代码，这样就不用在写一套 json 生成 view 的方法了。即只要 Ajax 请求，不用处理 onload 事件。
+
 ## 底层 Caching 接口
 
 ### fetch

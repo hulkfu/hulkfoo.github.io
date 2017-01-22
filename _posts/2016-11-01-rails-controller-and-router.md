@@ -196,6 +196,79 @@ permitted_params[:person][:name]
 => "Francesco"
 ```
 
+## 回调
+Controller 里的回调有 before、after和around xxxx_action，然后它们又可以 prepend_xxxx_action 和 skip_xxxx_action。
+
+xxxx_action 其实是在相应的 action 里，比如 show 里插入代码，所以它在逻辑上属于 action 里的代码，通过 paras[:action] 就可以看出来。知道这个，就可以在使用 pundit 时很方便的在 before_action 里 authorize @record 了。
+
+prepend_xxxx_action 就是将当前回调 prepend 到回调链里，因为默认是 append，排在后面的。
+
+在 Controller 里用下面方法定义：
+
+```ruby
+# rails/actionpack/lib/abstract_controller/callback.rb
+[:before, :after, :around].each do |callback|
+  define_method "#{callback}_action" do |*names, &blk|
+    _insert_callbacks(names, blk) do |name, options|
+      set_callback(:process_action, callback, name, options)
+    end
+  end
+
+  define_method "prepend_#{callback}_action" do |*names, &blk|
+    _insert_callbacks(names, blk) do |name, options|
+      set_callback(:process_action, callback, name, options.merge(prepend: true))
+    end
+  end
+
+  # Skip a before, after or around callback. See _insert_callbacks
+  # for details on the allowed parameters.
+  define_method "skip_#{callback}_action" do |*names|
+    _insert_callbacks(names) do |name, options|
+      skip_callback(:process_action, callback, name, options)
+    end
+  end
+
+  # *_action is the same as append_*_action
+  alias_method :"append_#{callback}_action", :"#{callback}_action"
+end
+```
+
+从上面的代码可以看到，Controller 用的是 process_action 事件，当然还有其他事件，比如：
+
+active_job 有 perform, enqueue。
+active_model 更多了，有 validation, commit, save, rollback 等等。
+
+是的，所有的回调都是通过 set_callback 方法实现的：
+
+```ruby
+# rails/activesupport/lib/active_support/callback.rb
+# Install a callback for the given event.
+#
+#   set_callback :save, :before, :before_method
+#   set_callback :save, :after,  :after_method, if: :condition
+#   set_callback :save, :around, ->(r, block) { stuff; result = block.call; stuff }
+#
+# The second argument indicates whether the callback is to be run +:before+,
+# +:after+, or +:around+ the event. If omitted, +:before+ is assumed. This
+# means the first example above can also be written as:
+#
+#   set_callback :save, :before_method
+#   ......
+def set_callback(name, *filter_list, &block)
+  type, filters, options = normalize_callback_params(filter_list, block)
+  self_chain = get_callbacks name
+  mapped = filters.map do |filter|
+    Callback.build(self_chain, filter, type, options)
+  end
+
+  __update_callbacks(name) do |target, chain|
+    options[:prepend] ? chain.prepend(*mapped) : chain.append(*mapped)
+    target.set_callbacks name, chain
+  end
+end
+```
+
+
 ## 其他
 
 [helper_method(*meths)](http://api.rubyonrails.org/classes/AbstractController/Helpers/ClassMethods.html#method-i-helper_method) 可以让 Controller 里方法在 View 也可以使用。
