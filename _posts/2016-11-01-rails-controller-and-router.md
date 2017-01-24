@@ -268,7 +268,50 @@ def set_callback(name, *filter_list, &block)
 end
 ```
 
-### TODO 如何定义一个可以回调的事件
+### 如何定义一个可以回调的事件
+定义在 activesupport 里的 callback 模块可以很方便的拿来使用。
+
+> Callbacks are code hooks that are run at key points in an object's life cycle.
+
+一个常用的情景是在子类继承父类时，不需要覆盖或重写父类的方法就能修改增强或修改父类的功能。
+
+使用步骤：
+
+1. 使用 define_callbacks 指明支持 callback 的事件(们)。这样会为这个事情定义相关的方法。
+2. 在一个方法里用 run_callbacks 来触发事件，并执行相应功能，这个方法一般和事件同名。
+3. 使用 set_callback 来定义 callback 方法。
+
+```ruby
+class Record
+  include ActiveSupport::Callbacks
+  define_callbacks :save
+
+  def save
+    run_callbacks :save do
+      puts "- save"
+    end
+  end
+end
+
+class PersonRecord < Record
+  set_callback :save, :before, :saving_message
+  def saving_message
+    puts "saving..."
+  end
+
+  set_callback :save, :after do |object|
+    puts "saved"
+  end
+end
+
+person = PersonRecord.new
+person.save
+
+# Output:
+# saving...
+# - save
+# saved
+```
 
 
 ## 其他
