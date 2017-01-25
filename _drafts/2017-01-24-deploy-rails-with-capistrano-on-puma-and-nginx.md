@@ -81,7 +81,55 @@ sudo apt-get install nginx
 
 ### 安装 PostgreSQL
 
-### 配置 Capistrano 3
+```bash
+# 安装自己需要的版本
+sudo apt-get install postgresql-9.5 libpq-dev
+
+sudo su - postgres
+psql
+
+# 第一次修改postgres的密码
+\password postgres
+
+# 为应用创建角色和密码
+create role myapp with createdb login password 'password';
+
+# 创建数据库
+create database myapp_production owner = myapp encoding = 'UTF-8';
+
+\q
+```
+
+之后需要去 /etc/postgresql/9.5/main/pg_hba.conf 配置一下访问权限：
+
+```bash
+local   all             all                                peer
+# 改为
+local   all             all                                md5
+```
+
+这样就能密码验证了。
+
+其他可以参考之前的[文章](/postgresql)。
+
+### 安装其他依赖库
+
+```bash
+sudo apt-get install nodejs memcached imagemagick
+```
+
+### 安装 Capistrano 3
+
+```ruby
+# Gemfile
+gem "capistrano"
+gem 'capistrano-rbenv'
+gem 'capistrano3-puma'
+gem 'capistrano-rails'
+```
+
+配置 Capfile 和 deploy.rb 及 /deploy 下相应的服务器。
+
 
 ### 配着 Puma
 配合着 [capistrano3-puma](https://github.com/seuros/capistrano-puma) 很方便，比 passenger 还简单。
@@ -149,9 +197,22 @@ set :nginx_use_ssl, false
 
 #### 5. 发布
 
+首先去 server 上重启一下 Nginx，让新的 sites-enabled 配置文件生效，就能接收 puma 的信息了：
+
+```bash
+sudo service nginx restart
+```
+
+在自己 PC 上发布吧：
+
 ```ruby
 cap production deploy
 ```
+
+deploy 的命令过程中，尤其是第一次部署，还是需要解决些问题的，把提示的错误解决完就好了：
+
+- shared 文件夹里文件：database.yml, secrets.yml 等。
+- "Failed to build gem native extension" 类型的 gem 的安装。
 
 # 参考
 - http://askubuntu.com/questions/7477/how-can-i-add-a-new-user-as-sudoer-using-the-command-line
