@@ -507,6 +507,26 @@ memcached的Ruby接口。
 config.cache_store = :dalli_store
 ```
 
+# [屌丝程序员如何打造日Pv百万的网站架构](http://shiningray.cn/cheap-high-scalability-architecture.html)
+
+曹力的分享很给力，[这里有 PPT](https://speakerdeck.com/shiningray/diao-si-cheng-xu-yuan-ru-he-da-zao-ri-pvbai-mo-de-wang-zhan-jia-gou)。
+
+我上面的介绍还是限于 Rails 内 cache，Nginx 把请求传给 Puma，Puma 再传给 Rails，Rails 在生成 view 的时候通过查看 memcache 来看是否已经生成过。这是最基础的。
+
+对于页面的缓存，默认用 caches_page 生成静态页面，好处是省内存，坏处是需要定期清理。
+
+曹力用 memcache 代替文件，就可以自动过期。那么架构是直接从 Nginx 到 memcache，没有命中才去请求 Puam 到 Rails，就完全实现了所有内容都是静态页面。他还专门写了个 [super_cache gem](https://github.com/ShiningRay/super_cache)。
+
+但当需要进对 memcache 进一步横向扩展时，其 key 不唯一，所有 用 membase（一个兼容 memcache 的缓存 Server）代替。
+
+之后又出现了 Dog Pile Effect 问题：多个节点同时访问没有缓存的内容而造成数据库拥堵，使用了 Lock 解决，同时只有一个节点去生成 cache。技术上可以使用 memcache 或 redis 的原子操作。
+
+从而达到了每日 1000万的PV。
+
+好牛逼！这是几年前的架构了，或可以说架构是可以更持久的，反正我是 Nginx 配 cache，后台用什么生成 cache 都可以啊，反正不耦合。正式不耦合，才可以发展壮大。而不耦合，也是随着网站的 PV 一步一步来的，没有那么大的 PV，也不必要一开始就搞复杂的架构。
+
+但这个架构给了我方向和信心，对于嫌 Ruby 和 Rails 慢的人，是一个很好的回应，当把网站做成 github， twitter 或 暴漫这个级别再考虑换吧～
+
 # 参考
 
 - http://guides.rubyonrails.org/caching_with_rails.html
@@ -514,3 +534,4 @@ config.cache_store = :dalli_store
 - http://shiningray.cn/cheap-high-scalability-architecture.html
 - https://signalvnoise.com/posts/3113-how-key-based-cache-expiration-works
 - https://devcenter.heroku.com/articles/caching-strategies
+- http://shiningray.cn/cheap-high-scalability-architecture.html
