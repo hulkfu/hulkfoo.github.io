@@ -16,6 +16,10 @@ title: 区块链
 
 ## 以太坊 —— ehtereum
 
+## DApp
+
+Decentralized App
+
 
 # 参考
 - http://www.8btc.com/ethereum-price
