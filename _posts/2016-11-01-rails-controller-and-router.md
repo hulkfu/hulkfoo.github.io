@@ -196,7 +196,7 @@ permitted_params[:person][:name]
 => "Francesco"
 ```
 
-## 回调
+## callback —— 回调
 Controller 里的回调有 before、after和around xxxx_action，然后它们又可以 prepend_xxxx_action 和 skip_xxxx_action。
 
 xxxx_action 其实是在相应的 action 里，比如 show 里插入代码，所以它在逻辑上属于 action 里的代码，通过 paras[:action] 就可以看出来。知道这个，就可以在使用 pundit 时很方便的在 before_action 里 authorize @record 了。
