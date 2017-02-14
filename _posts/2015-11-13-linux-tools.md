@@ -3,6 +3,21 @@ layout: post
 title: Linux下好用的工具
 ---
 
+# 定时执行任务
+
+## crontab
+```bash
+crontab -e
+```
+
+## at
+```bash
+$ at 2:05 tomorrow
+
+at>echo "hi"
+at> Ctrl+D
+```
+
 # [byzanz](https://github.com/GNOME/byzanz)
 
 能录制屏幕，并输出gif格式（根据输出文件名的后缀来输出文件类型）。
