@@ -214,8 +214,35 @@ deploy 的命令过程中，尤其是第一次部署，还是需要解决些问�
 - shared 文件夹里文件：database.yml, secrets.yml 等。
 - "Failed to build gem native extension" 类型的 gem 的安装。
 
+# SSL
+使用免费的 [let's encrypt](https://letsencrypt.org/) 服务，参考[Ruby-China 的帖子](https://ruby-china.org/topics/31983) 和 [官方的 wiki](https://github.com/Neilpang/acme.sh/wiki/%E8%AF%B4%E6%98%8E)。
+
+主要是参考前者，并中和后者，比如 ngingx 的 reload 要用 force-reload。
+
+总结就是用 [acme.sh](https://github.com/Neilpang/acme.sh)，很方便的。
+
+## 问题
+
+### sudo nginx -t
+查看 nginx 的配置，并指出问题。
+
+nginx 其实会把 sites-enabled 里所有的配置文件合并到 /etc/nginx/nginx.conf 来生成总的配置文件。
+
+### redirected you too many times
+把 environment/production.rb 的 config.force_ssl = true 开启后，发现出来了上述文件。
+
+参考[ stackoverflow 里的回答](http://stackoverflow.com/questions/14930452/too-many-redirects-error-while-trying-to-configure-rails-application-as-ssl-usin)，主要原因是force_ssl 依赖于 HTTP_X_FORWARDED_PROTO HTTP 头来判断请求是否是 HTTPS 请求，如果不设置就会一直死循环的跳转。
+
+在 app Nginx 配置文件里加入：
+
+```bash
+proxy_set_header X-Forwarded-Proto https;
+```
+
+
 # 参考
 - http://askubuntu.com/questions/7477/how-can-i-add-a-new-user-as-sudoer-using-the-command-line
 - https://www.digitalocean.com/community/tutorials/how-to-setup-a-firewall-with-ufw-on-an-ubuntu-and-debian-cloud-server
 - https://www.digitalocean.com/community/tutorials/how-to-deploy-a-rails-app-with-puma-and-nginx-on-ubuntu-14-04
 - https://ruby-china.org/topics/17425
+- https://ruby-china.org/topics/31983
