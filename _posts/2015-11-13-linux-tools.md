@@ -3,12 +3,75 @@ layout: post
 title: Linux下好用的工具
 ---
 
+# 文本处理
+
+更多参考[这里](http://linuxtools-rst.readthedocs.io/zh_CN/latest/base/03_text_processing.html)。
+
+## grep 文本搜索
+
+```bash
+#在多级目录中对文本递归搜索，并显示行号(程序员搜代码的最爱）:
+grep "class" . -R -n
+```
+
 # 定时执行任务
 
 ## crontab
 ```bash
-crontab -e
+crontab -e 编辑 # -l 列出现有的， -r 删除
 ```
+
+### 格式
+
+分 时 日 月 星期 要运行的命令
+
+- 第1列分钟0～59
+- 第2列小时0～23（0表示子夜）
+- 第3列日1～31
+- 第4列月1～12
+- 第5列星期0～7（0和7表示星期天）
+- 第6列要运行的命令
+
+### 例子
+
+```bash
+实例1：每1分钟执行一次myCommand
+* * * * * myCommand
+
+实例2：每小时的第3和第15分钟执行
+3,15 * * * * myCommand
+
+实例3：在上午8点到11点的第3和第15分钟执行
+3,15 8-11 * * * myCommand
+
+实例4：每隔两天的上午8点到11点的第3和第15分钟执行
+3,15 8-11 */2  *  * myCommand
+
+实例5：每周一上午8点到11点的第3和第15分钟执行
+3,15 8-11 * * 1 myCommand
+
+实例6：每晚的21:30重启smb
+30 21 * * * /etc/init.d/smb restart
+
+实例7：每月1、10、22日的4 : 45重启smb
+45 4 1,10,22 * * /etc/init.d/smb restart
+
+实例8：每周六、周日的1 : 10重启smb
+10 1 * * 6,0 /etc/init.d/smb restart
+
+实例9：每天18 : 00至23 : 00之间每隔30分钟重启smb
+0,30 18-23 * * * /etc/init.d/smb restart
+
+实例10：每星期六的晚上11 : 00 pm重启smb
+0 23 * * 6 /etc/init.d/smb restart
+
+实例11：每一小时重启smb
+* */1 * * * /etc/init.d/smb restart
+
+实例12：晚上11点到早上7点之间，每隔一小时重启smb
+0 23-7 * * * /etc/init.d/smb restart
+```
+
 
 ## at
 ```bash
@@ -17,6 +80,12 @@ $ at 2:05 tomorrow
 at>echo "hi"
 at> Ctrl+D
 ```
+
+# 同步
+
+## rsync
+rsync - a fast, versatile, remote (and local) file-copying tool
+
 
 # [byzanz](https://github.com/GNOME/byzanz)
 
@@ -98,3 +167,6 @@ http://askubuntu.com/questions/107726/how-to-create-animated-gif-images-of-a-scr
 
 # [lftp](http://lftp.yar.ru/)
 比ftp命令好用，封装了 rm 等常用命令。
+
+# 参考
+- http://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/crontab.html
