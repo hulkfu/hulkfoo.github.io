@@ -219,6 +219,16 @@ deploy 的命令过程中，尤其是第一次部署，还是需要解决些问�
 
 主要是参考前者，并中和后者，比如 ngingx 的 reload 要用 force-reload。
 
+修改一下 sudoer 文件，让 sudo service nginx reload 不需要输入密码：
+
+```bash
+sudo visudo
+
+# 打开文件以后新增:
+# NOTE: ubuntu 是 acme.sh 安装所用的账号
+ubuntu  ALL=(ALL) NOPASSWD: /usr/sbin/service nginx reload
+```
+
 总结就是用 [acme.sh](https://github.com/Neilpang/acme.sh)，很方便的。
 
 ## 问题

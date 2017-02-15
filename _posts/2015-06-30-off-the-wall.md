@@ -158,6 +158,61 @@ IKEv2 是 IKE(v1) 的全新改良版，传输效率大大超于 PPTP 和 L2TP，
 
 而且这里有方便一键安装脚本 —— [one-key-ikev2](https://github.com/quericy/one-key-ikev2-vpn).
 
+证书可以用 acme.sh 来申请，参考[https://quericy.me/blog/860/]并写一个更新证书的脚本 update_ipsec_cert：
+
+```bash
+#! /bin/bash
+cert_file="/home/user/.acme.sh/yourdomain/yourdomain.cer"
+key_file="/home/user/.acme.sh/yourdomain/yourdomain.key"
+
+sudo cp -f $cert_file /usr/local/etc/ipsec.d/certs/server.cert.pem
+sudo cp -f $key_file /usr/local/etc/ipsec.d/private/server.pem
+sudo cp -f $cert_file /usr/local/etc/ipsec.d/certs/client.cert.pem
+sudo cp -f $key_file /usr/local/etc/ipsec.d/private/client.pem
+sudo /usr/local/sbin/ipsec restart
+```
+
+并 chmod +x 让其可执行。
+
+在更新 Nginx 证书的时候顺便更新它的：
+
+```bash
+acme.sh --installcert -d www.your-app.com \
+               --keypath       /home/ubuntu/www/ssl/www.your-app.com.key  \
+               --fullchainpath /home/ubuntu/www/ssl/www.your-app.com.key.pem \
+               --reloadcmd     "sudo service nginx force-reload && sudo /home/ubuntu/bin/update_ipsec_cert"
+```
+
+
+### 客户端配置说明
+
+- 连接的服务器地址和证书保持一致,即取决于签发证书ca.cert.pem时使用的是ip还是域名;
+
+- Android/iOS/OSX 可使用ikeV1,认证方式为用户名+密码+预共享密钥(PSK);
+
+- iOS/OSX/Windows7+/WindowsPhone8.1+/Linux 均可使用IkeV2,认证方式为用户名+密码。使用SSL证书则无需导入证书；使用自签名证书则需要先导入证书才能连接,可将ca.cert.pem更改后缀名作为邮件附件发送给客户端,手机端也可通过浏览器导入,其中:
+
+- iOS/OSX 的远程ID和服务器地址保持一致,用户鉴定选择"用户名".如果通过浏览器导入,将证书放在可访问的远程外链上,并在系统浏览器(Safari)中访问外链地址.OSX证书需要设置为始终信任;
+Windows PC 系统导入证书需要导入到"本地计算机"的"受信任的根证书颁发机构",以"当前用户"的导入方式是无效的.推荐运行mmc添加本地计算机的证书管理单元来操作;
+
+### 其他
+
+#### ipsec启动问题
+
+服务器重启后默认ipsec不会自启动，请命令手动开启,或添加/usr/local/sbin/ipsec start到自启动脚本文件中(如rc.local等)。
+
+Ubuntu 已经在 /etc/init 里创建了 strongswan-start.conf 来自动启动了。
+
+#### ipsec常用指令
+
+```bash
+ipsec start   #启动服务
+ipsec stop    #关闭服务
+ipsec restart #重启服务
+ipsec reload  #重新读取
+ipsec status  #查看状态
+ipsec --help  #查看帮助
+```
 
 ## PPTP
 
