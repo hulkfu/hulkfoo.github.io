@@ -19,7 +19,7 @@ man 2 getpid
 
 Ruby的 Process.pid就是映射到了getpid(2):
 
-```rb
+```ruby
 puts Process.pid
 ```
 
@@ -29,7 +29,7 @@ pid代表着运行的进程，文件描述代表着打开的文件。
 
 每一个进程打开的资源都有一个唯一的ID，内核正是通过这个ID来跟踪这个进程使用的资源的。
 
-```rb
+```ruby
 passwd = File.open('/etc/passwd')
 puts passwd.fileno  #=> 8
 
@@ -47,7 +47,7 @@ puts null.fileno  #=> 8
 
 资源ID最小是3,那么0到2呢？
 
-```rb
+```ruby
 puts STDIN.fileno   #=> 0
 puts STDOUT.fileno  #=> 1
 puts STDERR.fileno  #=> 2
@@ -60,7 +60,7 @@ puts STDERR.fileno  #=> 2
 $ MESSAGE='wing it' ruby -e "puts ENV['MESSAGE']"
 ```
 
-```rb
+```ruby
 ENV['MESSAGE'] = 'wing it'
 system "echo $MESSAGE"
 ```
@@ -93,7 +93,7 @@ ARGV.include?('-c') && ARGV[ARGV.index('-c') + 1]
 
 退出，并且可以返回一个代码，而且at_exit里的代码将被执行。
 
-```rb
+```ruby
 # This will exit the program with the success status code (0).
 exit
 # You can pass a custom exit code to this method
@@ -110,7 +110,7 @@ exit
 ## abort
 程序运行失败时的退出。
 
-```rb
+```ruby
 # Will exit with exit code 1.
 abort
 # You can pass a message to Kernel#abort. This message will be printed
@@ -128,7 +128,7 @@ abort "Something went horribly wrong."
 # fork
 fork会返回两次，子进程返回nil，父进程返回子进程的pid。
 
-```rb
+```ruby
 if fork
   # parent
   puts "entered the if block"

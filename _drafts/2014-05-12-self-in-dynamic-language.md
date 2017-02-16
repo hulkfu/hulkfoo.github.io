@@ -10,7 +10,7 @@ Ruby隐性的在程序中自己寻找self对象，通过def、class、module这�
 
 ## 赋值
 
-```rb
+```ruby
 class People
   attr_accessor :name
 

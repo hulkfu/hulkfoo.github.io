@@ -12,7 +12,7 @@ Minitest 是默认的，也挺好用的，而且还简单。
 
 一个例子：
 
-```rb
+```ruby
 require 'test_helper'
 
 # TestCase 继承自 Minitest::Test
@@ -26,7 +26,7 @@ end
 
 常用测试判断 [assertion](http://docs.seattlerb.org/minitest/Minitest/Assertions.html):
 
-```rb
+```ruby
 assert( test, [msg] )	Ensures that test is true.
 assert_not( test, [msg] )	Ensures that test is false.
 assert_equal( expected, actual, [msg] )	Ensures that expected == actual is true.
@@ -64,7 +64,7 @@ Rails 自带的 Fixture 也是简单好用，不要为了生成几个数据而�
 
 比如  <your-rails-app>/test/fixtures/web_sites.yml 文件：
 
-```rb
+```ruby
 rubyonrails:
   id: 1
   name: Ruby on Rails
@@ -78,7 +78,7 @@ google:
 
 然后在 test_helper.rb 里，Fixtures 会在执行测试前装入数据库：
 
-```rb
+```ruby
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
@@ -88,13 +88,13 @@ end
 
 可以用 Fixture 的文件名和里面实例的名字来引用：
 
-```rb
+```ruby
 web_sites(:rubyonrails)
 ```
 
 也通过声明 self.use_instantiated_fixtures = true 来实例化 fixtures：
 
-```rb
+```ruby
 # 可以直接用 yml 里的名字来找到数据
 test "find" do
   assert_equal "Ruby on Rails", web_sites(:rubyonrails).name
@@ -108,7 +108,7 @@ end
 
 ## 嵌入 erb 动态数据
 
-```rb
+```ruby
 <% 1.upto(1000) do |i| %>
 fix_<%= i %>:
   id: <%= i %>
@@ -118,7 +118,7 @@ fix_<%= i %>:
 
 可以在 test_helper.rb 里定义公用的 help：
 
-```rb
+```ruby
 module FixtureFileHelpers
   def file_sha(path)
     Digest::SHA2.hexdigest(File.read(Rails.root.join('test/fixtures', path)))
@@ -144,7 +144,7 @@ ActiveRecord::FixtureSet.context_class.include FixtureFileHelpers
 
 使用前可以在rspec里配置includeFactoryGirl的DSL，这样就不需要在测试时前面每次都加FactoryGirl了。
 
-```rb
+```ruby
 # RSpec
 # spec/support/factory_girl.rb
 # 可以在rails_helper.rb里require
@@ -212,7 +212,7 @@ FactoryGirl还有继承、关联、序列等用法，可以参考上面提到的
 ## 其它
 当使用carriewave时，直接在factories文件里用**File.open**打开文件。如：
 
-```rb
+```ruby
 FactoryGirl.define do
   factory :task do
     name "task"

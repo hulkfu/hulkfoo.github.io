@@ -98,7 +98,7 @@ end
 
 在数据库migration里，可以用 t.references 来创建表结构：
 
-```rb
+```ruby
 class CreatePictures < ActiveRecord::Migration[5.0]
   def change
     create_table :comments do |t|
@@ -119,7 +119,7 @@ end
 上面的 t.references :commentable, polymorphic: true, index: true
 已经把 commentable_id 和 commentable_type 一起加入到数据框的索引了，相当于在 migration里：
 
-```rb
+```ruby
 add_index :comments, [:commentable_id, :commentable_type]
 ```
 
@@ -131,13 +131,13 @@ belongs_to 给每个可能的 Owner 了，都在 commentable 里了。
 而这个 Photo 类通过 has_many（拥有） comments，并且 as（当做）commentable 来变成可以被评论的。
 然后这个 commentable 可以通过 comments 表里的 commentable_id 和 commentable_type 来定位。如：
 
-```rb
+```ruby
 comment.commentable # 将得到一个实例，比如 photo
 ```
 
 创建评论的话，用：
 
-```rb
+```ruby
 # has_many
 phote.comments.create
 
@@ -149,7 +149,7 @@ phote.create_comment
 
 这里也可以理解为Comment通过：
 
-```rb
+```ruby
 belongs_to :commentable, :polymorphic => true
 ```
 
@@ -392,7 +392,7 @@ This is mainly intended for sharing common conditions between multiple associati
 
 The find_each method retrieves a batch of records and then yields each record to the block individually as a model. In the following example, find_each will retrieve 1000 records (the current default for both find_each and find_in_batches) and then yield each record individually to the block as a model. This process is repeated until all of the records have been processed:
 
-```rb
+```ruby
 User.find_each do |user|
  NewsMailer.weekly(user).deliver_now
 end
@@ -401,7 +401,7 @@ end
 ### find_in_batches
 The find_in_batches method is similar to find_each, since both retrieve batches of records. The difference is that find_in_batches yields batches to the block as an array of models, instead of individually. The following example will yield to the supplied block an array of up to 1000 invoices at a time, with the final block containing any remaining invoices:
 
-```rb
+```ruby
 # Give add_invoices an array of 1000 invoices at a time
 Invoice.find_in_batches do |invoices|
   export.add_invoices(invoices)

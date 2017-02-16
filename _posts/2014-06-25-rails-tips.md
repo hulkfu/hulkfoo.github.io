@@ -19,7 +19,7 @@ controller与view中的实例变量即@开头的变量是相通的。
 
 # 枚举——Enum
 
-```rb
+```ruby
 class Conversation < ActiveRecord::Base
   enum status: [ :active, :archived ]
 end

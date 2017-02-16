@@ -19,7 +19,7 @@ Rails 是很灵活的，它里面的 MVC 可以单独活动，只是秉着“惯
 默认了很多根据名字的方便，比如 PostsController 的 view 就在 view/posts 目录里，而它有个
 Model 是 Post，数据库建的表是 posts。然后在 config/routes.rb 里：
 
-```rb
+```ruby
 resources :posts
 ```
 
@@ -73,21 +73,21 @@ destroy 当前的 session，而不出写两个 action：sign_in 和 sing_out。�
 
 比如：
 
-```rb
+```ruby
 get ':controller(/:action(/:id))'
 ```
 
 - 路径： /photos/show/1?user_id=2
 - 得到： params = { controller: 'photos', action: 'show', id: '1', user_id: '2' }
 
-```rb
+```ruby
 get ':controller/:action/:id/:user_id'
 ```
 
 - 路径： /photos/show/1/2
 - 得到： params = { controller: 'photos', action: 'show', id: '1', user_id: '2' }
 
-```rb
+```ruby
 get ':controller/:action/:id/with_user/:user_id'
 ```
 
@@ -96,7 +96,7 @@ get ':controller/:action/:id/with_user/:user_id'
 
 自定义路径时记得指定 action，要不路由不知道指到 Controller 的哪个方法：
 
-```rb
+```ruby
 # /photos/:id/:index(.:format), preview_photo_path(@photo, 1)
 get ':index', to: "photos#show", as: :preview
 ```
@@ -106,7 +106,7 @@ get ':index', to: "photos#show", as: :preview
 
 ### 改变 url 的样子 或对应的 Controller
 
-```rb
+```ruby
 # 关于 photes 的处理，就会交给 ImagesController 来处理，但是 path helper 还是 photos。
 resources :photos, controller: 'images'
 
@@ -170,7 +170,7 @@ Model 才是处理逻辑的地方，还方便在其他地方使用。所有如�
 - require 提取一个或多个key的值
 - permit 授权一个多个参数
 
-```rb
+```ruby
 params = ActionController::Parameters.new(person: { name: 'Francesco' })
 
 # require后还是一个Parameters，并且没有permitted，只是将person提取出来。

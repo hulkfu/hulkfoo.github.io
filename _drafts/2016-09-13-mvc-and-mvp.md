@@ -9,7 +9,7 @@ MVP算是MVC的演变。MVC中，View可以从Model中读取数据而不用通�
 回想默认的Rails就是MVC模式，一些大的逻辑比如增删改查都是View通过Router到Controller，
 然后执行相应的操作的。但是有些小的数据，比如所有消息的个数，就直接在View写的代码：
 
-```rb
+```ruby
 <%= Messages.count %>
 ```
 

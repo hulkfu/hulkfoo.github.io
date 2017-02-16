@@ -136,7 +136,7 @@ A.new.test  #=> out
 
 用作用域之门隔离吧！
 
-```rb
+```ruby
 def define_methods
   shared = 0
 
@@ -342,7 +342,7 @@ C.read  #=> 3
 ## 类的方法
 类的实例方法只有在创建出实例时才能够调用，类的方法在外不需要创建实例就能执行：
 
-```rb
+```ruby
 class C
   def self.hi
     puts "HI"
@@ -358,7 +358,7 @@ C.hi #=> HI
 
 对上面的类进行扩展：
 
-```rb
+```ruby
 class<<C
   def my_macro(arg)
     "my_macro(#{arg} called)"

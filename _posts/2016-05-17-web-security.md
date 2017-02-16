@@ -34,7 +34,7 @@ URL是在另一个网站中嵌入的，比如：
 
 在Rails中，只需要在最顶层的ApplicationController中加入：
 
-```rb
+```ruby
 protect_from_forgery with: :exception
 ```
 
@@ -78,7 +78,7 @@ protect_from_forgery with: :exception
 使用[sanitize()](http://api.rubyonrails.org/classes/ActionView/Helpers/SanitizeHelper.html)，
 它只运行白名单里的tag和attributes显示：
 
-```rb
+```ruby
 tags = %w(a acronym b strong i em li ul ol h1 h2 h3 h4 h5 h6 blockquote br cite sub sup ins p)
 s = sanitize(user_input, tags: tags, attributes: %w(href title))
 ```

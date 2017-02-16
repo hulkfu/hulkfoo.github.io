@@ -18,7 +18,7 @@ partial render的功能是：
 
 partial没有local变量，需要的话要用locals来传递，比如:
 
-```rb
+```ruby
 <%= render partial: "account", locals: { account: @buyer } %>
 ```
 

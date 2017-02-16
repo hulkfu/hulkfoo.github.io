@@ -127,7 +127,7 @@ bundle install --deployment --without development test
 
 用Capistrano部署时，这两个文件都会在linked_files里：
 
-```rb
+```ruby
 append :linked_files, 'config/database.yml', 'config/secrets.yml'
 ```
 

@@ -9,7 +9,7 @@ title: 用Mathjax在Markdown里插入公式
 
 首先安装[kramdown](https://www.mathjax.org/)：
 
-```rb
+```ruby
 gem install kramdown
 ```
 

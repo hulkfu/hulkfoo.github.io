@@ -12,7 +12,7 @@ permalink: automation
 
 如果用Chrome做代理，需要先去下载ChromeDriver。
 
-```rb
+```ruby
 require 'watir-webdriver'
 
 browser = Watir::Browser.new :chrome
@@ -32,7 +32,7 @@ browser.quit
 
 ### Text Fields
 
-```rb
+```ruby
 require 'watir-webdriver'
 b = Watir::Browser.start 'bit.ly/watir-webdriver-demo'
 t = b.text_field :id => 'entry_1000000'
@@ -43,7 +43,7 @@ t.value
 
 ### Select Lists – Combos
 
-```rb
+```ruby
 require 'watir-webdriver'
 b = Watir::Browser.start 'bit.ly/watir-webdriver-demo'
 s = b.select_list :id => 'entry_1000001'
@@ -53,7 +53,7 @@ s.selected_options
 
 ### Radios
 
-```rb
+```ruby
 require 'watir-webdriver'
 b = Watir::Browser.start 'bit.ly/watir-webdriver-demo'
 r = b.radio :value => 'A gem'
@@ -64,7 +64,7 @@ r.set?
 
 ### Checkboxes
 
-```rb
+```ruby
 require 'watir-webdriver'
 b = Watir::Browser.start 'bit.ly/watir-webdriver-demo'
 c = b.checkbox :value => '1.9.2'
@@ -75,7 +75,7 @@ c.set?
 
 ### Buttons
 
-```rb
+```ruby
 require 'watir-webdriver'
 b = Watir::Browser.start 'bit.ly/watir-webdriver-demo'
 btn = b.button :value => 'Submit'
@@ -85,7 +85,7 @@ btn.click
 
 ### Links
 
-```rb
+```ruby
 require 'watir-webdriver'
 b = Watir::Browser.start 'bit.ly/watir-webdriver-demo'
 l = b.link :text => 'Google Forms'
@@ -95,7 +95,7 @@ l.click
 
 ### Divs & Spans
 
-```rb
+```ruby
 require 'watir-webdriver'
 b = Watir::Browser.start 'bit.ly/watir-webdriver-demo'
 d = b.div :class => 'ss-form-desc ss-no-ignore-whitespace'
@@ -109,7 +109,7 @@ s.text
 ## 等待
 等待很有用的，因为很多网页现在都是异步加载的。
 
-```rb
+```ruby
 require 'watir-webdriver'
 b = Watir::Browser.start 'bit.ly/watir-webdriver-demo'
 b.text_field(:id => 'entry_1000000').when_present.set 'your name'
@@ -124,7 +124,7 @@ Watir::Wait.until { b.text.include? 'Thank you' }
 
 ### Window选择
 
-```rb
+```ruby
 browser.window(:title => "annoying popup").use do
   browser.button(:id => "close").click
 end
@@ -132,7 +132,7 @@ end
 
 ### 截屏
 
-```rb
+```ruby
 # Save screenshot to file
 browser.screenshot.save 'screenshot.png'
 

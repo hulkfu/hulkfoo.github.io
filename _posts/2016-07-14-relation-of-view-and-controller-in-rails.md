@@ -19,7 +19,7 @@ Rails中Controller里实例变量，可以直接在相应的View里使用，这�
 
 ## 1. 在Controller里读取实例变量及其值，返回一个包含它们的Hash
 
-```rb
+```ruby
 #actionpack/lib/abstract_controller/rendering.rb  line:67
 def view_assigns
   protected_vars = _protected_ivars
@@ -35,7 +35,7 @@ end
 
 ## 2. 生成ActiveView实例时将上面的 hash 赋值为其实例变量
 
-```rb
+```ruby
 #actionview/lib/action_view/base.rb
 def assign(new_assigns) # :nodoc:
   @_assigns = new_assigns.each { |key, value| instance_variable_set("@#{key}", value) }
@@ -63,7 +63,7 @@ end
 
 而上面的初始化函数在 actionview/lib/action_view/rendering 里被使用：
 
-```rb
+```ruby
 # An instance of a view class. The default view class is ActionView::Base.
 #
 # The view class must have the following methods:
@@ -78,7 +78,7 @@ def view_context
 end
 ```
 
-```rb
+```ruby
 # Find and render a template based on the options given.
 # :api: private
 def _render_template(options)
@@ -94,7 +94,7 @@ def _render_template(options)
 end
 ```
 
-```rb
+```ruby
 def render_to_body(options = {})
   _process_options(options)
   _render_template(options)
@@ -105,7 +105,7 @@ end
 
 在Controller里最后render相应的View。
 
-```rb
+```ruby
 # actionpack/lib/abstract_controller/rendering.rb
 def render(*args, &block)
   options = _normalize_render(*args, &block)
@@ -130,7 +130,7 @@ render方法定义在Rendering模块里，继承自AbstractController的Metal类
 Metal的子类ActionController::Base类，才被include。Metal类只是实现了Rack的接口，Base才到了Rails
 的世界，一下包含了很多模块。
 
-```rb
+```ruby
 MODULES = [
     AbstractController::Rendering,
     AbstractController::Translation,
