@@ -175,6 +175,8 @@ fetch(:special_thing, 'some_default_value')
 # will return the value if set, or the second argument as default value
 ```
 
+将变量用 set 和 fetch 操作的好处是建立了一个简单的作用空间，和程序的变量空间分离，这样重名也不怕。
+
 ### 数组
 
 append方法向array中添加元素，remote则是删除：
@@ -277,6 +279,13 @@ within './directory' { execute(:bundle, :install) }
 excute()的第一个参数是没有空格的字符串，这样传给SSHKit::CommandMap后就会有一系列的强大功能。
 
 当定一个参数里面有空格，不管是Capistrano还是SSHKit都不能准确的进行判断，因此不能在任何上下文中执行或进行命令映射，就是说within(){}, with(), as()等都是无效的。
+
+另：
+
+- 使用 capture() 来获取 execute 的结果到 string，可以保存到变量里，比如 r = capture(execute(:ls))。
+- 使用 info, warn 来在本地显示结果。
+
+在本地的 teminal 里，任务蓝色，命令是黄色，info 白色。
 
 ### 本地任务
 通过run_locally块，可以让任务在本地执行：

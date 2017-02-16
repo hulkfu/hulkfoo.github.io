@@ -104,6 +104,8 @@ get ':index', to: "photos#show", as: :preview
 - 路径：/photos/1/1
 - 得到：params = {controller: 'photos', action: 'show', id: '1', index: '1' }
 
+注： as 指明了 url helper 的名字，否则不会生成 url helper 的。
+
 ### 改变 url 的样子 或对应的 Controller
 
 ```ruby
