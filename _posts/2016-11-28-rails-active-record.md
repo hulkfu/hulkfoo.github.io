@@ -360,7 +360,50 @@ User.where(id: posts.map(&:user_id))
 
 ## joins
 
-## includes
+## Eager Loading
+
+### includes
+
+ORM 的 N + 1 问题： 本来可以 2 次查完的，却查了 N + 1 次。
+
+比如在显示 Post 时附带着显示评论。
+
+```ruby
+@posts = Post.all
+
+```
+
+```coffee
+<% @posts.each do |post| %>
+  <tr>
+    <td><%= post.name %></td>
+    <td><%= post.comments.map(&:name) %></td>
+  </tr>
+<% end %>
+```
+
+那么就会生成如下的 SQL：
+
+```coffee
+Post Load (1.0ms)   SELECT * FROM "posts"
+Comment Load (0.4ms)   SELECT * FROM "comments" WHERE ("comments".post_id = 1)
+Comment Load (0.3ms)   SELECT * FROM "comments" WHERE ("comments".post_id = 2)
+```
+
+解决就用 includes:
+
+```ruby
+@posts = Post.includes(:comments)
+```
+
+那么 SQL 就变成了两句了：
+
+```coffee
+Post Load (0.5ms)   SELECT * FROM "posts"
+Comment Load (0.5ms)   SELECT "comments".* FROM "comments" WHERE ("comments".post_id IN (1,2))
+```
+
+
 
 ### or
 
@@ -419,3 +462,4 @@ end
 - https://tomafro.net/2009/08/using-indexes-in-rails-index-your-associations
 - http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html
 - http://guides.rubyonrails.org/active_record_callbacks.html
+- http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#module-ActiveRecord::Associations::ClassMethods-label-Eager+loading+of+associations
