@@ -403,7 +403,12 @@ Post Load (0.5ms)   SELECT * FROM "posts"
 Comment Load (0.5ms)   SELECT "comments".* FROM "comments" WHERE ("comments".post_id IN (1,2))
 ```
 
+提前加载完后，至于如何配对，那就是 Rails 的方案了，应该是 SQL 缓冲技术。
 
+#### [goldiloader gem](https://github.com/salsify/goldiloader)
+不喜欢重复的程序员，用[goldiloader gem](https://github.com/salsify/goldiloader) 可以方便的解决上面的问题。
+
+默认它会自动提前加载所有相关的数据，如果不需要，可以在 has_many 后面指明 auto_include: false。
 
 ### or
 
@@ -463,3 +468,4 @@ end
 - http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html
 - http://guides.rubyonrails.org/active_record_callbacks.html
 - http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#module-ActiveRecord::Associations::ClassMethods-label-Eager+loading+of+associations
+- http://blog.bigbinary.com/2013/07/01/preload-vs-eager-load-vs-joins-vs-includes.html
