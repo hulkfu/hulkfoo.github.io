@@ -20,6 +20,9 @@ function test() {
 
 > 调用函数的那个对象。
 
+如果一个变量（函数也是一个变量）前没有 “this.” ，那么就是去调用全局的了。在一个实例里亦是如此，调用函数时不加 this，就是调用的全局里定义的函数。
+
+
 # prototype
 正是prototype体现了JavaScript的Script，其它的都是Java了。
 通过prototype，可以实现类、继承进而其它高级的设计模式。
@@ -77,6 +80,11 @@ REST。
 # TIPS
 
 数组长度用array的length访问得到：a.length。
+
+# 感想
+不管何种语言，就是为了在一定场景中方便编程者表达逻辑。
+
+在此基础上，越简单越好！
 
 # 参考
 - http://www.ruanyifeng.com/blog/2011/06/designing_ideas_of_inheritance_mechanism_in_javascript.html
