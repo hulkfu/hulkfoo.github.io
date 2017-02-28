@@ -3,10 +3,22 @@ layout: post
 title : JavaScript编程
 ---
 
-JavaScript是一门简单但完备的语言。
+JavaScript是一门简单但完备的语言。看上去结构就像一个 hash 表，可以给 key 绑定值或函数。
 
 # this
-通过改变this，实现各种动态。
+this 指的当前实例对象。通过改变this，实现各种动态。
+
+它代表函数运行时，自动生成的一个内部对象，只能在函数内部使用。比如:
+
+```js
+function test() {
+  this.x = 1;
+}
+```
+
+随着函数使用场合的不同，this的值会发生变化。但是有一个总的原则，那就是this指的是:
+
+> 调用函数的那个对象。
 
 # prototype
 正是prototype体现了JavaScript的Script，其它的都是Java了。
@@ -15,16 +27,20 @@ JavaScript是一门简单但完备的语言。
 ## 构造函数
 和一般函数一样，只是为了便于认出首字母大写，然后通过**new**来创建新实例。
 
+可以看出，JavaScript 的实例创造，就是给 new 方法传了一个构造函数，而不像其他真正的面向对象编程语言传的是一个类，然后类里有构造函数。
+
+这个构造函数里的 this，即是实例的 this。
+
 ```javascript
-function Persion(name) {
+function Person(name) {
   this.name = name;
   this.who = function() {
     console.log(this.name);
   }
 }
 
-var p1 = new Persion('Jack');
-var p2 = new Persion('Tom');
+var p1 = new Person('Jack');
+var p2 = new Person('Tom');
 p1.who()  // #=> Jack
 ```
 
@@ -35,8 +51,9 @@ p1.who()  // #=> Jack
 * 执行构造函数中的代码（为这个新对象添加属性）。
 * 返回新对象。
 
-由于在JavaScript中函数也是对象，因此上例中的p1和p2的who方法是不同的。也就是说每次实例化一个对象，都会重新定义一遍方法，显然这是不可取的。
-因此会选择在构造函数的prototype中定义实例的方法以及实例间共享的变量。
+由于在JavaScript中函数也是对象，因此上例中的 p1 和 p2 的 who 方法是不同的，都有自己的定义。也就是说每次实例化一个对象，都会重新定义一遍方法，显然这是不可取的。
+
+因此会选择在构造函数的 prototype，即原型来定义实例的方法以及实例间共享的变量，有点父类的意思。为什么不直接实现父类呢？只因想简单些。
 
 ## 寄生组合式继承
 
@@ -60,3 +77,6 @@ REST。
 # TIPS
 
 数组长度用array的length访问得到：a.length。
+
+# 参考
+- http://www.ruanyifeng.com/blog/2011/06/designing_ideas_of_inheritance_mechanism_in_javascript.html
