@@ -84,7 +84,7 @@ REST。
 # 感想
 不管何种语言，就是为了在一定场景中方便编程者表达逻辑。
 
-在此基础上，越简单越好！
+在此基础上，越简单越好！JavaScript 当初就是为了简单的浏览器互动，没有想到会有后来的 Node 等来构建复杂的系统。但是经过扩展，它也可以做到。
 
 # 参考
 - http://www.ruanyifeng.com/blog/2011/06/designing_ideas_of_inheritance_mechanism_in_javascript.html
