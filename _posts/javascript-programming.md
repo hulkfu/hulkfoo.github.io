@@ -54,6 +54,18 @@ p1.who()  // #=> Jack
 * 执行构造函数中的代码（为这个新对象添加属性）。
 * 返回新对象。
 
+在 JavaScript 里是这么执行的：
+
+```js
+// var a = new A('hehe') =>
+var a = new Person();
+a.__proto__ = A.prototype; (proto)
+Person.call(a, 'Jack')
+```
+
+这里的 __proto__ 才是原型链的存储的地方。
+
+
 由于在JavaScript中函数也是对象，因此上例中的 p1 和 p2 的 who 方法是不同的，都有自己的定义。也就是说每次实例化一个对象，都会重新定义一遍方法，显然这是不可取的。
 
 因此会选择在构造函数的 prototype，即原型来定义实例的方法以及实例间共享的变量，有点父类的意思。为什么不直接实现父类呢？只因想简单些。
@@ -88,3 +100,4 @@ REST。
 
 # 参考
 - http://www.ruanyifeng.com/blog/2011/06/designing_ideas_of_inheritance_mechanism_in_javascript.html
+- https://blog.oyanglul.us/javascript/understand-prototype.html
