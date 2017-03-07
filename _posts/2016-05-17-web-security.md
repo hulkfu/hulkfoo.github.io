@@ -30,7 +30,7 @@ URL是在另一个网站中嵌入的，比如：
 
 那么就会执行相应的操作。浏览器并不知道这是否是用户的本意，只会按部就班的去解析，遇到img的src就去请求。
 
-应对：对非GET需要验证安全令牌，只有通过才能给执行。而这个安全令牌是Server在render表单等时自己生成的。
+应对：对非 GET 需要验证安全令牌，只有通过才能给执行。而这个安全令牌是 Server 在 render 表单等时自己生成的。浏览器只有拥有这个令牌才可以通过 Server 的验证进行所提交的操作。
 
 在Rails中，只需要在最顶层的ApplicationController中加入：
 
@@ -43,6 +43,19 @@ protect_from_forgery with: :exception
 ```
 <%= csrf_meta_tags %>
 ```
+
+会在 html header 里生成：
+
+```js
+<meta name="csrf-token" content="xxxxxxxxxxxx-token" />
+```
+
+当然在有 Ajax 操作时，也需要加入 X-CSRF-Token head：
+
+```js
+xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
+```
+
 
 # Cross-Site Scripting (XSS)
 跨站执行脚本，等于别人可以在你的网站页面上写自己的代码。十分恐怖！
