@@ -3,6 +3,14 @@ layout: post
 title: 搭建 git 服务器
 ---
 
+```bash
+$ sudo adduser git
+$ su git
+$ cd
+$ mkdir .ssh && chmod 700 .ssh
+$ touch .ssh/authorized_keys && chmod 600 .ssh/authorized_keys
+```
+
 
 ```bash
 $ cd /opt/git
