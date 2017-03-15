@@ -18,9 +18,9 @@ sudo adduser deploy sudo
 
 ```bash
 cd ~
-mkdir .ssh
-touch .ssh/authorized_ke
-chmod 600 .ssh/authorized_keysys
+mkdir .ssh && chmod 700 .ssh
+touch .ssh/authorized_keys && chmod 600 .ssh/authorized_keys
+
 # 添加自己 PC 的公钥
 vim .ssh/authorized_keysys
 
@@ -122,19 +122,70 @@ sudo apt-get install nodejs memcached imagemagick
 
 ```ruby
 # Gemfile
-gem "capistrano"
-gem 'capistrano-rbenv'
-gem 'capistrano3-puma'
-gem 'capistrano-rails'
+group :development do
+  gem "capistrano", require: false
+  gem 'capistrano-rbenv', require: false
+  gem 'capistrano3-puma', require: false
+  gem 'capistrano-rails', require: false
+end
 ```
 
-配置 Capfile 和 deploy.rb 及 /deploy 下相应的服务器。
+### 配置 Capistrano
+
+```bash
+# 应用根目录下 初始化
+cap install
+```
+
+然后配置 Capfile：
+
+```bash
+require "capistrano/rbenv"
+# require "capistrano/chruby"
+require "capistrano/bundler"
+require "capistrano/rails/assets"
+require "capistrano/rails/migrations"
+# require "capistrano/passenger"
+
+# ...
+
+# config/deploy.rb
+set :rbenv_type, :user # or :system, depends on your rbenv setup
+set :rbenv_ruby, '2.4.0'
+
+# in case you want to set ruby version from the file:
+# set :rbenv_ruby, File.read('.ruby-version').strip
+
+set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/home/deploy/.rbenv/bin/rbenv exec"
+set :rbenv_map_bins, %w{rake gem bundle ruby rails}
+set :rbenv_roles, :all # default value
+```
+
+在 config/deploy.rb 设置应用的相关信息，包括 application，repo_url，deploy_to，linked_files，linked_dirs 等主要信息。
+
+在 config/deploy/production.rb 下设置相应的服务器。
+
+配置完后首次部署一下：
+
+```bash
+cap production deploy setup
+```
+
+此前需要先将 linked_files 和 linked_dirs 在 server 上创建，否则它要先找到这些文件才去部署代码。
+
+比如 database, secrets 等。
+
+生成 secret_key_base：
+
+```bash
+rails secret
+```
 
 
-### 配着 Puma
+### 配置 Puma
 配合着 [capistrano3-puma](https://github.com/seuros/capistrano-puma) 很方便，比 passenger 还简单。
 
-#### 1. 相关 gem 和 引用
+#### 1. 相关 gem 和引用
 
 ```ruby
 # Gemfile
@@ -164,9 +215,10 @@ rails g capistrano:nginx_puma:config
 
 ```ruby
 # nginx 如何在 /etc 目录需要 sudo，它会传到 /tmp 里，然后自己拷贝呗
-cap puma:nginx_config
+cap production puma:nginx_config
+
 # 直接上传到 shared/puma.rb，所有需要将它也加到 deploy.rb 的 linked_files 里。
-cap puma:config
+cap production puma:config
 ```
 
 #### 4. 配置
