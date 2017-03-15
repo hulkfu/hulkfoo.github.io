@@ -207,7 +207,7 @@ MD4、MD5、SHA-1、SHA-256、SHA-384、SHA-512,这些都是常用的散列函�
 
 # 消息认证码 —— 消息被正确传送了吗
 
-**消息认证码**（Message Authentication Code）是一种确认消息完整性并认证的技术。
+**消息认证码**（Message Authentication Code）是一种确认消息完整性并认证的技术。而常用的 HMAC 是 Keyed-hash Message Authentication Code 的缩写。
 
 MAC 的输入包括任意长度的消息和一个发送者与接受者直接共享的密钥，即公钥，它可以输出固定长度的数据，这个数据称为 MAC 值。
 
@@ -218,6 +218,19 @@ MAC 的输入包括任意长度的消息和一个发送者与接受者直接共�
 消息的完整性通过对消息生成 MAC 实现，消息的认证通过共享密钥实现，只有这两个输入都正确，才可以输出正确的 MAC 值。
 
 消息认证码(MAC)是对消息摘要的补充，消息摘要只能保证消息的完整性，MAC 不仅能够保证完整性，还能够保证真实性。比如客户端 A 想给服务端 B 发送一条消息，A 需要把消息内容和对应的消息摘要都发给 B；B 通过同样的摘要算法，自然可以知道消息是否被篡改。比如攻击者 C 将 A 发送的原始消息和摘要，都篡改成新的消息和摘要，那么这个消息对B来说也是完整的，只不过不是A发的。因为 MAC 含有秘钥(只有 A 和 B 知道)，如果 A 将消息内容和 MAC 发给 B，虽然C是仍然可以修改消息内容和MAC，但是由于C不知道秘钥，所以无法生成与篡改后内容匹配的MAC。
+
+下面是一段生成的验证 HMAC 的 Ruby 代码：
+
+```ruby
+require 'base64'
+require 'openssl'
+
+def verify_webhook(data, hmac_header)
+  digest  = OpenSSL::Digest::Digest.new('sha256')
+  calculated_hmac = Base64.encode64(OpenSSL::HMAC.digest(digest, SHARED_SECRET, data)).strip
+  calculated_hmac == hmac_header
+end
+```
 
 ## 重放攻击
 正确的消息，被多次发送。如向我汇款100块，这个数据被我截获了，那么我重复1000次呢？所以要防止。
@@ -464,3 +477,4 @@ TLS（Transport Layer Security，传输层安全）算是SSL（Secure Socket Lay
 
 # 参考
 - http://blog.csdn.net/aitangyong/article/details/54426711
+https://help.shopify.com/api/getting-started/webhooks#verify-webhook
