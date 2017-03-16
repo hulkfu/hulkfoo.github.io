@@ -3,9 +3,11 @@ layout: post
 title: 用 Capistrano 在 Puma 和 Nginx 上部署 Rails 应用
 ---
 
-这里用的是 Ubuntu 16.04.
+# 基本
 
-# 从头来
+## 服务器配置
+
+这里用的是 Ubuntu 16.04.
 
 ### 创建 deploy 用户
 
@@ -118,7 +120,9 @@ local   all             all                                md5
 sudo apt-get install nodejs memcached imagemagick
 ```
 
-### 安装 Capistrano 3
+## Rails 配置
+
+### 相关 Gem
 
 ```ruby
 # Gemfile
@@ -130,7 +134,7 @@ group :development do
 end
 ```
 
-### 配置 Capistrano
+### Capistrano 3
 
 ```bash
 # 应用根目录下 初始化
@@ -182,15 +186,10 @@ rails secret
 ```
 
 
-### 配置 Puma
+### Puma
 配合着 [capistrano3-puma](https://github.com/seuros/capistrano-puma) 很方便，比 passenger 还简单。
 
-#### 1. 相关 gem 和引用
-
-```ruby
-# Gemfile
-gem 'capistrano3-puma' , group: :development
-```
+#### 1. gem 引用
 
 ```ruby
 # Capfile
@@ -247,7 +246,7 @@ set :puma_plugins, []  #accept array of plugins
 set :nginx_use_ssl, false
 ```
 
-#### 5. 发布
+## 发布
 
 首先去 server 上重启一下 Nginx，让新的 sites-enabled 配置文件生效，就能接收 puma 的信息了：
 
