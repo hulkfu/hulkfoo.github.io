@@ -1,14 +1,15 @@
 ---
 layout: post
-title: Python VS. Ruby
+title: Ruby VS. Python
+permalink: rubypython
 ---
 
-# 引子
 在同时用Python和Ruby，固做总结，用的越多，感悟也越多，比较乱，随时在变着！
 
-Python没有太多新概念，不像Ruby的元编程、作用域等需要去适应。Python唯一需要适应的就是实例方法的self参数以及继承父类时主动去调用父类的够找函数，这也是全凭self。
+# 对比
+Python 没有太多新概念，不像 Ruby 的元编程、作用域等需要去适应。Python 唯一需要适应的就是实例方法的self参数以及继承父类时主动去调用父类的够找函数，这也是全凭self。
 
-Ruby的灵活性让它有了Rails、DSL，所以Ruby更适合去创造创造其它东西的东西。Python的简单让它更适合去探索已知的东西，比如调试器等。
+Ruby 的灵活性让它有了 Rails、DSL，所以 Ruby 更适合去创造创造其它东西的东西。Python 的简单让它更适合去探索已知的东西，比如调试器等。
 
 不同的语言性格决定了它们的用途以及使用者的性格。所以不要死抱哪门语言，那是懒惰的借口，适合就去学着用。
 
@@ -16,7 +17,11 @@ Ruby的灵活性让它有了Rails、DSL，所以Ruby更适合去创造创造其�
 
 再说语言只是表象的东西，对操作系统的包裹。想多线程、数据结构、网络协议这些东西是躲不掉的。
 
-还有Python语法中那个让我纠结的冒号，因为根据缩进也可以达到冒号的语义作用，我给它找了理由：
+Ruby社区的东西都很漂亮，对比一想Python的官网就知道了。可以想象，用Ruby的都文艺些，Python的都Geek些。
+
+## 语法
+
+Python语法中那个让我纠结的冒号，因为根据缩进也可以达到冒号的语义作用，我给它找了理由：
 
 * 多行。对，这是功能需求，为了和多行代码分开，因为多行需要" \"来表示，然后接着下一行要缩进。还有多行数组的赋值。
 * 清晰。很准确的知道这下面是一个新的开始。
@@ -25,9 +30,16 @@ Ruby的灵活性让它有了Rails、DSL，所以Ruby更适合去创造创造其�
 
 因为是按缩进来定义代码段的，确实需要这么个冒号，要不可读性太差了。
 
-Ruby的变量作用域被class、module、def定义分开了，只要在里面就开不见外面的，因此需要闭包去引用外面的变量。而Python可以在里面访问外面的。
+### 方法
+在Python中执行方法要加是()，如js中那样，而Ruby不用。就是这一点，造就了很大的代码差异。
 
-Ruby社区的东西都很漂亮，对比一想Python的官网就知道了。可以想象，用Ruby的都文艺些，Python的都Geek些。
+加括号的好处是，方法的执行很明确，那么不加方法就是对这个方法的访问。
+
+而Ruby因为不用加括号，更适合写出DSL。
+
+想把一个方法作为参数传递，Python就传方法名即可，Ruby则要传Proc，要么是块。
+
+### lambda
 
 说实话，Ruby的块真心好用！
 
@@ -35,9 +47,41 @@ Ruby社区的东西都很漂亮，对比一想Python的官网就知道了。可�
 
 在Python中，通过self也就是当前实例，可以很容易的指定变量。Python的其它代码都是围绕着self转的，像self的衣服，self可以穿自己的，也可以穿它爸的。
 
+### yield
+两边都有yield。
+
+Ruby的是执行方法后的程序块，而Python是用来定义生成器。
+
+### 分与合
+分：开发软件时，为了去耦合会将代码分开写到各个文件里，修改时也只会影响这个文件。
+
+合：把分开的模块合到一起使用，完成需求。不管是require还是import，都是把代码“copy and load”。
+
+Ruby可以用include或extend模块来扩展类的方法，Python则偏向于使用self来在各个功能模块见传递变量。
+
+## 变量
 在Ruby中，实例变量就是以@开头的变量。
 
 动态语言与静态语言的一个很大区别就是变量不需要提前定义了。当然都需要初始化。
+
+### 作用域
+
+Ruby的变量作用域被class、module、def定义分开了，只要在里面就开不见外面的，因此需要闭包去引用外面的变量。而Python可以在里面访问外面的。
+
+## 继承
+
+## 包管理
+Ruby require 一个文件后，相当于里面代码被复制了进来，如果在同一个 module 里，里面的类、方法等能够直接使用。
+
+Python import 一个文件后，相当于Java里的import，只是引入了包，使用还是需要包名的。
+
+而在Ruby里，这是靠module来实现的，可以在任何位置定义这个module。而Python是根据目录关系来管理。
+
+不管是require还是import包时，都会将代码执行一遍，而且只执行一般，再引入就会提示已经引入了。
+想重新加载，就用load方法。
+
+
+
 
 # 感观
 Python里面大写开头的单词比较少，即使是类，也用小心，用的时候就像调用方法。
@@ -52,33 +96,30 @@ Rails比较难，是因为它需要有很多其它相关知识：浏览器如何
 
 “生活不只是眼前的苟且，还有诗和远方。”
 
-# 包管理
-Ruby require一个文件后，相当于里面代码被复制了进来，里面的类、方法等能够直接使用。
-
-Python import一个文件后，相当于Java里的import，只是引入了包，使用还是需要包名的。
-
-而在Ruby里，这是靠module来实现的，可以在任何位置定义这个module。而Python是根据目录关系来管理。
-
-不管是require还是import包时，都会将代码执行一遍，而且只执行一般，再引入就会提示已经引入了。
-想重新加载，就用load方法。
-
-# 方法
-在Python中执行方法要加是()，如js中那样，而Ruby不用。就是这一点，造就了很大的代码差异。
-
-加括号的好处是，方法的执行很明确，那么不加方法就是对这个方法的访问。
-
-而Ruby因为不用加括号，更适合写出DSL。
-
-想把一个方法作为参数传递，Python就传方法名即可，Ruby则要传Proc，要么是块。
 
 # 领域
-从社区的贡献看，Ruby适合做框架，因为有Rails，而Python比较多科学运算、功能实现。
+从社区的贡献看，Ruby适合做框架，因为有Rails，而Python比较多底层原理、科学运算、功能实现等。
 
 想想这也是因为这两种语言的语法格式适合的。
 
 Python侧重过程，而Ruby都是类。
 
-# PyInstaller
+
+## 优秀项目
+
+### Ruby
+发现越来越多的安全项目和管理项目使用Ruby来做。
+
+* [metasploit-framework](https://github.com/rapid7/metasploit-framework)：渗透。
+* [Chef](),[Puppet]()：节点部署。
+
+### Python
+而Python主要集中在具体的功能领域。
+
+#### [PyAutoGUI]()
+自动操作。
+
+#### PyInstaller
 Python有个pyinstaller，真是个好东西，能打包成方便发行的二进制文件。Ruby也有(ocra)[https://github.com/larsch/ocra]，但只支持windows平台。
 
 ```
@@ -89,29 +130,8 @@ pyinstaller -F xxx.py
 
 是的，我特别喜欢能够分发的二进制文件，所以喜欢终端开发。
 
-# yield
-两边都有yield。
+#### [mitmproxy](http://docs.mitmproxy.org/en/latest/mitmproxy.html)
 
-Ruby的是执行方法后的程序块，而Python是用来定义生成器。
-
-# 分与合
-分：开发软件时，为了去耦合会将代码分开写到各个文件里，修改时也只会影响这个文件。
-
-合：把分开的模块合到一起使用，完成需求。不管是require还是import，都是把代码“copy and load”。
-Ruby可以用include或extend模块来扩展类的方法，Python则偏向于使用self来在各个功能模块见传递变量。
-
-# 优秀项目
-
-## Ruby
-发现越来越多的安全项目和管理项目使用Ruby来做。
-
-* [metasploit-framework](https://github.com/rapid7/metasploit-framework)：渗透。
-* [Chef](),[Puppet]()：节点部署。
-
-## Python
-而Python主要集中在具体的功能领域。
-
-* [PyAutoGUI]()：自动操作。
 
 # 感想
 多掌握一门语言就如同多了个朋友。像Ruby和Pthon都是有十多年历史的语言，所以在批判之前最好要能理解。
