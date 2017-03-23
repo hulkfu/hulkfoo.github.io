@@ -110,4 +110,9 @@ $ bin/rails runner -e staging "Model.long_running_method"
 
 其实在view中使用的path等，都是helper。
 
+# migration
+rake db:setup 与 rake db:migrate 的区别是前者不会执行 migrations 而直接创建数据库，在新建数据库时这是我们需要的。
+
+# 参考
+
 * http://mixandgo.com/blog/the-beginner-s-guide-to-rails-helpers

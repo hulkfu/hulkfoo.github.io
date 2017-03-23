@@ -1,11 +1,35 @@
 ---
 layout: post
 title : JavaScript编程
+permalink: javascript
 ---
 
-JavaScript是一门简单但完备的语言。看上去结构就像一个 hash 表，可以给 key 绑定值或函数。
+JavaScript是一门简单但完备的语言，如同浏览器的汇编语言（已经可以将各种语言编译成 js 了）。看上去结构就像一个 hash 表，可以给 key 绑定值或函数。
 
-# this
+# 函数调用
+总的来说，JavaScript 就是一堆函数，有名的匿名的。在函数被调用时，调用对象通过明的或默认的方式被指定。
+
+一个函数是通过 call() 被调用的，第一个参数是调用它的对象。而不用 call 调用的简写，其实是把当前环境里的 this 传了过去。
+
+```js
+function hello(thing) {
+  console.log(this + " says hello " + thing);
+}
+```
+
+```js
+> hello("world")
+[object global] says hello world
+
+> hello.call(this, "world")
+[object global] says hello world
+
+> hello.call("Jack","world")
+Jack says hello world
+
+```
+
+## this
 this 指的当前实例对象。通过改变this，实现各种动态。
 
 它代表函数运行时，自动生成的一个内部对象，只能在函数内部使用。比如:
@@ -21,6 +45,8 @@ function test() {
 > 调用函数的那个对象。
 
 如果一个变量（函数也是一个变量）前没有 “this.” ，那么就是去调用全局的了。在一个实例里亦是如此，调用函数时不加 this，就是调用的全局里定义的函数。
+
+
 
 
 # prototype
@@ -101,3 +127,4 @@ REST。
 # 参考
 - http://www.ruanyifeng.com/blog/2011/06/designing_ideas_of_inheritance_mechanism_in_javascript.html
 - https://blog.oyanglul.us/javascript/understand-prototype.html
+- http://yehudakatz.com/2011/08/11/understanding-javascript-function-invocation-and-this/

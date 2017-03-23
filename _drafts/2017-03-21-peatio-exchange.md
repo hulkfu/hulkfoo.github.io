@@ -6,14 +6,21 @@ permalink: peatio
 
 [Peatio](https://github.com/peatio/peatio) 是云币用的后台交易系统，而且文档完善，按照　README 就能部署。
 
-# 运行开发环境
-参考[Ubuntu 指南](https://github.com/peatio/peatio/blob/master/doc/setup-local-ubuntu.md)，在 Ubuntu 上的运行开发环境。
+# 跑起来
+参考[Ubuntu 指南](https://github.com/peatio/peatio/blob/master/doc/setup-local-ubuntu.md)，在 Ubuntu 上的安装开发环境依赖。
 
-需要注意由于代码有两年没有更新了，不能在 Ruby 2.4.0 上跑，需要更换 Ruby 版本。
+需要注意由于代码有两年没有更新了，亲测不能在 Ruby 2.4.0 和 2.3.0 上使用，还是安装指定的 2.2.1 可以使用。
 
-把数据库从 MySQL 无缝换成了 PostgreSQL。
+顺便把数据库从 MySQL 无缝换成了 PostgreSQL。
 
-其它都能正常安装，然后跑起来，可是到进入进入市场，即 /markets/btccny，Server 就挂掉。
+配置好后就可以起来了。
+
+然后跑测试：
+
+```bash
+bundle exec rake db:setup RAILS_ENV=test
+bundle exec rspec
+```
 
 
 # 主要外部程序
@@ -29,6 +36,8 @@ RabbitMQ is a messaging broker - an intermediary for messaging. It gives your ap
 bitcoind is a program that implements the Bitcoin protocol for remote procedure call (RPC) use.
 
 # 主要 Gem
+
+[enumerize](https://github.com/brainspec/enumerize) —— 枚举属性。
 
 [gon](https://github.com/gazay/gon) —— get your Rails variables in your js.
 
@@ -63,6 +72,43 @@ bitcoind is a program that implements the Bitcoin protocol for remote procedure 
 
 [unread](https://github.com/ledermann/unread) —— Handle unread records and mark them as read with Ruby on Rails.
 
+# Assets
+
+
+## [flightjs](https://flightjs.github.io/)
+
+Flight 是一个轻量级的，基于组件的 JavaScript 框架，它将行为与 DOM 的节点一一映射。
+
+官方的一个例子：
+
+```js
+/* Component definition */
+
+var Inbox = flight.component(inbox);
+
+function inbox() {
+  this.doSomething = function() { /* ... */ }
+  this.doSomethingElse = function() { /* ... */ }
+
+  // after initializing the component
+  this.after('initialize', function() {
+    this.on('click', this.doSomething);
+    this.on('mouseover', this.doSomethingElse);
+  });
+}
+
+/* Attach the component to a DOM node */
+
+Inbox.attachTo('#inbox');
+```
+
+可见它是基于事件驱动的。
+
+用来在 market 里显示动态的信息，比如买卖，帐号资产等。
+
+- component_data
+- component_ui
+- component_mixin
 
 # 数据结果
 
@@ -70,6 +116,30 @@ bitcoind is a program that implements the Bitcoin protocol for remote procedure 
 
 # Model
 
+## ActiveYamlBase
+使用了 ActiveHash 来存储需要 config 文件，而且还可以像 ActiveRecord。
 
+```ruby
+class ActiveYamlBase < ActiveYaml::Base
+  field :sort_order, default: 9999
+
+  if Rails.env == 'test'
+    set_root_path "#{Rails.root}/spec/fixtures"
+  else
+    set_root_path "#{Rails.root}/config"
+  end
+
+  private
+
+  def <=>(other)
+    self.sort_order <=> other.sort_order
+  end
+end
+```
+
+Bank, Currency, DepositChannel, Market, MemberTag 和 WithdrawChannel 都是它的子类。可以在 config 里找到对应的 yml 文件。
+
+
+## Deposit
 
 # 问题

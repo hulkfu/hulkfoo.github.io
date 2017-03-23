@@ -130,7 +130,7 @@ pyinstaller -F xxx.py
 
 是的，我特别喜欢能够分发的二进制文件，所以喜欢终端开发。
 
-#### [mitmproxy](http://docs.mitmproxy.org/en/latest/mitmproxy.html)
+#### [mitmproxy](https://github.com/mitmproxy/mitmproxy)
 
 
 # 感想
