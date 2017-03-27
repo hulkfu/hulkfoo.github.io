@@ -119,6 +119,16 @@ TRADE_EXECUTOR=4 rake daemon:start
 
 [eco](https://github.com/sstephenson/eco) —— Embedded CoffeeScript templates.在 app/assets/javascripts/templates 中使用，配合 JST，提前编译 js 模板文件。
 
+[jwt](https://github.com/jwt/ruby-jwt) —— A pure ruby implementation of the [RFC 7519](https://tools.ietf.org/html/rfc7519) OAuth JSON Web Token (JWT) standard. JWT是一种用于双方之间传递安全信息的简洁的、URL安全的表述性声明规范。因为数字签名的存在，这些信息是可信的，JWT可以使用HMAC算法或者是RSA的公私秘钥对进行签名。
+
+JSON Web Token (JWT) is a compact, URL-safe means of representing
+   claims to be transferred between two parties.  The claims in a JWT
+   are encoded as a JSON object that is used as the payload of a JSON
+   Web Signature (JWS) structure or as the plaintext of a JSON Web
+   Encryption (JWE) structure, enabling the claims to be digitally
+   signed or integrity protected with a Message Authentication Code
+   (MAC) and/or encrypted.
+
 # 数据结构
 
 只看数据结果，其实就能分析出程序的大概来，即使不知具体的代码。
