@@ -127,10 +127,10 @@ sudo apt-get install nodejs memcached imagemagick
 ```ruby
 # Gemfile
 group :development do
-  gem "capistrano", require: false
-  gem 'capistrano-rbenv', require: false
-  gem 'capistrano3-puma', require: false
-  gem 'capistrano-rails', require: false
+  gem "capistrano", "~> 3.8.0", require: false
+  gem 'capistrano-rbenv', "~> 2.1.0", require: false
+  gem 'capistrano3-puma', "~> 3.1.0", require: false
+  gem 'capistrano-rails', "~> 1.2.3", require: false
 end
 ```
 
@@ -195,11 +195,11 @@ rails secret
 # Capfile
 
 require 'capistrano/puma'
-# require 'capistrano/puma/workers' # if you want to control the workers (in cluster mode)
-require 'capistrano/puma/jungle'  # if you need the jungle tasks
-# require 'capistrano/puma/monit'   # if you need the monit tasks
-require 'capistrano/puma/nginx'   # if you want to upload a nginx site template
-
+install_plugin Capistrano::Puma  # Default puma tasks
+install_plugin Capistrano::Puma::Workers  # if you want to control the workers (in cluster mode)
+install_plugin Capistrano::Puma::Jungle # if you need the jungle tasks
+install_plugin Capistrano::Puma::Monit  # if you need the monit tasks
+install_plugin Capistrano::Puma::Nginx  # if you want to upload a nginx site template
 ```
 
 #### 2. 生成 nginx 和 puma 配置模板文件

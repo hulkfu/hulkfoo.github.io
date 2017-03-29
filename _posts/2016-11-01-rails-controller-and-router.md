@@ -106,7 +106,15 @@ get ':index', to: "photos#show", as: :preview
 
 注： as 指明了 url helper 的名字，否则不会生成 url helper 的。
 
-### 改变 url 的样子 或对应的 Controller
+### 改变 url 的样子或对应的 Controller
+
+- as:    定义 url helper 的名字
+- path:  定义 url 前缀的名字
+
+块：
+- 默认没有：     就是在当前 resource 后面
+- collection:  resource 集合
+- member:      当前 resource
 
 ```ruby
 # 关于 photes 的处理，就会交给 ImagesController 来处理，但是 path helper 还是 photos。
