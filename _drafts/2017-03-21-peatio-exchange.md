@@ -619,6 +619,32 @@ end
 
 主要在 app/models/matching 目录下。
 
+主要撮合代码在 executor.rb：
+
+```ruby
+def create_trade_and_strike_orders
+  ActiveRecord::Base.transaction do
+    @ask = OrderAsk.lock(true).find(@payload[:ask_id])
+    @bid = OrderBid.lock(true).find(@payload[:bid_id])
+
+    raise TradeExecutionError.new({ask: @ask, bid: @bid, price: @price, volume: @volume, funds: @funds}) unless valid?
+
+    @trade = Trade.create!(ask_id: @ask.id, ask_member_id: @ask.member_id,
+                           bid_id: @bid.id, bid_member_id: @bid.member_id,
+                           price: @price, volume: @volume, funds: @funds,
+                           currency: @market.id.to_sym, trend: trend)
+
+    @bid.strike @trade
+    @ask.strike @trade
+  end
+
+  # TODO: temporary fix, can be removed after pusher -> polling refactoring
+  if @trade.ask_member_id == @trade.bid_member_id
+    @ask.hold_account.reload.trigger
+    @bid.hold_account.reload.trigger
+  end
+end
+```
 
 
 # API
