@@ -458,6 +458,13 @@ end
 
 # Active Record Callbacks
 
+# 其它
+
+## serialize
+serialize(attr_name, class_name = Object) public
+
+If you have an attribute that needs to be saved to the database as an object, and retrieved as the same object, then specify the name of that attribute using this method and it will be handled automatically. The serialization is done through YAML. If class_name is specified, the serialized object must be of that class on retrieval or SerializationTypeMismatch will be raised.
+
 # 参考
 
 [1]: http://railscasts.com/episodes/154-polymorphic-association

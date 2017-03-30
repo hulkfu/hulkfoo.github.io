@@ -91,6 +91,7 @@ TRADE_EXECUTOR=4 rake daemon:start
 
 [aasm](https://github.com/aasm/aasm) —— 状态机。
 
+
 [bunny](https://github.com/ruby-amqp/bunny) ——  a popular, easy to use, mature Ruby client for RabbitMQ.
 
 [amqp](https://github.com/ruby-amqp/amqp) —— the asynchronous Ruby RabbitMQ client.
@@ -121,11 +122,7 @@ TRADE_EXECUTOR=4 rake daemon:start
 
 [jwt](https://github.com/jwt/ruby-jwt) —— A pure ruby implementation of the [RFC 7519](https://tools.ietf.org/html/rfc7519) OAuth JSON Web Token (JWT) standard. JWT是一种用于双方之间传递安全信息的简洁的、URL安全的表述性声明规范。因为数字签名的存在，这些信息是可信的，JWT可以使用HMAC算法或者是RSA的公私秘钥对进行签名。
 
-# 数据结构
-
-只看数据结构，其实就能分析出程序的大概来，即使不知具体的代码。
-
-# Model
+# 基础类
 
 ## ActiveYamlBase
 使用了 ActiveHash 来存储需要 config 文件，而且还可以像 ActiveRecord。
@@ -150,8 +147,481 @@ end
 
 Bank, Currency, DepositChannel, Market, MemberTag 和 WithdrawChannel 都是它的子类。可以在 config 里找到对应的 yml 文件。
 
+## Currencible
+
+```ruby
+module Currencible
+  extend ActiveSupport::Concern
+
+  included do
+    extend Enumerize
+    enumerize :currency, in: Currency.enumerize, scope: true
+    belongs_to_active_hash :currency_obj, class_name: 'Currency', foreign_key: 'currency_value'
+    delegate :key_text, to: :currency_obj, prefix: true
+  end
+end
+
+```
+
+# 验证系统
+
+# Token
+
+```ruby
+create_table "tokens", force: true do |t|
+  t.string   "token"
+  t.datetime "expire_at"
+  t.integer  "member_id"
+  t.boolean  "is_used",    default: false
+  t.string   "type"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+end
+```
+
+没有过期也没有用过就可用：
+
+```ruby
+scope :available, -> { where("expire_at > ? and is_used = ?", DateTime.now, false) }
+```
+
+
+生成一个 30 分钟后过期的 token：
+
+```ruby
+def generate_token
+  self.token = SecureRandom.hex(16)
+  self.expire_at = 30.minutes.from_now
+end
+```
+
+# 用户系统
+
+## identity
+用户的注册信息，与 Devise 相接，用户的具体信息在与其 member 里。
+
+```ruby
+create_table "identities", force: true do |t|
+  t.string   "email"
+  t.string   "password_digest"
+  t.boolean  "is_active"
+  t.integer  "retry_count"
+  t.boolean  "is_locked"
+  t.datetime "locked_at"
+  t.datetime "last_verify_at"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+end
+```
+
+## Member
+会员的信息。
+
+```ruby
+create_table "members", force: true do |t|
+  t.string   "sn"
+  t.string   "display_name"
+  t.string   "email"
+  t.integer  "identity_id"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+  t.integer  "state"
+  t.boolean  "activated"
+  t.integer  "country_code"
+  t.string   "phone_number"
+  t.boolean  "disabled",     default: false
+  t.boolean  "api_disabled", default: false
+  t.string   "nickname"
+end
+```
+
+
+```ruby
+has_many :orders
+has_many :accounts
+has_many :payment_addresses, through: :accounts
+has_many :withdraws
+has_many :fund_sources
+has_many :deposits
+has_many :api_tokens
+has_many :two_factors
+has_many :tickets, foreign_key: 'author_id'
+has_many :comments, foreign_key: 'author_id'
+has_many :signup_histories
+
+has_one :id_document
+
+has_many :authentications, dependent: :destroy
+```
+
+## Account
+资金帐号。属于 member， 可以绑定银行卡、BTC 地址等。
+
+```ruby
+create_table "accounts", force: true do |t|
+  t.integer  "member_id"
+  t.integer  "currency"
+  t.decimal  "balance",                         precision: 32, scale: 16
+  t.decimal  "locked",                          precision: 32, scale: 16
+  t.datetime "created_at"
+  t.datetime "updated_at"
+  t.decimal  "in",                              precision: 32, scale: 16
+  t.decimal  "out",                             precision: 32, scale: 16
+  t.integer  "default_withdraw_fund_source_id"
+end
+```
+
+```ruby
+belongs_to :member
+has_many :payment_addresses
+has_many :versions, class_name: "::AccountVersion"
+has_many :partial_trees
+```
+
+## RunningAccount
+
+```ruby
+CATEGORY = {
+  withdraw_fee:         0,
+  trading_fee:          1,
+  register_reward:      2,
+  referral_code_reward: 3,
+  deposit_reward:       4
+}
+```
+
+```ruby
+create_table "running_accounts", force: true do |t|
+  t.integer  "category"
+  t.decimal  "income",      precision: 32, scale: 16, default: 0.0, null: false
+  t.decimal  "expenses",    precision: 32, scale: 16, default: 0.0, null: false
+  t.integer  "currency"
+  t.integer  "member_id"
+  t.integer  "source_id"
+  t.string   "source_type"
+  t.string   "note"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+end
+```
+
+## IdDocument
+身份认证。
+
+```ruby
+create_table "id_documents", force: true do |t|
+  t.integer  "id_document_type"
+  t.string   "name"
+  t.string   "id_document_number"
+  t.integer  "member_id"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+  t.date     "birth_date"
+  t.text     "address"
+  t.string   "city"
+  t.string   "country"
+  t.string   "zipcode"
+  t.integer  "id_bill_type"
+  t.string   "aasm_state"
+end
+```
+
+
+# 资金系统
 
 ## Deposit
+充值，即保证金。云币是 100% 保证金的。
+
+状态机的状态：
+
+```ruby
+STATES = [:submitting, :cancelled, :submitted, :rejected, :accepted, :checked, :warning]
+
+```
+
+```ruby
+create_table "deposits", force: true do |t|
+  t.integer  "account_id"
+  t.integer  "member_id"
+  t.integer  "currency"
+  t.decimal  "amount",                 precision: 32, scale: 16
+  t.decimal  "fee",                    precision: 32, scale: 16
+  t.string   "fund_uid"
+  t.string   "fund_extra"
+  t.string   "txid"
+  t.integer  "state"
+  t.string   "aasm_state"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+  t.datetime "done_at"
+  t.string   "confirmations"
+  t.string   "type"
+  t.integer  "payment_transaction_id"
+  t.integer  "txout"
+end
+```
+
+## DepositChannel
+不同渠道充值的配置，是一个 ActiveYamlBase。
+
+数据在 config/deposit_channels.yml 文件：
+
+```ruby
+- id: 200
+  key: satoshi
+  currency: btc
+  sort_order: 1
+  min_confirm: 1
+  max_confirm: 3
+- id: 400
+  key: bank
+  currency: cny
+  sort_order: 2
+  bank_accounts:
+    -
+      bank: 'Your Bank Name'
+      branch: 'Your Bank Branch'
+      holder: 'Your Account Holder'
+      account: 'Your Account Number'
+
+```
+
+## Withdraw
+提币。
+
+```ruby
+create_table "withdraws", force: true do |t|
+  t.string   "sn"
+  t.integer  "account_id"
+  t.integer  "member_id"
+  t.integer  "currency"
+  t.decimal  "amount",     precision: 32, scale: 16
+  t.decimal  "fee",        precision: 32, scale: 16
+  t.string   "fund_uid"
+  t.string   "fund_extra"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+  t.datetime "done_at"
+  t.string   "txid"
+  t.string   "aasm_state"
+  t.decimal  "sum",        precision: 32, scale: 16, default: 0.0, null: false
+  t.string   "type"
+end
+```
+
+## WithdrawChannel
+不同渠道提现的配置，比如最少提多少，费率等等。
+
+配置文件：
+
+```ruby
+- id: 200
+  key: satoshi
+  currency: btc
+  fixed: 8
+  fee: 0.0005
+  inuse: true
+  type: WithdrawChannelSatoshi
+- id: 400
+  key: bank
+  currency: cny
+  fixed: 2
+  fee_max: 0
+  min: 100
+  max: 50000
+  fee: 0.003
+  proportion: true
+  inuse: true
+  type: WithdrawChannelBank
+
+```
+
+## FundSource
+资金来源。
+
+比如当已经用来 ICO 时，就会被冻结。
+
+```ruby
+create_table "fund_sources", force: true do |t|
+  t.integer  "member_id"
+  t.integer  "currency"
+  t.string   "extra"
+  t.string   "uid"
+  t.boolean  "is_locked",  default: false
+  t.datetime "created_at"
+  t.datetime "updated_at"
+  t.datetime "deleted_at"
+end
+```
+
+
+## PaymentAddress
+
+```ruby
+create_table "payment_addresses", force: true do |t|
+  t.integer  "account_id"
+  t.string   "address"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+  t.integer  "currency"
+end
+```
+
+## PaymentTransaction
+
+```ruby
+create_table "payment_transactions", force: true do |t|
+  t.string   "txid"
+  t.decimal  "amount",                   precision: 32, scale: 16
+  t.integer  "confirmations"
+  t.string   "address"
+  t.integer  "state"
+  t.string   "aasm_state"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+  t.datetime "receive_at"
+  t.datetime "dont_at"
+  t.integer  "currency"
+  t.string   "type",          limit: 60
+  t.integer  "txout"
+end
+```
+
+## Proof
+
+## PartialTree
+
+
+
+
+
+
+# 交易系统
+
+## Ticket
+股票代码，即交易的币种，是 BTC 还是 ETH 等等。
+
+```ruby
+create_table "tickets", force: true do |t|
+  t.string   "title"
+  t.text     "content"
+  t.string   "aasm_state"
+  t.integer  "author_id"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+end
+```
+
+```ruby
+belongs_to :author, class_name: 'Member', foreign_key: 'author_id'
+```
+
+用 AASM 记录状态：
+
+```ruby
+aasm whiny_transitions: false do
+  state :open
+  state :closed
+
+  event :close do
+    transitions from: :open, to: :closed
+  end
+
+  event :reopen do
+    transitions from: :closed, to: :open
+  end
+end
+```
+
+## Market
+
+## Order
+买或卖，只是要价，还没有被撮合。
+
+```ruby
+create_table "orders", force: true do |t|
+  t.integer  "bid"
+  t.integer  "ask"
+  t.integer  "currency"
+  t.decimal  "price",                     precision: 32, scale: 16
+  t.decimal  "volume",                    precision: 32, scale: 16
+  t.decimal  "origin_volume",             precision: 32, scale: 16
+  t.integer  "state"
+  t.datetime "done_at"
+  t.string   "type",           limit: 8
+  t.integer  "member_id"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+  t.string   "sn"
+  t.string   "source",         null: false
+  t.string   "ord_type",       limit: 10
+  t.decimal  "locked",                    precision: 32, scale: 16
+  t.decimal  "origin_locked",             precision: 32, scale: 16
+  t.decimal  "funds_received",            precision: 32, scale: 16, default: 0.0
+  t.integer  "trades_count",                                        default: 0
+end
+```
+
+order 创建后触发：
+
+```ruby
+after_commit :trigger
+
+ATTRIBUTES = %w(id at market kind price state state_text volume origin_volume)
+
+def trigger
+  return unless member
+
+  json = Jbuilder.encode do |json|
+    json.(self, *ATTRIBUTES)
+  end
+  member.trigger('order', json)
+end
+```
+
+Member 的 trigger 方法：
+
+```ruby
+def trigger(event, data)
+  AMQPQueue.enqueue(:pusher_member, {member_id: id, event: event, data: data})
+end
+```
+
+
+
+### OrderAsk
+
+### OrderBid
+
+## Trade
+交易记录。
+
+```ruby
+create_table "trades", force: true do |t|
+  t.decimal  "price",         precision: 32, scale: 16
+  t.decimal  "volume",        precision: 32, scale: 16
+  t.integer  "ask_id"
+  t.integer  "bid_id"
+  t.integer  "trend"
+  t.integer  "currency"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+  t.integer  "ask_member_id"
+  t.integer  "bid_member_id"
+  t.decimal  "funds",         precision: 32, scale: 16
+end
+```
+
+## matching
+撮合系统，是交易所的关键：如何把买单和买单匹配，让它们交易，并生成交易数据。
+
+对，这里才是系统的核心，其它的一切都是为了它服务。
+
+主要在 app/models/matching 目录下。
+
+
+
+# API
 
 # Assets
 
@@ -209,5 +679,13 @@ Inbox.attachTo('#inbox');
 - component_data
 - component_ui
 - component_mixin
+
+# 技术方案
+
+## 技术指标显示
+用 Redis 缓存当前价格，提供数据，用 JS 代码绘制显示。
+
+## 撮合
+使用 RabbitMQ
 
 # 问题
