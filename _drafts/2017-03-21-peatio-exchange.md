@@ -710,8 +710,6 @@ end
 可见在里面 build 了 order，这里判断 new limit_order 还是 market_order。并调用了 Matching Engine 的 submit 方法。
 
 
-
-
 在 app/models/matching 目录下。
 
 engine.rb 文件：
@@ -759,7 +757,7 @@ end
 
 counter_order 是买卖队列里的第一个 order，即买价最高或卖价最低的那个。
 
-match 方法是个递归，它会一直尝试和最新的 counter_order 去配对成交。可见我们下的每一单都会一直在尝试去成交，是需要很大内存的。
+match 方法是个递归，它会一直尝试和最新的 counter_order 去配对成交。可见我们下的每一单都会一直在尝试去成交，是需要很大内存的。又不能不这样，万一有大单把所有都吃掉呢。而且需要实时统计当前筹码等数据。
 
 在里面会调用 order 的 trade_with 方法，因为 order 分 limit_order 和 market_order，前者只有价格是指定的才成就，后者是能成就成：
 
@@ -796,7 +794,7 @@ def trade_with(counter_order, counter_book)
 end
 ```
 
-matching 后就可以创建 trade 了了，主要代码在 executor.rb：
+matching 后就可以创建 trade 了，主要代码在 executor.rb：
 
 ```ruby
 module Matching
