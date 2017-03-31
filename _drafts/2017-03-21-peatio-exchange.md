@@ -612,39 +612,286 @@ create_table "trades", force: true do |t|
 end
 ```
 
-## matching
-撮合系统，是交易所的关键：如何把买单和买单匹配，让它们交易，并生成交易数据。
-
-对，这里才是系统的核心，其它的一切都是为了它服务。
-
-主要在 app/models/matching 目录下。
-
-主要撮合代码在 executor.rb：
+在 app/controllers/concerns/order_creation.rb 文件里：
 
 ```ruby
-def create_trade_and_strike_orders
-  ActiveRecord::Base.transaction do
-    @ask = OrderAsk.lock(true).find(@payload[:ask_id])
-    @bid = OrderBid.lock(true).find(@payload[:bid_id])
-
-    raise TradeExecutionError.new({ask: @ask, bid: @bid, price: @price, volume: @volume, funds: @funds}) unless valid?
-
-    @trade = Trade.create!(ask_id: @ask.id, ask_member_id: @ask.member_id,
-                           bid_id: @bid.id, bid_member_id: @bid.member_id,
-                           price: @price, volume: @volume, funds: @funds,
-                           currency: @market.id.to_sym, trend: trend)
-
-    @bid.strike @trade
-    @ask.strike @trade
-  end
-
-  # TODO: temporary fix, can be removed after pusher -> polling refactoring
-  if @trade.ask_member_id == @trade.bid_member_id
-    @ask.hold_account.reload.trigger
-    @bid.hold_account.reload.trigger
+def order_submit
+  begin
+    Ordering.new(@order).submit
+    render status: 200, json: success_result
+  rescue
+    Rails.logger.warn "Member id=#{current_user.id} failed to submit order: #{$!}"
+    Rails.logger.warn params.inspect
+    Rails.logger.warn $!.backtrace[0,20].join("\n")
+    render status: 500, json: error_result(@order.errors)
   end
 end
 ```
+
+app/services/ordering.rb 文件里 submit 将 保存 order 后，压入 matching 队列：
+
+```ruby
+def submit
+  ActiveRecord::Base.transaction do
+    @orders.each {|order| do_submit order }
+  end
+
+  @orders.each do |order|
+    AMQPQueue.enqueue(:matching, action: 'submit', order: order.to_matching_attributes)
+  end
+
+  true
+end
+
+def do_submit(order)
+  order.fix_number_precision # number must be fixed before computing locked
+  order.locked = order.origin_locked = order.compute_locked
+  order.save!
+
+  account = order.hold_account
+  account.lock_funds(order.locked, reason: Account::ORDER_SUBMIT, ref: order)
+end
+```
+
+下面就交给 matching 工作了。
+
+## matching
+matcing，撮合系统，是交易所的关键：如何把买单和买单匹配，让它们交易，并生成交易数据。
+
+对，这里才是系统的核心，其它的一切都是为了它服务。
+
+接上面 order 创建后， order 被压入队列，它在 app/models/worker/matching.rb 文件里被处理：
+
+```ruby
+def process(payload, metadata, delivery_info)
+  payload.symbolize_keys!
+
+  case payload[:action]
+  when 'submit'
+    submit build_order(payload[:order])
+  when 'cancel'
+    cancel build_order(payload[:order])
+  when 'reload'
+    reload payload[:market]
+  else
+    Rails.logger.fatal "Unknown action: #{payload[:action]}"
+  end
+end
+
+def submit(order)
+  engines[order.market.id].submit(order)
+end
+
+def build_order(attrs)
+  ::Matching::OrderBookManager.build_order attrs
+end
+```
+
+```ruby
+module Matching
+  class OrderBookManager
+
+    attr :ask_orders, :bid_orders
+
+    def self.build_order(attrs)
+      attrs.symbolize_keys!
+
+      raise ArgumentError, "Missing ord_type: #{attrs.inspect}" unless attrs[:ord_type].present?
+
+      klass = ::Matching.const_get "#{attrs[:ord_type]}_order".camelize
+      klass.new attrs
+    end
+
+    # ...
+  end
+end
+```
+
+可见在里面 build 了 order，这里判断 new limit_order 还是 market_order。并调用了 Matching Engine 的 submit 方法。
+
+
+
+
+在 app/models/matching 目录下。
+
+engine.rb 文件：
+
+```ruby
+module Matching
+  class Engine
+    # ...
+
+    def submit(order)
+      book, counter_book = orderbook.get_books order.type
+      match order, counter_book
+      add_or_cancel order, book
+    rescue
+      Rails.logger.fatal "Failed to submit order #{order.label}: #{$!}"
+      Rails.logger.fatal $!.backtrace.join("\n")
+    end
+
+    def match(order, counter_book)
+      return if order.filled?
+
+      counter_order = counter_book.top
+      return unless counter_order
+
+      if trade = order.trade_with(counter_order, counter_book)
+        counter_book.fill_top *trade
+        order.fill *trade
+
+        publish order, counter_order, trade
+
+        match order, counter_book
+      end
+    end
+
+    def add_or_cancel(order, book)
+      return if order.filled?
+      order.is_a?(LimitOrder) ?
+        book.add(order) : publish_cancel(order, "fill or kill market order")
+    end
+
+    # ...
+  end
+end
+```
+
+counter_order 是买卖队列里的第一个 order，即买价最高或卖价最低的那个。
+
+match 方法是个递归，它会一直尝试和最新的 counter_order 去配对成交。可见我们下的每一单都会一直在尝试去成交，是需要很大内存的。
+
+在里面会调用 order 的 trade_with 方法，因为 order 分 limit_order 和 market_order，前者只有价格是指定的才成就，后者是能成就成：
+
+```ruby
+# LimitOrder 的
+def trade_with(counter_order, counter_book)
+  if counter_order.is_a?(LimitOrder)
+    if crossed?(counter_order.price)
+      trade_price  = counter_order.price
+      trade_volume = [volume, counter_order.volume].min
+      trade_funds  = trade_price*trade_volume
+      [trade_price, trade_volume, trade_funds]
+    end
+  else
+    trade_volume = [volume, counter_order.volume, counter_order.volume_limit(price)].min
+    trade_funds  = price*trade_volume
+    [price, trade_volume, trade_funds]
+  end
+end
+
+# MarketOrder 的
+def trade_with(counter_order, counter_book)
+  if counter_order.is_a?(LimitOrder)
+    trade_price  = counter_order.price
+    trade_volume = [volume, volume_limit(trade_price), counter_order.volume].min
+    trade_funds  = trade_price*trade_volume
+    [trade_price, trade_volume, trade_funds]
+  elsif price = counter_book.best_limit_price
+    trade_price  = price
+    trade_volume = [volume, volume_limit(trade_price), counter_order.volume, counter_order.volume_limit(trade_price)].min
+    trade_funds  = trade_price*trade_volume
+    [trade_price, trade_volume, trade_funds]
+  end
+end
+```
+
+matching 后就可以创建 trade 了了，主要代码在 executor.rb：
+
+```ruby
+module Matching
+  class Executor
+    # ...
+
+    def execute!
+      retry_on_error(5) { create_trade_and_strike_orders }
+      publish_trade
+      @trade
+    end
+
+    def create_trade_and_strike_orders
+      ActiveRecord::Base.transaction do
+        @ask = OrderAsk.lock(true).find(@payload[:ask_id])
+        @bid = OrderBid.lock(true).find(@payload[:bid_id])
+
+        raise TradeExecutionError.new({ask: @ask, bid: @bid, price: @price, volume: @volume, funds: @funds}) unless valid?
+
+        @trade = Trade.create!(ask_id: @ask.id, ask_member_id: @ask.member_id,
+                               bid_id: @bid.id, bid_member_id: @bid.member_id,
+                               price: @price, volume: @volume, funds: @funds,
+                               currency: @market.id.to_sym, trend: trend)
+
+        @bid.strike @trade
+        @ask.strike @trade
+      end
+
+      # TODO: temporary fix, can be removed after pusher -> polling refactoring
+      if @trade.ask_member_id == @trade.bid_member_id
+        @ask.hold_account.reload.trigger
+        @bid.hold_account.reload.trigger
+      end
+    end
+
+    # ...
+  end
+end
+```
+
+后台任务在 lib/daemons/trade_executor_ctl 文件：
+
+```ruby
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'daemons/rails/config'
+
+num = ENV['TRADE_EXECUTOR'] ? ENV['TRADE_EXECUTOR'].to_i : 1
+
+num.times do |i|
+  if pid = fork
+    Process.detach pid
+  else
+    config = Daemons::Rails::Config.for_controller(File.expand_path(__FILE__))
+
+    config[:app_name] = "peatio:amqp:trade_executor:#{i+1}"
+    config[:script]   = "#{File.expand_path('../amqp_daemon.rb', __FILE__)}"
+    config[:ARGV]     = ARGV + %w(-- trade_executor)
+
+    Daemons::Rails.run config[:script], config.to_hash
+
+    break
+  end
+end
+```
+
+执行的 qmqp_daemon.rb 文件：
+
+```ruby
+
+```
+
+把相应的任务交给相应的 worker 处理，worker 在 app/models/worker 目录下，都在 Worder module 里。
+
+如 trade_executor.rb :
+
+```ruby
+module Worker
+  class TradeExecutor
+
+    def process(payload, metadata, delivery_info)
+      payload.symbolize_keys!
+      ::Matching::Executor.new(payload).execute!
+    rescue
+      SystemMailer.trade_execute_error(payload, $!.message, $!.backtrace.join("\n")).deliver
+      raise $!
+    end
+
+  end
+end
+```
+
+而这里正调用了开始的代码。
+
+
 
 
 # API
