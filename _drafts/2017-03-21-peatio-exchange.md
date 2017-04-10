@@ -957,6 +957,8 @@ Inbox.attachTo('#inbox');
 用 Redis 缓存当前价格，提供数据，用 JS 代码绘制显示。
 
 ## 撮合
-使用 RabbitMQ
+使用 RabbitMQ。
+
+线上的服务应该是运行在多台服务器上，通过 RabbitMQ 来进行任务分配，这样就可以根据用户量而动态扩展服务器的数量了。
 
 # 问题
