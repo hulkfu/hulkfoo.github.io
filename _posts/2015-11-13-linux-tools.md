@@ -78,8 +78,12 @@ crontab -e 编辑 # -l 列出现有的， -r 删除
 $ at 2:05 tomorrow
 
 at>echo "hi"
-at> Ctrl+D
+at> <Ctrl+D>
 ```
+
+at -c 14  显示 14 号任务内容
+
+atq 显示待执行的任务
 
 # 同步
 
