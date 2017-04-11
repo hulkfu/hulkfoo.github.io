@@ -55,6 +55,13 @@ echo "= $?"
 
 # 管道和 exec
 
+## <<< 将后面的内容转成标准输入
+
+```bash
+at now +10 minutes <<< "rm -rf /tmp/tobedeleted"
+```
+
+
 # 参考
 
 * http://blog.longwin.com.tw/2014/09/bash-shell-scrip-argv-argc-2014/
