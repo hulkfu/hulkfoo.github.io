@@ -55,9 +55,8 @@ echo "= $?"
 
 # 管道和 exec
 
-## <<< 将后面的内容转成标准输入
-
 ```bash
+# <<< 将后面的内容转成标准输入
 at now +10 minutes <<< "rm -rf /tmp/tobedeleted"
 ```
 
