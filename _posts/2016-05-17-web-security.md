@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Web安全
-permalink: web-security
+permalink: websec
 ---
 
 Rails作为一个成熟的框架，已经默认提供了必要的安全机制，从而使得小白也能初始化出安全的站点。但安全还在人心，
@@ -118,6 +118,12 @@ s = sanitize(user_input, tags: tags, attributes: %w(href title))
 但还是会产生 nil error，这也算被动防御了。
 
 而且关系都是用 id 关联的，所以影响不大。
+
+# 工具
+
+## [sqlmap]()
+
+## [Burp](https://portswigger.net/burp/)
 
 # 参考
 * http://guides.rubyonrails.org/security.html

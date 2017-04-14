@@ -75,6 +75,7 @@ crontab -e 编辑 # -l 列出现有的， -r 删除
 
 ## at
 ```bash
+# at 5pm+3 days
 $ at 2:05 tomorrow
 
 at>echo "hi"
@@ -84,6 +85,7 @@ at> <Ctrl+D>
 at -c 14  显示 14 号任务内容
 
 atq 显示待执行的任务
+atrm 删除任务
 
 # 同步
 
@@ -174,3 +176,4 @@ http://askubuntu.com/questions/107726/how-to-create-animated-gif-images-of-a-scr
 
 # 参考
 - http://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/crontab.html
+- http://www.cnblogs.com/peida/archive/2013/01/05/2846152.html
