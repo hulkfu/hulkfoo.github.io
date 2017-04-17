@@ -69,7 +69,7 @@ msfconsole 主要使用步骤：
 - scan 扫描目标
 - search 找到合适的 exploit
 - use 选择漏洞
-- show info 查看需要设置的参数
+- show options 查看需要设置的参数
 - set 设置参数
   - PAYLOAD  攻击后执行的载荷
   - RHOST(S) 目标地址
