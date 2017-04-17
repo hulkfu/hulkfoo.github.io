@@ -166,22 +166,19 @@ msf auxiliary(smb_version) > run
 ## 目录结构
 
 ```
-data: editable files used by Metasploit
-documentation: provides documentation for the framework
-external: source code and third-party libraries
-lib: the ‘meat’ of the framework code base
-modules: the actual MSF modules
-plugins: plugins that can be loaded at run-time
-scripts: Meterpreter and other scripts
-tools: various useful command-line utilities
+data: Metasploit 使用的可以编辑的文件。
+documentation: 具体的开发使用文档。
+external: 源码及第三方库。
+lib: 构建 Metasploit 框架的“肉”
+modules: 真正的 MSF modules
+  - auxiliary 没有 payload 的 exploit
+  - exploit 攻击
+  - payload
+  - post 攻击后的进一步操作，比如权限提升
+plugins: 在运行时可以载入的插件
+scripts: Meterpreter 以及其它脚本
+tools: 多种有用的命令行集合
 ```
-
-modules 类型：
-
-- auxiliary 没有 payload 的 exploit
-- exploit 攻击
-- payload
-- post 攻击后的进一步操作，比如权限提升
 
 ## Libraries
 
