@@ -54,3 +54,5 @@ title: 收藏夹
 * [Simple Screen Recorder](http://www.maartenbaert.be/simplescreenrecorder/)
 
 # Ohters
+
+[Windows 虚拟机官方镜像](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
