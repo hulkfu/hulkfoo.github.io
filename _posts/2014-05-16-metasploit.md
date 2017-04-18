@@ -4,6 +4,8 @@ title: Metasploit
 permalink: msf
 ---
 
+使用的版本：metasploit v4.14.12-dev。
+
 Metasploit 将渗透测试的过程标准化自动化，每一步都有相应的代码对应，并提供了基础库，可以很方便的扩展。
 
 它是一个渗透测试的集大成者，即是工具，有时学习的框架。
@@ -42,13 +44,13 @@ msfupdate
 ### 数据库
 首先数据库不是必须的，但它很有用，能加快 search 和 存储结果。
 
-如果有 .msf4/db 目录，就会运行那里面的数据库程序和配置文件，否则运行系统的。
+启动 msfconsole 是首先会检查 $HOME/.msf4/db 目录，如果存在就会运行那里面的数据库程序，否则使用系统 PostgreSQL。
 
-但数据库配置都是像 Rails 一样配置 database.yml 文件。
+但无论用哪个数据库，数据库配置文件都是像 Rails 一样在配置 .msf4/database.yml 文件里配置。
 
-打开 msfconsole，它会自动创建数据库的。
+第一次打开 msfconsole，它会自动创建数据库的。不修改 database.yml 的情况下，第一次启动，它发现没有数据库，会默认创建 db 目录的。
 
-在 .msf4/db 下创建数据库：
+也可以在外部创建 .msf4/db 下的数据库：
 
 ```bash
 $ msfdb init
@@ -60,6 +62,8 @@ msfdb start: Starts the database.
 msfdb stop: Stops the database.
 msfdb status: Shows the database status.
 ```
+
+其实这样将 MSF 的数据库单独存放挺好的，和自己使用的不冲突。在打开 msfconsole 时才打开数据库服务，启动嵌入的数据库  /opt/metasploit-framework/embedded/bin/postgres，并监听 5433 端口，但退出时不会自动关闭。（PostgreSQL 数据库服务并没有什么特别之处，一个可执行文件加配置文件就可以嵌入进来）
 
 如果显示 'Module database cache not built yet, using slow search'，则需要更新查找缓存：
 
@@ -242,6 +246,89 @@ The MSF libraries help us to run our exploits without having to write additional
 # [metasploit-omnibus](https://github.com/rapid7/metasploit-omnibus) —— 安装包制作
 
 使用的是修改过的 Chef 的 [omnibus](https://github.com/chef/omnibus)。
+
+不仅是 Metasploit 的代码，更是它这一套构建流程及嵌入 nmap、postgresql、ruby 等等运行环境打包进去的思想，最后自动生成一个跨平台可安装包。
+
+看 Linux 下 Metasploit 的安装目录  /opt/metasploit-framework/
+
+```bash
+├── bin
+│   ├── metasploit-aggregator
+│   ├── msfbinscan
+│   ├── msfconsole
+│   ├── msfd
+│   ├── msfdb
+│   ├── msfelfscan
+│   ├── msfmachscan
+│   ├── msfpescan
+│   ├── msfremove
+│   ├── msfrop
+│   ├── msfrpc
+│   ├── msfrpcd
+│   ├── msfupdate
+│   └── msfvenom
+├── embedded
+│   ├── bin
+│   ├── framework
+│   ├── include
+│   ├── lib
+│   ├── postgresql-prev
+│   ├── share
+│   └── ssl
+```
+
+主要两个目录：
+
+- bin 目录： shell 的接口程序。
+- embedded 目录： 使用 omnibus 打包进来的程序。
+  - bin: Metasploit 执行时用到的执行文件
+  - framework: Metasploit 的 代码
+  - include: 头
+  - lib: 库
+  - postgresql-prev
+  - share
+  - ssl
+
+看一下 bin/msfconsole 的前几行：
+
+```bash
+#!/bin/sh
+cmd=`basename $0`
+
+CWD=`pwd`
+SCRIPTDIR=/opt/metasploit-framework/bin
+cd $SCRIPTDIR
+EMBEDDED=$SCRIPTDIR/../embedded
+BIN=$EMBEDDED/bin
+FRAMEWORK=$EMBEDDED/framework
+
+LOCALCONF=~/.msf4
+DB=$LOCALCONF/db
+DBCONF=$LOCALCONF/database.yml
+cd $CWD
+
+# ...
+
+unset GEM_HOME
+unset GEM_PATH
+unset GEM_ROOT
+unset RUBY_ENGINE
+unset RUBY_ROOT
+PATH=$BIN:$SCRIPTDIR:$PATH
+if [ -e "$FRAMEWORK/$cmd" ]; then
+  $BIN/ruby $FRAMEWORK/$cmd $db_args "$@"
+else
+  $BIN/ruby $BIN/$cmd $db_args "$@"
+fi
+
+```
+
+可见首先就是设置环境变量，最后用设置的环境来执行 framework 里的代码。这些应该都是 omnibus 做的。
+
+还是信息论的概念，对于一个系统，我们只要提供了足够必要的信息，剩下的就可以自动完成了。
+
+# 感想
+
 
 # 参考
 - https://www.offensive-security.com/metasploit-unleashed/

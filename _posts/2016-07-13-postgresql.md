@@ -64,6 +64,15 @@ Postgres.app默认是trust认证，所以只需要有用户名和host就可以�
 
 当然也可以用brew或直接安装，只是Mac一般开发用，没有必要一直开着数据库服务。
 
+## Linux
+
+之前需要进行数据迁移，并卸载旧的 Postgresql，比如：
+
+```bash
+sudo apt-get purge postgresql-9.1
+```
+
+否则新旧都会运行，而且新的端口号会加一，默认是 5432,新的就成了 5433 了。
 
 # 问题
 gem install pg error:
