@@ -46,7 +46,7 @@ msfupdate
 
 启动 msfconsole 是首先会检查 $HOME/.msf4/db 目录，如果存在就会运行那里面的数据库程序，否则使用系统 PostgreSQL。
 
-但无论用哪个数据库，数据库配置文件都是像 Rails 一样在配置 .msf4/database.yml 文件里配置。
+但无论用哪个数据库，数据库配置文件都是像 Rails 一样在配置 .msf4/database.yml 文件里配置。而且默认它们都是用的 **production** 的数据库配置。在开发环境下我还是比较喜欢系统的数据库。
 
 第一次打开 msfconsole，它会自动创建数据库的。不修改 database.yml 的情况下，第一次启动，它发现没有数据库，会默认创建 db 目录的。
 
