@@ -174,6 +174,13 @@ http://askubuntu.com/questions/107726/how-to-create-animated-gif-images-of-a-scr
 # [lftp](http://lftp.yar.ru/)
 比ftp命令好用，封装了 rm 等常用命令。
 
+# netstat
+
+```bash
+# 查看使用 80 端口的程序
+sudo netstat --all --program | grep '80'
+```
+
 # 参考
 - http://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/crontab.html
 - http://www.cnblogs.com/peida/archive/2013/01/05/2846152.html

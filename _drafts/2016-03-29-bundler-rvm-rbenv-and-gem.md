@@ -18,3 +18,11 @@ title: Bundler RVM rbenv gem
 
 
 # Bundler
+
+## bundle install
+--binstubs[=<directory>]
+Creates a directory (defaults to ~/bin) and place any executables from the gem there. These executables run in Bundler's context. If used, you might add this directory to your environment's PATH variable. For instance, if the rails gem comes with a rails executable, this flag will create a bin/rails executable that ensures that all referred dependencies will be resolved using the bundled gems.
+
+
+# 参考
+- http://bundler.io/v1.14/man/bundle-install.1.html

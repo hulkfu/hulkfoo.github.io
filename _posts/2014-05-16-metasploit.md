@@ -20,6 +20,8 @@ curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/t
   ./msfinstall
 ```
 
+上面的代码其实是下载最新的匹配安装包，把 Metasploit 安装到 /opt/metasploit-framework 目录下，然后将里面的 bin 目录加到 PATH 里。
+
 之后就可以：
 
 ```bash
@@ -35,10 +37,29 @@ msfupdate
 ```
 
 ## 配置
-安装代码开发版的话，配置文件在 $HOME/.msf4 下，可以去设置数据库等。
+不管开发板还是社区版，配置文件在 $HOME/.msf4 下，可以去设置数据库等。
 
 ### 数据库
-配置好 database.yml 后，打开 msfconsole，它会自动创建数据库的。
+首先数据库不是必须的，但它很有用，能加快 search 和 存储结果。
+
+如果有 .msf4/db 目录，就会运行那里面的数据库程序和配置文件，否则运行系统的。
+
+但数据库配置都是像 Rails 一样配置 database.yml 文件。
+
+打开 msfconsole，它会自动创建数据库的。
+
+在 .msf4/db 下创建数据库：
+
+```bash
+$ msfdb init
+
+After the database starts, you can use any of the following commands to manage the database:
+msfdb reinit: Deletes and reinitializes the database.
+msfdb delete: Deletes the database.
+msfdb start: Starts the database.
+msfdb stop: Stops the database.
+msfdb status: Shows the database status.
+```
 
 如果显示 'Module database cache not built yet, using slow search'，则需要更新查找缓存：
 
@@ -46,7 +67,25 @@ msfupdate
 msf > db_rebuild_cache
 ```
 
-## 其它
+有了数据库，就有了 workspace 来存数据了。
+
+[这里](https://www.offensive-security.com/metasploit-unleashed/using-databases/)有更详细用法。
+
+### 自定义
+可以在 $HOME/.msf4 的以下目录自定义相应的内容：
+
+- modules
+- plugins
+- loot
+
+然后在 msfconsole 中重新加载：
+
+```bash
+reload_all
+```
+
+
+## 其它命令
 
 - msfvenom 木马生成
 
@@ -200,6 +239,10 @@ The MSF libraries help us to run our exploits without having to write additional
 - Provides the ‘friendly’ API
 - Provides simplified APIs for use in the Framework
 
+# [metasploit-omnibus](https://github.com/rapid7/metasploit-omnibus) —— 安装包制作
+
+使用的是修改过的 Chef 的 [omnibus](https://github.com/chef/omnibus)。
 
 # 参考
 - https://www.offensive-security.com/metasploit-unleashed/
+- https://community.rapid7.com/docs/DOC-3163
