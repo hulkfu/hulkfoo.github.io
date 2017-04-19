@@ -234,18 +234,19 @@ tools: 多种有用的命令行集合
 
 The MSF libraries help us to run our exploits without having to write additional code for rudimentary tasks, such as HTTP requests or encoding of payloads.
 
-### Rex
+### 0: Rex
+The framework was designed to be as modular as possible in order to encour- age the re-use of code across various projects. The most fundamental piece of the architecture is the Rex library which is short for the Ruby Extension Library. Some of the components provided by Rex include a wrapper socket subsystem, implementations of protocol clients and servers, a logging subsys- tem, exploitation utility classes, and a number of other useful classes. Rex itself is designed to have no dependencies other than what comes with the default Ruby install. In the event that a Rex class depends on something that is not included in the default install, the failure to find such a dependency should not lead to an inability to use Rex.
 
 - The basic library for most tasks
 - Handles sockets, protocols, text transformations, and others
 - SSL, SMB, HTTP, XOR, Base64, Unicode
 
-### Msf::Core
+### 1: Msf::Core
 
 - Provides the ‘basic’ API
 - Defines the Metasploit Framework
 
-### Msf::Base
+### 2: Msf::Base
 
 - Provides the ‘friendly’ API
 - Provides simplified APIs for use in the Framework
