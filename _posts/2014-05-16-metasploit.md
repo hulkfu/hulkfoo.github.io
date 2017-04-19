@@ -46,7 +46,14 @@ msfupdate
 
 启动 msfconsole 是首先会检查 $HOME/.msf4/db 目录，如果存在就会运行那里面的数据库程序，否则使用系统 PostgreSQL。
 
-但无论用哪个数据库，数据库配置文件都是像 Rails 一样在配置 .msf4/database.yml 文件里配置。而且默认它们都是用的 **production** 的数据库配置。在开发环境下我还是比较喜欢系统的数据库。
+但无论用哪个数据库，数据库配置文件都是像 Rails 一样在配置 .msf4/database.yml 文件里配置。而且默认它们都是用的 **production** 的数据库配置，但可以在启动时通过 --environment 参数来选择环境。其实共用影响不大，因为主要起到索引，而且它是增量的。我喜欢用开发环境，因为可以直接 git pull 来升级 modules 里的内容，而不像 msfupdate 那样重新安装一遍。
+
+```bash
+# lib/metasploit/framework/parsed_options/base.rb
+# If RAILS_ENV is set, then it will be used, but if RAILS_ENV is set and the --environment option is given, then
+# --environment value will be used to reset ENV[RAILS_ENV].
+options.environment = ENV['RAILS_ENV'] || DEFAULT_ENVIRONMENT
+```
 
 第一次打开 msfconsole，它会自动创建数据库的。不修改 database.yml 的情况下，第一次启动，它发现没有数据库，会默认创建 db 目录的。
 
@@ -216,8 +223,8 @@ lib: 构建 Metasploit 框架的“肉”
 modules: 真正的 MSF modules
   - auxiliary 没有 payload 的 exploit
   - exploit 攻击
-  - payload
-  - post 攻击后的进一步操作，比如权限提升
+  - payload 打开最小缺口
+  - post 攻击后的进一步操作，比如权限提升、种马等
 plugins: 在运行时可以载入的插件
 scripts: Meterpreter 以及其它脚本
 tools: 多种有用的命令行集合
@@ -327,6 +334,19 @@ fi
 
 还是信息论的概念，对于一个系统，我们只要提供了足够必要的信息，剩下的就可以自动完成了。
 
+# 相关
+## [Empire](http://www.powershellempire.com/)
+Empire is a pure PowerShell post-exploitation agent built on cryptologically-secure communications and a flexible architecture. Empire implements the ability to run PowerShell agents without needing powershell.exe, rapidly deployable post-exploitation modules ranging from key loggers to Mimikatz, and adaptable communications to evade network detection, all wrapped up in a usability-focused framework. It premiered at BSidesLV in 2015.
+
+这里主要对 listener 说明：
+
+- native   本地的，此时 Host 只能是本机的 ip 地址，否则报 Error:99
+- pivot    在肉鸡上开一个端口，通过这个端口进行操作
+- hop      生成一个 hop.php 页面，肉鸡去那里获得 Host 地址
+- foreign  将 Host 链到一起
+- meter    中间的虚拟的，可以随意起 Host，只为提供 Host 信息
+
+那么问题来了，如果将 Host 设置为自己路由后的 ip 呢？首先用 native 打开监听，然后在生成一 meter 指向路由的 ip，当然还需要做端口映射。
 # 感想
 
 
