@@ -2,6 +2,11 @@
 layout: post
 title: Linux下好用的工具
 ---
+Linux 下各种好用的工具，可以让日常流程自动化、也可以实现你想要的效果。它们是 Linux 的宝贵资产，是代代程序员传承下来的。
+
+仅仅三十年间计算机软件就有了如此的积累，甚至第一代程序员还在编程，已经形成了如此庞大的基础，而且还会一直持续下去。如果说人类是靠书本将知识传递了下来，那计算机自出生就是一体的，一直多是它一个，在一步一步被人类养大。所以，怎能不看好计算机呢？
+
+
 
 # 文本处理
 
@@ -87,11 +92,6 @@ at -c 14  显示 14 号任务内容
 atq 显示待执行的任务
 atrm 删除任务
 
-# 同步
-
-## rsync
-rsync - a fast, versatile, remote (and local) file-copying tool
-
 
 # [byzanz](https://github.com/GNOME/byzanz)
 
@@ -170,17 +170,58 @@ byzanz-record-window 30 -c output.gif
 
 http://askubuntu.com/questions/107726/how-to-create-animated-gif-images-of-a-screencast
 
-
-# [lftp](http://lftp.yar.ru/)
-比ftp命令好用，封装了 rm 等常用命令。
-
-# netstat
+# 网络
+## netstat
 
 ```bash
 # 查看使用 80 端口的程序
 sudo netstat --all --program | grep '80'
 ```
 
+# 文件传输
+
+## [rsync] —— 同步
+
+命令格式：
+
+```bash
+# 使用起来很像 ssh
+rsync [option] 源路径 目标路径
+
+其中 [option]：
+  a:使用archive模式，等于-rlptgoD，即保持原有的文件权限
+  z:表示传输时压缩数据
+  v:显示到屏幕中
+  e:使用远程shell程序（可以使用rsh或ssh）
+  --delete:精确保存副本，源主机删除的文件，目标主机也会同步删除
+  --include=PATTERN:不排除符合PATTERN的文件或目录
+  --exclude=PATTERN:排除所有符合PATTERN的文件或目录
+  --password-file:指定用于rsync服务器的用户验证密码
+```
+
+### rsync 和 ssh 差异远程同步命令
+
+例子：
+
+```bash
+# 将远程主机上test目录下的内容更新到本地test_new目录下
+rsync -ave ssh  user@192.168.1.109:/home/user/test/ /home/my/test_new/　　
+
+# 将本地内容同步到远程目录
+rsync -ave ssh /home/my/test_new/  user@192.168.1.109:/home/user/test/
+
+# 将远程上的test目录内容同步到本地的New_Test目录，并删除本地上源路径中不存在的文件或目录。
+# 千万要注意--delete参数，在使用此参数的时候，建议用绝对路径指定本地目录，防止清空当前目录
+rsync -avz --delete user@192.168.1.109:/home/user/test/ /home/my/New_Test/
+```
+
+默认不用 -e ssh，rsync 就会自动用 ssh 的。
+
+# [lftp](http://lftp.yar.ru/)
+比ftp命令好用，封装了 rm 等常用命令。
+
+
 # 参考
 - http://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/crontab.html
 - http://www.cnblogs.com/peida/archive/2013/01/05/2846152.html
+- http://www.cnblogs.com/daxian2012/archive/2012/08/01/2618375.html
