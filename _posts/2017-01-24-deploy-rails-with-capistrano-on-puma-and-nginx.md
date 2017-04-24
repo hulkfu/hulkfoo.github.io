@@ -266,7 +266,11 @@ deploy 的命令过程中，尤其是第一次部署，还是需要解决些问�
 - "Failed to build gem native extension" 类型的 gem 的安装。
 
 # SSL
+
+## 生成证书
 使用免费的 [let's encrypt](https://letsencrypt.org/) 服务，参考[Ruby-China 的帖子](https://ruby-china.org/topics/31983) 和 [官方的 wiki](https://github.com/Neilpang/acme.sh/wiki/%E8%AF%B4%E6%98%8E)。
+
+使用 [acme.sh](https://github.com/Neilpang/acme.sh)，很方便的。
 
 主要是参考前者，并中和后者，比如 ngingx 的 reload 要用 force-reload。
 
@@ -280,7 +284,42 @@ sudo visudo
 ubuntu  ALL=(ALL) NOPASSWD: /usr/sbin/service nginx reload
 ```
 
-总结就是用 [acme.sh](https://github.com/Neilpang/acme.sh)，很方便的。
+## 修改 Nginx 启用 SSL：
+
+```
+http {
+  # 新增，在我的 /etc/nginx/nginx.conf 文件里已经有了
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+  ssl_prefer_server_ciphers on;
+  # 兼容其他老浏览器的 ssl_ciphers 设置请访问 https://wiki.mozilla.org/Security/Server_Side_TLS
+
+  server {
+    listen 80 default_server;
+    # 新增
+    listen 443 ssl;
+    ssl_certificate         /etc/nginx/ssl/www.your-app.com.key.pem;
+    ssl_certificate_key     /etc/nginx/ssl/www.your-app.com.key;
+    # ssl_dhparam
+    ssl_dhparam             /etc/nginx/ssl/dhparam.pem;
+
+    # 其他省略
+  }
+
+  location @yourapp.com_production {
+    # 解决 redirected you too many times
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    # ...
+  }
+}
+```
+
+检查 Nginx 配置是否正确后重启
+
+```bash
+sudo service nginx configtest
+sudo service nginx restart
+```
 
 ## 问题
 
