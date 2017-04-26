@@ -127,6 +127,7 @@ msfconsole 主要使用步骤：
   - LHOST    攻击者的 IP
   - LPORT    攻击者的 端口
 - exploit(run) 攻击
+- post 进一步控制
 
 ## 一个例子
 进入命令行：
@@ -185,6 +186,8 @@ msf auxiliary(smb_version) > run
 ```
 
 ## Search
+
+# Meterpreter
 
 
 # 编写自己的 exploit
@@ -354,3 +357,4 @@ Empire is a pure PowerShell post-exploitation agent built on cryptologically-sec
 # 参考
 - https://www.offensive-security.com/metasploit-unleashed/
 - https://community.rapid7.com/docs/DOC-3163
+- https://wizardforcel.gitbooks.io/daxueba-kali-linux-tutorial
