@@ -4,9 +4,9 @@ title: 密码技术
 permalink: cryptography
 ---
 
-在读《图解密码技术》，笔记。
+此文主要是读《图解密码技术》的笔记，另加入自己的实践。
 
-平时我们使用的登录密码其实是pin或password，而这里的密码是cryptography，即安全传送消息的方法，通常包括密码算法和密钥等部分。
+平时我们使用的登录密码其实是 pin 或 password，而这里的密码是 cryptography，即安全传送消息的方法，通常包括密码算法和密钥等部分。
 
 密码学家的六个重要工具：
 
@@ -477,4 +477,4 @@ TLS（Transport Layer Security，传输层安全）算是SSL（Secure Socket Lay
 
 # 参考
 - http://blog.csdn.net/aitangyong/article/details/54426711
-https://help.shopify.com/api/getting-started/webhooks#verify-webhook
+- https://help.shopify.com/api/getting-started/webhooks#verify-webhook
