@@ -50,16 +50,62 @@ sudo less /var/log/shadowsocks.log
 ```
 
 ### 自动启动
-这里使用[upstart](http://upstart.ubuntu.com/getting-started.html)，在/etc/init/目录下
-新建ssserver-start.conf文件，内容如下：
+新建 /etc/init.d/shadowsocks 文件，内容如下：
 
-```
-start on startup
-task
-exec /path/to/ssserver-start
+```bash
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          shadowsocks
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: start shadowsocks
+# Description:       start shadowsocks
+### END INIT INFO
+
+start(){
+    ssserver -c /etc/shadowsocks.config -d start
+}
+
+stop(){
+    ssserver -c /etc/shadowsocks.config -d stop
+}
+
+case "$1" in
+start)
+    start
+    ;;
+stop)
+    stop
+    ;;
+reload)
+     stop
+     start
+     ;;
+*)
+    echo "Usage: $0 {start|reload|stop}"
+    exit 1
+    ;;
+esac
 ```
 
-参考： https://www.digitalocean.com/community/tutorials/the-upstart-event-system-what-it-is-and-how-to-use-it
+然后
+
+```bash
+# 增加这个文件的可执行权限
+sudo chmod +x /etc/init.d/shadowsocks
+
+# 在 rc.d 中新增，添加到开机启动中
+sudo update-rc.d shadowsocks defaults
+
+# 可以在shell中直接运行
+sudo service shadowsocks {start|reload|stop}
+```
+
+
+参考：
+http://blog.xavierskip.com/2015-02-02-shadowsocks-init/
 
 ### 命令行也proxy
 使用[proxychains-ng](https://github.com/rofl0r/proxychains-ng)

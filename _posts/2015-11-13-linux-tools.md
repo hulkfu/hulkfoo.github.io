@@ -75,6 +75,9 @@ crontab -e 编辑 # -l 列出现有的， -r 删除
 
 实例12：晚上11点到早上7点之间，每隔一小时重启smb
 0 23-7 * * * /etc/init.d/smb restart
+
+# 在系统启动后执行脚本
+@reboot /path/to/script
 ```
 
 
@@ -91,6 +94,28 @@ at -c 14  显示 14 号任务内容
 
 atq 显示待执行的任务
 atrm 删除任务
+
+## rc
+系统重启后执行的任务。执行的任务都需要在  /etc/init.d/ 目录里。
+
+用 update-rc.d 进行控制。
+
+```bash
+#创建要开机自动执行的脚本：/home/test/blog/startBlog.sh，并给予可执行权限：
+chmod +x /home/test/blog/startBlog.sh
+
+# 在/etc/init.d目录下创建链接文件到前面的脚本
+ln -s /home/test/blog/startBlog.sh /etc/init.d/startBlog。
+
+# 进入/etc/init.d目录，用 update-rc.d 命令将连接文件 startBlog 添加到启动脚本中去：
+# 其中的99表示启动顺序，取值范围是0-99。序号越大的越晚执行。
+update-rc.d startBlog defaults 99。
+
+# 移除启动的脚本，-f选项表示强制执行
+update-rc.d -f startBlog remove。
+```
+
+而 /etc/init.d/ 里的文件是有格式的，即 Subsystems，像 Nginx、PostgreSQL那样。
 
 
 # [byzanz](https://github.com/GNOME/byzanz)
@@ -226,3 +251,4 @@ rsync -avz --delete user@192.168.1.109:/home/user/test/ /home/my/New_Test/
 - http://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/crontab.html
 - http://www.cnblogs.com/peida/archive/2013/01/05/2846152.html
 - http://www.cnblogs.com/daxian2012/archive/2012/08/01/2618375.html
+- http://www.tldp.org/HOWTO/HighQuality-Apps-HOWTO/boot.html
