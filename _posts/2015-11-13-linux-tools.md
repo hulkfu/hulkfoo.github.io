@@ -109,10 +109,11 @@ ln -s /home/test/blog/startBlog.sh /etc/init.d/startBlog。
 
 # 进入/etc/init.d目录，用 update-rc.d 命令将连接文件 startBlog 添加到启动脚本中去：
 # 其中的99表示启动顺序，取值范围是0-99。序号越大的越晚执行。
-update-rc.d startBlog defaults 99。
+update-rc.d startBlog defaults 99
 
 # 移除启动的脚本，-f选项表示强制执行
-update-rc.d -f startBlog remove。
+# nstead of removing the links, disable them. The difference is that removal does not make dpkg aware of your preference to prevent the startup scripts from being executed because dpkg runs  update-rc.d too for removing and adding the links.
+update-rc.d -f startBlog disable
 ```
 
 而 /etc/init.d/ 里的文件是有格式的，即 Subsystems，像 Nginx、PostgreSQL那样。
