@@ -209,6 +209,7 @@ sudo netstat --all --program | grep '80'
 
 ## iftop - display bandwidth usage on an interface by host
 
+## htop - interactive process viewer
 
 # 文件传输
 
