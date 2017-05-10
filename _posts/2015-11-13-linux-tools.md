@@ -196,7 +196,9 @@ byzanz-record-window 30 -c output.gif
 
 http://askubuntu.com/questions/107726/how-to-create-animated-gif-images-of-a-screencast
 
+
 # 网络
+
 ## netstat
 
 ```bash
@@ -204,6 +206,9 @@ http://askubuntu.com/questions/107726/how-to-create-animated-gif-images-of-a-scr
 sudo netstat --all --program | grep '80'
 ```
 ## fuser - identify processes using files or sockets
+
+## iftop - display bandwidth usage on an interface by host
+
 
 # 文件传输
 
@@ -244,7 +249,7 @@ rsync -avz --delete user@192.168.1.109:/home/user/test/ /home/my/New_Test/
 
 默认不用 -e ssh，rsync 就会自动用 ssh 的。
 
-# [lftp](http://lftp.yar.ru/)
+## [lftp](http://lftp.yar.ru/)
 比ftp命令好用，封装了 rm 等常用命令。
 
 
