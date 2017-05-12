@@ -40,4 +40,4 @@ Dot-Bit 域名。
 # 文件
 
 ## [Resilio](https://www.resilio.com/)
-就是之前的 BT Sync。
+就是之前的 btsync，这里[下载](https://www.resilio.com/platforms/desktop/)。
