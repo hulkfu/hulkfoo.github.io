@@ -140,6 +140,36 @@ curl https://www.twitter.com/
 git push origin master
 ```
 
+### 中继
+参考 https://github.com/shadowsocks/shadowsocks/wiki/Setup-a-Shadowsocks-relay
+
+安装 HAProxy 后编辑 /etc/haproxy/haproxy.cfg 文件：
+
+```bash
+global
+        ulimit-n  51200
+
+defaults
+        log global
+        mode    tcp
+        option  dontlognull
+        contimeout 1000
+        clitimeout 150000
+        srvtimeout 150000
+
+frontend ss-in
+        bind *:8388
+        default_backend ss-out
+
+backend ss-out
+        server server1 remote-server:2222 maxconn 20480
+
+```
+
+remote-server 是运行 SS 的 Server，把它映射到了 本地的 8388 端口。
+
+主要这里主要把 mode 设置为 **tcp**，我的默认就是 http，当然还有其对应的 log 什么的。
+
 ## Linux/MacOS Client 使用
 
 1.首先也安装ss：pip install shadowsocks
@@ -172,10 +202,10 @@ sslocal -s IP -p PORT -b 127.0.0.1 -l 1080 -k PASSWORD -t 600 -m aes-256-cfb
 
 # SSH
 
-下面建立了一条绑定本地**7070**端口的静默隧道，-p表示server shh的端口。
+下面建立了一条绑定本地**7070**端口的静默隧道，-p 表示server shh的端口。
 
 ```
-ssh -qTfnN -D 7070 user@server.address -p 443
+ssh -qTfnN -D 7070 user@server.address -p 22
 ```
 
 相比ShadowSocks，SSH也是使用socket5来建立隧道，更简单，但是不如SS方便手机使用，而且比SS稍慢。
@@ -184,6 +214,33 @@ ssh -qTfnN -D 7070 user@server.address -p 443
 
 * http://www.williamlong.info/archives/4121.html
 * http://vpsnews.cc/shadowsocks-ssh%E5%8C%BA%E5%88%AB/
+
+## ssh chains
+local <--> A <--> B
+
+最傻瓜的方法：
+
+```bash
+local$ ssh user@A
+A$ ssh user@B
+```
+
+升级：
+
+```bash
+local$ ssh -A -t user@A ssh user@B
+```
+
+更好的方法，使用 'ProxyCommand' 设置 SSH config 文件，同时需要在跳板上安装 netcat，修改 ~/.ssh/config 文件：
+
+```bash
+Host A
+  HostName aaaa.com
+
+Host B
+  ProxyCommand ssh -q A nc -q0 B 22
+```
+
 
 # VPN
 VPN用着很方便，还能发放帐号呢。
@@ -406,6 +463,8 @@ COMMIT
 * http://askubuntu.com/questions/119534/easiest-way-to-setup-ubuntu-as-a-vpn-server
 * http://ubuntuforums.org/showthread.php?t=1113911
 * https://i.ssvpn.me/blog/id=5
+* http://sshmenu.sourceforge.net/articles/transparent-mulithop.html
+* http://kaywu.xyz/2016/06/19/Shadowsocks-HAProxy/
 
 # 关于VPS
 
