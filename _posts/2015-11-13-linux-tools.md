@@ -198,6 +198,35 @@ http://askubuntu.com/questions/107726/how-to-create-animated-gif-images-of-a-scr
 
 # 计算机状态
 
+## sysctl - configure kernel parameters at runtime
+
+永久配置在 /etc/sysctl.conf 文件里。
+
+比如设置 swap 的使用率。
+
+临时的：
+
+```bash
+sudo swapoff -a
+
+# To set the new value to 0:
+sudo sysctl vm.swappiness=0
+
+# To turn swap back on:
+sudo swapon -a
+
+```
+
+永久的：
+
+```bash
+sudoedit /etc/sysctl.conf
+Add this line vm.swappiness = 0
+sudo shutdown -r now # restart system
+```
+
+
+
 ## top
 
 ## htop - interactive process viewer
