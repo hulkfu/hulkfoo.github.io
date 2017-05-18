@@ -196,6 +196,15 @@ byzanz-record-window 30 -c output.gif
 
 http://askubuntu.com/questions/107726/how-to-create-animated-gif-images-of-a-screencast
 
+# 计算机状态
+
+## top
+
+## htop - interactive process viewer
+
+## du
+
+## df
 
 # 网络
 
@@ -213,7 +222,6 @@ sudo netstat --all --program | grep '80'
 
 ## iftop - display bandwidth usage on an interface by host
 
-## htop - interactive process viewer
 
 # 文件传输
 
