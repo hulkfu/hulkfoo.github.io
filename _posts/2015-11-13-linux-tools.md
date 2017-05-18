@@ -202,7 +202,14 @@ http://askubuntu.com/questions/107726/how-to-create-animated-gif-images-of-a-scr
 
 永久配置在 /etc/sysctl.conf 文件里。
 
-比如设置 swap 的使用率。
+比如设置 swap 的使用率，参考[这里](https://askubuntu.com/questions/1357/how-to-empty-swap-if-there-is-free-ram)。
+
+查看：
+
+```bash
+cat /proc/sys/vm/swappiness
+```
+
 
 临时的：
 
