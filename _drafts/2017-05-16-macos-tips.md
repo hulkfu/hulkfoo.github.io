@@ -15,7 +15,7 @@ permalink: macostips
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>homebrew.mxcl.memcached</string>
+  <string>homebrew.mxcl.memcaseched</string>
   <key>KeepAlive</key>
   <true/>
   <key>ProgramArguments</key>
