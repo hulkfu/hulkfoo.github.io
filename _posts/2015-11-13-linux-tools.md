@@ -285,7 +285,6 @@ rsync [option] 源路径 目标路径
 例子：
 
 ```bash
-# 将远程主机上test目录下的内容更新到本地test_new目录下
 rsync -ave ssh  user@192.168.1.109:/home/user/test/ /home/my/test_new/　　
 
 # 将本地内容同步到远程目录
@@ -301,6 +300,8 @@ rsync -avz --delete user@192.168.1.109:/home/user/test/ /home/my/New_Test/
 ## [lftp](http://lftp.yar.ru/)
 比ftp命令好用，封装了 rm 等常用命令。
 
+# 远程控制
+[Remmina](https://github.com/FreeRDP/Remmina)
 
 # 参考
 - http://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/crontab.html
