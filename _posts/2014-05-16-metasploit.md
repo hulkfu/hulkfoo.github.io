@@ -21,6 +21,35 @@ Metasploit 将渗透测试的过程标准化自动化，每一步都有相应的
       - libpcap-dev，用于 pcaprub gem
       - libsqlite3-dev
   - 初始化数据库：
+    - 安装 PostgresSQL： sudo apt-get install postgresql
+    - 配置 /etc/postgresql/9.x/main/pg_hba.conf local 为 trust，这样省得设置秘密了
+    - 进 psql 创建用户：
+      - sudo su - postgres
+      - create user msfdev with createdb;
+    - 在 ~/.msf4/database.yml 配置数据库：
+
+```coffee
+development: &pgsql
+  adapter: postgresql
+  database: msf_dev_db
+  username: msfdev
+  host: localhost
+  port: 5432
+  pool: 5
+  timeout: 5
+
+# Production database -- same as dev
+production: &production
+  <<: *pgsql
+  database: msf_production_db
+
+# Test database -- not the same, since it gets dropped all the time
+test:
+  <<: *pgsql
+  database: msf_test_db
+
+```
+
   - 就可以执行啦： ./msfconsole
 - [安装社区版](https://github.com/rapid7/metasploit-framework/wiki/Nightly-Installers)。
 
