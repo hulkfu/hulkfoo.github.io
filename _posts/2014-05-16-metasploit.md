@@ -51,6 +51,9 @@ test:
 ```
 
   - 就可以执行啦： ./msfconsole
+  - 也可以配置快捷访问：
+    - echo 'alias msfconsole="pushd $HOME/path/to/metasploit-framework && ./msfconsole && popd"' >> ~/.bash_aliases
+
 - [安装社区版](https://github.com/rapid7/metasploit-framework/wiki/Nightly-Installers)。
 
 ```bash
