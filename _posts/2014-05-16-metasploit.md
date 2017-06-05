@@ -13,7 +13,7 @@ Metasploit 将渗透测试的过程标准化自动化，每一步都有相应的
 # 安装
 
 - 使用 [kali Linux](https://www.kali.org/)
-- 从[代码](https://github.com/rapid7/metasploit-framework)安装开发版，这里有[官方参考](https://github.com/rapid7/metasploit-framework/wiki/Setting-Up-a-Metasploit-Development-Environment)。
+- 从[代码](https://github.com/rapid7/metasploit-framework)安装开发版，这里有[官方参考](https://github.com/rapid7/metasploit-framework/wiki/Setting-Up-a-Metasploit-Development-Environment)，下面是精简版：
   - git clone https://github.com/rapid7/metasploit-framework.git
   - cd metasploit-framework && bundle
     - 先安装以下包，用于编译安装相应的 gem
