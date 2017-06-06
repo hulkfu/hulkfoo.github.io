@@ -24,9 +24,7 @@ permalink: quant
 ## [Gekko](https://github.com/askmike/gekko)
 基于 Node 的量化交易平台。
 
-
-
-
+## [rqalpha](http://rqalpha.io/)
 
 # 套利
 套利算是策率简单但有效的量化交易。
