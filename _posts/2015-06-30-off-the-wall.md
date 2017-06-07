@@ -470,3 +470,9 @@ COMMIT
 # 关于VPS
 
 我目前用的是DigitalOcean的最低版本（5美元/月），这里有推荐链接，使用可以多得10美元：[https://www.digitalocean.com/?refcode=3d496b50e388](https://www.digitalocean.com/?refcode=3d496b50e388)
+
+# 黑科技
+## UDP 53
+参考 [bennythink 的文章](https://www.bennythink.com/udp53.html)，像校园网使用的锐捷网关（或者说交换机）都默认放行DHCP 和DNS报文，也就是UDP53与UDP 67。
+
+所以在网关外开一个 53 的 UDP 端口 VPN 就可以通过其上网啦。
