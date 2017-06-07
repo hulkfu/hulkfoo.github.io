@@ -270,6 +270,14 @@ sudo netstat --all --program | grep '80'
 
 ## iftop - display bandwidth usage on an interface by host
 
+## vnstat - a console-based network traffic monitor
+它会在后台运行一个 vnstatd 的后台进程，收集流量信息。
+
+## nethogs - Net top tool grouping bandwidth per process
+在不打断现有网络协议的情况下，统计每个进程的网络使用带宽。
+
+## [hogwatch](https://github.com/akshayKMR/hogwatch)
+
 
 # 文件传输
 

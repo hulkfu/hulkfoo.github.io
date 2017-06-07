@@ -455,11 +455,57 @@ PGP（Pretty Good Privary），1990年左右由Philip Zimmermann个人编写的�
 
 访问www.pgp.com，会转到赛门铁克，看来已被收购。但是有万能的自由软件：
 
-Gnu版：[https://gnupg.org/index.html](https://gnupg.org/index.html)
+Gnu版：[https://gnupg.org/index.html](https://gnupg.org/index.html)，这里还有[中文说明书](https://gnupg.org/howtos/zh/index.html)。
 
 说实话，程序员真的很大方，把自己辛苦劳动拿出来免费用，甚至还开源。
 
-在Linux下默认安装，命令为**gpg**，全程是Gnu Privary Guard.
+
+在Linux下默认安装，命令为**gpg** 和 **gpg2**，全程是Gnu Privary Guard.
+
+
+
+```bash
+# 生成密钥
+gpg --gen-key
+
+# 查看密钥，里面就有刚才生成的
+gpg --list-keys
+
+# 导出公钥， 这里 UID 可以是模糊的字段，gpg 会找到你想导出的
+gpg --export [UID]
+# -a 选项来把钥匙写进一个7位的文件，而不是一个二进制文件
+gpg --export [UID] -a -o out.pub
+
+# 修改，使用 sign 命令的化可以对公钥进行签名
+gpg --edit-key UID
+
+# 产生一份取消钥匙证书，导入这个证书相应的公钥就过期不能用了
+gpg --gen-revoke
+
+# 删除公钥
+gpg --delete-key UID
+# 删除私钥
+gpg --delete-secret-key
+
+
+# 加密，就会生成一个 file.gpg 的加密后的文件
+gpg -e file -u [UID]
+# 解密，会提示输入私钥的密码
+gpg [-d] file.gpg
+
+
+# 签名
+
+```
+
+## 邮件加密
+使用 Thunderbird 客户端 和 它的 Enigmail 插件。后者可以很方便的生产公钥，并在发送邮件时选择是否使用。
+
+使用加密邮件，会发送自己的公钥，目的是让对方发给我们的邮件被加密，而不是加密我们发出去的邮件。
+
+邮件正文以及附件。收件人、发件人、邮件主题都是无法被保护的。
+
+注意：只有PGP/MIME才可以保护邮件附件（包括文件名）；内嵌PGP不可以。
 
 # SSl/TLS —— 为了更安全的通信
 

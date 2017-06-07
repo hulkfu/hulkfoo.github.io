@@ -1,9 +1,10 @@
 ---
 layout: post
-title: Off The Wall
+title: Vans -- Off The Wall
+permalink: vans
 ---
 
-对，我喜欢Vans！无拘无束，见沟飞，见墙翻。
+对，我喜欢 Vans！无拘无束，见沟飞，见墙翻。
 
 只为科学上网！
 
