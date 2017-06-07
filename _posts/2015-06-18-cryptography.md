@@ -491,11 +491,19 @@ gpg --delete-secret-key
 # 加密，就会生成一个 file.gpg 的加密后的文件
 gpg -e file -u [UID]
 # 解密，会提示输入私钥的密码
-gpg [-d] file.gpg
+gpg [-d] file.gpg [-o outfile]
 
 
-# 签名
-
+# 签名，输出一个签名的数据。这样做的时候，同时数据也被压缩。也就是说，最终结果是无法直接读懂的。
+gpg -s file
+# 签名生成一个可读的签名文件，会生成一个 file.asc
+gpg --clearsign file
+# 将签名写进另一个文件，推荐这样做，尤其是对二进制文件签名，它将生成一个 file.sig 的签名文件
+gpg -b file
+# 加密且签名， --armor 会输出可读的编码
+gpg [-u Sender] [-r Recipient] [--armor] --sign --encrypt [Data]
+# 验证签名，当然，只有当你有讯息发出者的公钥时，这才起作用
+gpg [--verify] [Data]
 ```
 
 ## 邮件加密
