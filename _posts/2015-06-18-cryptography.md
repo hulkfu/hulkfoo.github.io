@@ -472,9 +472,10 @@ gpg --gen-key
 gpg --list-keys
 
 # 导出公钥， 这里 UID 可以是模糊的字段，gpg 会找到你想导出的
-gpg --export [UID]
-# -a 选项来把钥匙写进一个7位的文件，而不是一个二进制文件
-gpg --export [UID] -a -o out.pub
+# -a 选项来把钥匙输出可读 ASIC 编码，而不是一个二进制文件
+gpg --export -a [UID] > out.pub
+# 导出一个私钥
+gpg --export-secret-keys keyIDNumber > exportedKeyFilename.asc
 
 # 修改，使用 sign 命令的化可以对公钥进行签名
 gpg --edit-key UID
