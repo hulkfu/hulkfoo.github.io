@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 密码技术
-permalink: cryptography
+permalink: crypt
 ---
 
 此文主要是读《图解密码技术》的笔记，另加入自己的实践。
@@ -437,9 +437,10 @@ while (true) {
 
 还有，说起来很复杂的过程，用代码表示就很清晰了。
 
-# PGP —— 密码技术的完美组合
+# 实践
+上面讲了那么多理论，下面是实战环节。
 
-上面讲了那么多理论，终于有一个能用的软件。
+## PGP —— 密码技术的完美组合
 
 PGP（Pretty Good Privary），1990年左右由Philip Zimmermann个人编写的密码软件。功能几乎包括所有现代密码的功能：
 
@@ -462,7 +463,7 @@ Gnu版：[https://gnupg.org/index.html](https://gnupg.org/index.html)，这里�
 
 在Linux下默认安装，命令为**gpg** 和 **gpg2**，全程是Gnu Privary Guard.
 
-
+下面是简单的使用教程：
 
 ```bash
 # 生成密钥
@@ -514,7 +515,7 @@ gpg 2.1 和 gpg 是兼容的，只是密钥存放的地方不同，所以需要�
 gpg --export-secret-keys [key-id] | gpg2 --import
 ```
 
-使用 gpg 2.1 时，用 gpg2 命令即可。
+使用 gpg 2.1 时，用 gpg2 命令即可。一般个人使用用 gpg2，server 用 gpg。
 
 
 ## 邮件加密
@@ -525,6 +526,26 @@ gpg --export-secret-keys [key-id] | gpg2 --import
 邮件正文以及附件。收件人、发件人、邮件主题都是无法被保护的。
 
 注意：只有PGP/MIME才可以保护邮件附件（包括文件名）；内嵌PGP不可以。
+
+## 文件加密
+使用 [VeraCrypt](https://www.veracrypt.fr)。
+
+认证方式：
+
+- 密码：就是文字密码。
+- KeyFiles：一个或多个文件。
+- PIM(Personal Iterations Multiplie)：多次迭代生成 Header Key，当然这个次数也是你定义的，并像密码一样重要。
+
+通过上面的认证方式，生成的是 Header Key，而 Header Key 能够解密出 Master Key，它们都在加密盘的头里。而用 Master Key 能够解密出加密盘里的数据文件。
+
+Header Key 和 Master Key 分离的一个好处就是修改密码时不需要对数据再重新加密。
+
+
+### 虚拟加密盘
+就是创建一个文件，然后对它格式化后作为加密盘，可以被挂载到系统里。
+
+### 物理加密盘
+直接加密一个物理分区或 U 盘。
 
 # SSl/TLS —— 为了更安全的通信
 
