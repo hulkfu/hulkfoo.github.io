@@ -508,6 +508,15 @@ gpg [-u Sender] [-r Recipient] [--armor] --sign --encrypt [Data]
 gpg [--verify] [Data]
 ```
 
+gpg 2.1 和 gpg 是兼容的，只是密钥存放的地方不同，所以需要重新导入：
+
+```bash
+gpg --export-secret-keys [key-id] | gpg2 --import
+```
+
+使用 gpg 2.1 时，用 gpg2 命令即可。
+
+
 ## 邮件加密
 使用 Thunderbird 客户端 和 它的 Enigmail 插件。后者可以很方便的生产公钥，并在发送邮件时选择是否使用。
 
