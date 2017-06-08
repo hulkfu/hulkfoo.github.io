@@ -473,7 +473,7 @@ gpg --list-keys
 
 # 导出公钥， 这里 UID 可以是模糊的字段，gpg 会找到你想导出的
 # -a 选项来把钥匙输出可读 ASIC 编码，而不是一个二进制文件
-gpg --export -a [UID] > out.pub
+gpg -a --export [UID] > out.pub
 # 导出一个私钥
 gpg --export-secret-keys keyIDNumber > exportedKeyFilename.asc
 
@@ -489,14 +489,15 @@ gpg --delete-key UID
 gpg --delete-secret-key
 
 
-# 加密，就会生成一个 file.gpg 的加密后的文件
-gpg -e file -u [UID]
+# 加密，就会生成一个 file.gpg 的加密后的文件。-r 选择加密的公钥
+gpg -e file -r [UID]
 # 解密，会提示输入私钥的密码
 gpg [-d] file.gpg [-o outfile]
 
 
 # 签名，输出一个签名的数据。这样做的时候，同时数据也被压缩。也就是说，最终结果是无法直接读懂的。
-gpg -s file
+# -u 选择签名的私钥
+gpg -s -u [UID] file
 # 签名生成一个可读的签名文件，会生成一个 file.asc
 gpg --clearsign file
 # 将签名写进另一个文件，推荐这样做，尤其是对二进制文件签名，它将生成一个 file.sig 的签名文件
