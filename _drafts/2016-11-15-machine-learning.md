@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 机器学习
+permalink: ml
 ---
 
 第四次科研革命，未来就在其中。
@@ -59,7 +60,7 @@ def classify0(inX, dataSet, labels, k):
     """
     dataSetSize = dataSet.shape[0]
     # tile，“铺”的意思，对inX进行复制，从而和dataSet的规模一样。相减后得到每个样本与目标从diff
-    diffMat = tile(inX, (dataSetSize,1)) - dataSet  
+    diffMat = tile(inX, (dataSetSize,1)) - dataSet
     sqDiffMat = diffMat**2
     # 求平方和，axis=1表示横着sum，然后输出
     sqDistance = sqDiffMat.sum(axis=1)
@@ -234,6 +235,16 @@ $$ p(c|x) = \frac{p(x,y|c_i)p(c_i)}{p(x,y)} $$
 因此，可以定义贝叶斯分类准则：
 
 如果P(c_1|x, y) > P(c_2|x, y)，那么属于类别c_1，反之属于c_2.
+
+# 应用
+## [TensorFlow](https://www.tensorflow.org/)
+
+```bash
+# without gpu
+pip install tensorflow
+# with gpu
+pip install tensorflow-gpu
+```
 
 
 # 感想
