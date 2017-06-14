@@ -552,6 +552,8 @@ Header Key 和 Master Key 分离的一个好处就是修改密码时不需要对
 TLS（Transport Layer Security，传输层安全）算是SSL（Secure Socket Layer，安全套接层）的后续升级。
 前者由Netscape设计，后者由IETF在前者3.0的基础上设计。
 
+## CA 证书
+CA(Certificate Authority)，即证书授权中心。
 # 总结
 
 密钥技术就是“压缩”技术，生成一个短小的数据来解密或验证，从而提高效率，不用保密或验证全部明文。
