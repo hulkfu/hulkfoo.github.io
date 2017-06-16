@@ -290,14 +290,24 @@ sudo netstat --all --program | grep '80'
 rsync [option] 源路径 目标路径
 
 其中 [option]：
-  a:使用archive模式，等于-rlptgoD，即保持原有的文件权限
-  z:表示传输时压缩数据
-  v:显示到屏幕中
-  e:使用远程shell程序（可以使用rsh或ssh）
+  -a:使用archive模式，等于-rlptgoD，即保持原有的文件权限
+  -z:表示传输时压缩数据
+  -v:详细模式输出
+  -e:使用远程shell程序（可以使用rsh或ssh）
+  --progress: 显示备份过程
   --delete:精确保存副本，源主机删除的文件，目标主机也会同步删除
   --include=PATTERN:不排除符合PATTERN的文件或目录
   --exclude=PATTERN:排除所有符合PATTERN的文件或目录
   --password-file:指定用于rsync服务器的用户验证密码
+```
+
+### 备份本地数据
+比 cp 好用，开始几分钟显示比较慢，但后面就很快。
+
+最大的优点是可以中断，当然可以接着 cp 的中断用 rsync。
+
+```bash
+rsync -a  ./test.c  /backup
 ```
 
 ### rsync 和 ssh 差异远程同步命令
