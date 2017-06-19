@@ -307,7 +307,7 @@ rsync [option] 源路径 目标路径
 最大的优点是可以中断，当然可以接着 cp 的中断用 rsync。
 
 ```bash
-rsync -a  ./test.c  /backup
+rsync -av --progress  ./test.c  /backup
 ```
 
 ### rsync 和 ssh 差异远程同步命令
