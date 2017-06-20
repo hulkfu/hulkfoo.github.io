@@ -299,6 +299,7 @@ rsync [option] 源路径 目标路径
   --include=PATTERN:不排除符合PATTERN的文件或目录
   --exclude=PATTERN:排除所有符合PATTERN的文件或目录
   --password-file:指定用于rsync服务器的用户验证密码
+  -s, --protect-args: 如果文件名里有空白，不会把它们分开当成多个文件，同时如 ~ 也不会被翻译
 ```
 
 ### 备份本地数据
