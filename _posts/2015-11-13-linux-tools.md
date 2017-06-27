@@ -254,7 +254,11 @@ sudo shutdown -r now # restart system
 
 ## df
 
+
 # 网络
+
+## telnet
+TCP 链接器。
 
 ## netcat — arbitrary TCP and UDP connections and listens
 
