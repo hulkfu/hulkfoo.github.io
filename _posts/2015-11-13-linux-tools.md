@@ -258,7 +258,7 @@ sudo shutdown -r now # restart system
 # 网络
 
 ## telnet
-TCP 链接器。
+TCP 连接器。
 
 ## netcat — arbitrary TCP and UDP connections and listens
 
