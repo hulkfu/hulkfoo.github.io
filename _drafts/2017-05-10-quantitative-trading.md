@@ -60,10 +60,18 @@ import pyalgotrade as pat
 import numpy as np
 import scipy as sp
 import matplotlib as mpl #mpl
+# 画图库
 import matplotlib.pyplot as plt
 ```
 
-[ANACONDA](https://www.continuum.io/downloads) 是一个集成的数据分析平台它。
+## [ANACONDA](https://www.continuum.io/downloads)
+ANACONDA 是一个集成的数据分析平台。它已经包含了各种包。
+
+使用时有两个接口：
+
+- conda
+- anaconda-navigator  conda 的图形界面
+
 
 
 # 参考
