@@ -28,6 +28,11 @@ permalink: quant
 
 ## [rqalpha](http://rqalpha.io/)
 
+## [vn.py](http://www.vnpy.org/) - 基于python的开源交易平台开发框架
+
+## [pytrader](https://github.com/owocki/pytrader)
+用了机器学习的交易机器人。
+
 # 套利
 套利算是策率简单但有效的量化交易。
 
@@ -38,5 +43,29 @@ C++ 写的套利软件，策略是不用搬移货币，因为货币价格总是�
 
 ## [rbtc_arbitrage](https://github.com/hstove/rbtc_arbitrage)
 
+# Python
+Python 是量化的标准语言了，有众多功能强大的第三方库，也被华尔街官方指定。
+
+```python
+# py量化：三大件:pd,ts,zp,py量化分析的三个核心模块库，
+import pandas as pd
+# TuShare是一个免费、开源的python财经数据接口包
+import tushare as ts
+import zipline as zp
+import talib as ta
+import pyalgotrade as pat
+
+
+# py数据分析：三大件,py数据分析，科学计算三个核心模块库，
+import numpy as np
+import scipy as sp
+import matplotlib as mpl #mpl
+import matplotlib.pyplot as plt
+```
+
+[ANACONDA](https://www.continuum.io/downloads) 是一个集成的数据分析平台它。
+
+
 # 参考
 - http://www.huangzhong.ca/zh/bitcoin-arbitrage-trading-robots-open-source/
+- https://www.zhihu.com/question/52589498
