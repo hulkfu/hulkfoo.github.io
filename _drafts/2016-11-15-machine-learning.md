@@ -236,7 +236,7 @@ $$ p(c|x) = \frac{p(x,y|c_i)p(c_i)}{p(x,y)} $$
 
 如果P(c_1|x, y) > P(c_2|x, y)，那么属于类别c_1，反之属于c_2.
 
-# 应用
+# 框架
 ## [TensorFlow](https://www.tensorflow.org/)
 
 ```bash
@@ -245,7 +245,9 @@ pip install tensorflow
 # with gpu
 pip install tensorflow-gpu
 ```
+## [Scikit-Learn](https://github.com/scikit-learn/scikit-learn)
 
+## [PyBrain](https://github.com/pybrain/pybrain)
 
 # 感想
 在编程中其实用到过上面提到的算法，原来就是机器学习啊！
