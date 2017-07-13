@@ -67,6 +67,8 @@ import matplotlib.pyplot as plt
 ## [ANACONDA](https://www.continuum.io/downloads)
 ANACONDA 是一个集成的数据分析平台。它已经包含了各种包。
 
+可以直接用 pyenv 安装。
+
 使用时有两个接口：
 
 - conda

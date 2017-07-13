@@ -16,6 +16,12 @@ title: rbenv和pyenv
 PATH=~/.rbenv/shims:/usr/local/bin:/usr/bin:/bin
 ```
 
+# 安装
+- git clone 代码
+- 设置环境变量
+
+升级的时候只需要去 $home/.rbenv 目录的代码里拉取新的代码。
+
 # 使用
 主要就是版本选择了。
 
