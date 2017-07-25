@@ -102,6 +102,10 @@ at>echo "hi"
 at> <Ctrl+D>
 ```
 
+```bash
+echo "your-command" | at now 
+```
+
 at -c 14  显示 14 号任务内容
 
 atq 显示待执行的任务
