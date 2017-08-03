@@ -249,6 +249,18 @@ pip install tensorflow-gpu
 
 ## [PyBrain](https://github.com/pybrain/pybrain)
 
+
+# [吴恩达的机器学习公开课](https://www.coursera.org/learn/machine-learning)
+虽然有斯坦福的公开课，但是 Coursera 上的课程安排更适合远程学习，有很好的课程规划，正常是 11 周学完。
+
+## Week 1
+介绍了机器学习，主要分为监督学习和无监督学习。主要区别在提供的样本是否给出了相应的结果。
+
+并主要讲了用梯度下降算法来解决线性回归的问题。
+
+最后对线性代数做了简介。
+
+
 # 感想
 在编程中其实用到过上面提到的算法，原来就是机器学习啊！
 
