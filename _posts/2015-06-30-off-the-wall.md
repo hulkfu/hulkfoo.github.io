@@ -206,15 +206,63 @@ sslocal -s IP -p PORT -b 127.0.0.1 -l 1080 -k PASSWORD -t 600 -m aes-256-cfb
 下面建立了一条绑定本地**7070**端口的静默隧道，-p 表示server shh的端口。
 
 ```
-ssh -qTfnN -D 7070 user@server.address -p 22
+ssh -qTfnNC -D 7070 user@server.address -p 22
 ```
 
+主要是 -D 参数起作用。
+
+其它参数：
+
+-C  Requests gzip compression of all data
+-T  Disable pseudo-tty allocation
+-N  Do not execute a remote command. This is useful for just forwarding ports.
+-f  Requests ssh to go to background just before command execution.
+-n  Redirects stdin from /dev/null (actually, prevents reading from stdin).
+-q  Quiet mode. Causes most warning and diagnostic messages to be suppressed.
+
+
 相比ShadowSocks，SSH也是使用socket5来建立隧道，更简单，但是不如SS方便手机使用，而且比SS稍慢。
+
+
+## 隧道
+
+```coffee
+c0:p0 <--> s1:p1 <==> s2:p2 <--> s3
+```
+
+c0 和 s1 可以是一台电脑。只有 s2 能访问 s3，c0 能通过 s1 访问 s2。
+
+### 本地端口转发
+
+Let’s start with a simple and useful example: we want to forward local port 8080 to server:port. We can easily do this by using ssh like this:
+
+我们把本机的 8080 端口转发到 server 的 port 端口，其中 ssh_server 是我们能 ssh 上的，命令如下：
+
+```bash
+ssh -L 8080:server:port username@ssh_server
+```
+
+这样对本机 8080 端口的访问就会自动*通过 ssh_server* 转发到 server 的 port 端口。这样可以解决访问内网的情况：ssh_server 是内网的主机，server 是内网的服务。
+
+### 远程端口转发
+或者叫做输入隧道。这种情况下，s1 是 sshd server， s2 是 client。在 s2 看来，s1 开放一个端口把它指向 s3 的一个端口。
+
+在 s2 上执行：
+
+```bash
+ssh -R p1:s3:p3 username@s1
+```
+
+这样虽然 s1 和 s3 都在防火墙后，不能对外开放端口。但 s2 却可以照样访问 s1 的端口进而访问 s3，这正是远程端口转发的由来。如果 s2 通过访问本机的端口访问到了 s3，那就是上面的本机端口转发了。
+
+ssh 是一个用户空间的应用，虽然没有 iptables 的效率高，但贵在方便。
 
 参考：
 
 * http://www.williamlong.info/archives/4121.html
 * http://vpsnews.cc/shadowsocks-ssh%E5%8C%BA%E5%88%AB/
+* https://www.systutorials.com/944/proxy-using-ssh-tunnel/
+* https://www.systutorials.com/39648/port-forwarding-using-ssh-tunnel/
 
 ## ssh chains
 local <--> A <--> B
