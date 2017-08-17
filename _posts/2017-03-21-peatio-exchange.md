@@ -6,6 +6,19 @@ permalink: peatio
 
 [Peatio](https://github.com/peatio/peatio) 是云币用的后台交易系统，而且文档完善，按照　README 就能部署。
 
+下面首先把代码跑起来，然后查看相关依赖包的功能，最后分析代码。
+
+代码主要有以下部分组成：
+
+- 基础类
+- 验证系统
+- 用户系统
+- 资金系统
+- 交易系统
+- API
+
+其中交易系统是核心。
+
 # 跑起来
 参考[Ubuntu 指南](https://github.com/peatio/peatio/blob/master/doc/setup-local-ubuntu.md)，在 Ubuntu 上的安装开发环境依赖。
 
@@ -23,20 +36,9 @@ bundle exec rspec
 ```
 
 
-# 主要外部程序
+# 相关依赖
 
-## [RabbitMQ](https://www.rabbitmq.com/)
-Messaging enables software applications to connect and scale. Applications can connect to each other, as components of a larger application, or to user devices and data. Messaging is asynchronous, decoupling applications by separating sending and receiving data.
-
-You may be thinking of data delivery, non-blocking operations or push notifications. Or you want to use publish / subscribe, asynchronous processing, or work queues. All these are patterns, and they form part of messaging.
-
-RabbitMQ is a messaging broker - an intermediary for messaging. It gives your applications a common platform to send and receive messages, and your messages a safe place to live until received.
-
-## [bitcoind](https://en.bitcoin.it/wiki/Bitcoind)
-bitcoind is a program that implements the Bitcoin protocol for remote procedure call (RPC) use.
-
-
-# 主要 Gem
+## 主要 Gem
 
 [enumerize](https://github.com/brainspec/enumerize) —— 枚举属性。
 
@@ -86,7 +88,6 @@ TRADE_EXECUTOR=4 rake daemon:start
 ```
 
 
-
 [rotp](https://github.com/mdp/rotp) —— The Ruby One Time Password Library.
 
 [aasm](https://github.com/aasm/aasm) —— 状态机。
@@ -121,6 +122,14 @@ TRADE_EXECUTOR=4 rake daemon:start
 [eco](https://github.com/sstephenson/eco) —— Embedded CoffeeScript templates.在 app/assets/javascripts/templates 中使用，配合 JST，提前编译 js 模板文件。
 
 [jwt](https://github.com/jwt/ruby-jwt) —— A pure ruby implementation of the [RFC 7519](https://tools.ietf.org/html/rfc7519) OAuth JSON Web Token (JWT) standard. JWT是一种用于双方之间传递安全信息的简洁的、URL安全的表述性声明规范。因为数字签名的存在，这些信息是可信的，JWT可以使用HMAC算法或者是RSA的公私秘钥对进行签名。
+
+
+
+## 主要外部程序
+
+- [RabbitMQ](https://www.rabbitmq.com/) 消息队列，任务管理，事件触发。
+- [bitcoind](https://en.bitcoin.it/wiki/Bitcoind) 比特币的后台服务，实现里比特币协议。
+- Redis
 
 # 基础类
 
@@ -492,14 +501,10 @@ end
 ## PartialTree
 
 
-
-
-
-
 # 交易系统
 
 ## Ticket
-股票代码，即交易的币种，是 BTC 还是 ETH 等等。
+币的代码，即交易的币种，是 BTC 还是 ETH 等等。
 
 ```ruby
 create_table "tickets", force: true do |t|
@@ -586,7 +591,6 @@ def trigger(event, data)
   AMQPQueue.enqueue(:pusher_member, {member_id: id, event: event, data: data})
 end
 ```
-
 
 
 ### OrderAsk
@@ -757,7 +761,8 @@ end
 
 counter_order 是买卖队列里的第一个 order，即买价最高或卖价最低的那个。
 
-match 方法是个递归，它会一直尝试和最新的 counter_order 去配对成交。可见我们下的每一单都会一直在尝试去成交，是需要很大内存的。又不能不这样，万一有大单把所有都吃掉呢。而且需要实时统计当前筹码等数据。
+match 方法是个递归，它会一直尝试和最新的 counter_order 去配对成交。
+可见我们下的每一单都会一直在尝试去成交，是需要很大内存的。又不能不这样，万一有大单把所有都吃掉呢。而且需要实时统计当前筹码等数据。
 
 在里面会调用 order 的 trade_with 方法，因为 order 分 limit_order 和 market_order，前者只有价格是指定的才成就，后者是能成就成：
 
@@ -888,8 +893,6 @@ end
 ```
 
 而这里正调用了开始的代码。
-
-
 
 
 # API
