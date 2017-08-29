@@ -32,7 +32,12 @@ title: 收藏夹
 
 - [The Pirate Bay](http://thepiratebay.cd/)
 
-# Tools
+# Chrome
+
+- [The Great Suspender]
+- [Adblock Plus]
+- [Proxy SwitchyOmega]
+- [Vimium]
 
 ## Ruby
 - [Ruby Toolbox]https://www.ruby-toolbox.com/
@@ -54,6 +59,6 @@ title: 收藏夹
 ## Linux
 - [Simple Screen Recorder](http://www.maartenbaert.be/simplescreenrecorder/)
 
-# Ohters
+# Windows
 
 - [Windows 虚拟机官方镜像](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
