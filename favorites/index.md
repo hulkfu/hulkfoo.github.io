@@ -34,7 +34,7 @@ title: 收藏夹
 
 # Chrome
 
-- [The Great Suspender]
+- [The Great Suspender](https://chrome.google.com/webstore/detail/the-great-suspender/klbibkeccnjlkjkiokjodocebajanakg?hl=zh-CN)
 - [Adblock Plus]
 - [Proxy SwitchyOmega]
 - [Vimium]
