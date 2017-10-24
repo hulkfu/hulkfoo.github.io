@@ -17,7 +17,9 @@ np.empyt((1,2))
 np.ones(10)
 ```
 
-
+# scipy
+- polyfit(x, y, 阶)  拟合出多项式的参数
+- poly1d(多项式参数)   得到函数
 
 # pandas
 pandas 是对 NumPy 的扩展。
