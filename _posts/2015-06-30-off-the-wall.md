@@ -19,7 +19,7 @@ permalink: vans
 
 ## Server搭建
 
-Debian/Ubuntu
+Ubuntu 16.10 or higher:
 
 ```
 sudo apt install shadowsocks-libev
