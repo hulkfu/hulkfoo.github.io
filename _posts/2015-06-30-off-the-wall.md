@@ -201,6 +201,12 @@ sslocal -s IP -p PORT -b 127.0.0.1 -l 1080 -k PASSWORD -t 600 -m aes-256-cfb
 * 选择自动，输入http://127.0.0.1:8090/proxy.pac
 * 返回
 
+# [v2ray](https://www.v2ray.com/)
+V2Ray 原生支持 Socks、HTTP、Shadowsocks、VMess 等协议。
+
+- 在一个进程中可以配置不同的端口使用不同的协议进行通讯。
+- 通过不同的传入和传出协议组合，灵活转换通讯格式。
+
 # SSH
 
 下面建立了一条绑定本地**7070**端口的静默隧道，-p 表示server shh的端口。
