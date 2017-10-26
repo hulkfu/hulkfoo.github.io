@@ -14,99 +14,43 @@ permalink: vans
 
 虽然免费，但不稳定，总要升级。
 
-# [ShadowSocks](https://github.com/shadowsocks/shadowsocks)
-
+# [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
+它是 shadowsocks 的 libev 版本，占内存少，运行快。
 
 ## Server搭建
 
 Debian/Ubuntu
 
 ```
-apt-get install python-pip
-pip install shadowsocks
+sudo apt install shadowsocks-libev
 ```
 
-### 打开服务
-
-```
-ssserver -p 443 -k password -m aes-256-cfb
-```
-
-### 在后台运行：
-
-```
-sudo ssserver -p 443 -k password -m aes-256-cfb --user nobody -d start
-```
-
-### 停止服务：
-
-```
-sudo ssserver -d stop
-```
-
-### 查看Log：
-
-```
-sudo less /var/log/shadowsocks.log
-```
-
-### 自动启动
-新建 /etc/init.d/shadowsocks 文件，内容如下：
+之后去 /etc/shadowsocks-libev/config.json 配置服务器，主要是密码和加密方式：
 
 ```bash
-#!/bin/sh
-### BEGIN INIT INFO
-# Provides:          shadowsocks
-# Required-Start:    $remote_fs $syslog
-# Required-Stop:     $remote_fs $syslog
-# Default-Start:     2 3 4 5
-# Default-Stop:      0 1 6
-# Short-Description: start shadowsocks
-# Description:       start shadowsocks
-### END INIT INFO
-
-start(){
-    ssserver -c /etc/shadowsocks.config -d start
+{
+    "server":"0.0.0.0",
+    "server_port":8088,
+    "password":"password",
+    "timeout":60,
+    "method":"aes-256-cfb"
 }
 
-stop(){
-    ssserver -c /etc/shadowsocks.config -d stop
-}
-
-case "$1" in
-start)
-    start
-    ;;
-stop)
-    stop
-    ;;
-reload)
-     stop
-     start
-     ;;
-*)
-    echo "Usage: $0 {start|reload|stop}"
-    exit 1
-    ;;
-esac
 ```
 
-然后
+之后重启服务即可：
 
 ```bash
-# 增加这个文件的可执行权限
-sudo chmod +x /etc/init.d/shadowsocks
-
-# 在 rc.d 中新增，添加到开机启动中
-sudo update-rc.d shadowsocks defaults
-
-# 可以在shell中直接运行
-sudo service shadowsocks {start|reload|stop}
+sudo service shadowsocks-libev restart
 ```
 
+## 使用
+在 client 用 ss-client 来连接 server：
 
-参考：
-http://blog.xavierskip.com/2015-02-02-shadowsocks-init/
+```bash
+ss-local -s server-ip -p server-port -b 127.0.0.1 -l 1080 -k password -t 600 -m aes-256-cfb
+```
+
 
 ### 命令行也proxy
 使用[proxychains-ng](https://github.com/rofl0r/proxychains-ng)
