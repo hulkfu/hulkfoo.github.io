@@ -467,7 +467,10 @@ COMMIT
 
 # 关于VPS
 
-我目前用的是DigitalOcean的最低版本（5美元/月），这里有推荐链接，使用可以多得10美元：[https://www.digitalocean.com/?refcode=3d496b50e388](https://www.digitalocean.com/?refcode=3d496b50e388)
+目前使用的 2.5美元/月的 vultr.com，这里是推荐地址：
+
+[https://www.vultr.com/?ref=7167921](https://www.vultr.com/?ref=7167921)
+
 
 # 黑科技
 ## UDP 53
