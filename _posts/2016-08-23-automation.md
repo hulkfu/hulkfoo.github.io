@@ -152,6 +152,20 @@ Windows上像Watir控制浏览器那样控制Windows程序。
 
 通过title定位到程序，然后控制它。
 
+# [xdotool](https://github.com/jordansissel/xdotool)
+
+```bash
+sudo apt install xdotool
+
+xdotool key abc
+xdotool key alt+Tab
+xdotool type ''
+
+xdotool search --name [name of the window] key [keys to press]
+xdotool mousemove x y click 1
+```
+
+
 
 # [PyAutoGUI](https://github.com/asweigart/pyautogui)
 可以模拟键盘鼠标的输入，所有操作系统通用！
@@ -177,6 +191,7 @@ Linux：PyAutoGUI需要python-xlib（Python 2）、python3-Xlib（Python 3）：
 
 ```sh
 sudo pip3 install python3-xlib
+# screen capture
 sudo apt-get scrot
 sudo apt-get install python-tk
 sudo apt-get install python3-dev
