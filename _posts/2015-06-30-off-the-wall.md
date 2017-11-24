@@ -258,6 +258,28 @@ IKEv2 是 IKE(v1) 的全新改良版，传输效率大大超于 PPTP 和 L2TP，
 如果出门在外，(手机) 网络环境 (IP 地址) 经常变动的情况下， IKEv2 是唯一使用 “MOBIKE” – Mobility and Multihoming 技术来达到加密通讯不中断目的的。
 所以用户再也无需考虑手动开启或者关闭 VPN，或者担心因网络环境变化而导致的 VPN 连接中断了。
 
+### Docker 安装 (推荐！)
+使用这个[docker-ikev2-vpn-server image](https://github.com/gaomd/docker-ikev2-vpn-server)
+
+1. 开启 IKEv2 VPN Server
+
+```bash
+docker run --privileged -d --name ikev2-vpn-server --restart=always -p 500:500/udp -p 4500:4500/udp gaomd/ikev2-vpn-server:0.3.0
+```
+
+2. 为 iOS 或 macOS 生成 the .mobileconfig
+
+```bash
+docker run --privileged -i -t --rm --volumes-from ikev2-vpn-server -e "HOST=vpn1.example.com" gaomd/ikev2-vpn-server:0.3.0 generate-mobileconfig > ikev2-vpn.mobileconfig
+```
+
+注意：
+
+- HOST=vpn1.example.com 里 host 是你的域名或者直接可以是 ip 地址
+- 生成的文件要是 mobileconfig 后缀，这样当做附件发给 iOS/macOS 时它会自动提示导入
+
+
+### 一般安装
 而且这里有方便一键安装脚本 —— [one-key-ikev2](https://github.com/quericy/one-key-ikev2-vpn).
 
 证书可以用 acme.sh 来申请，参考[https://quericy.me/blog/860/]并写一个更新证书的脚本 update_ipsec_cert：
