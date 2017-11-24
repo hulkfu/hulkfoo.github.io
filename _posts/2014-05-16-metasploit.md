@@ -4,11 +4,13 @@ title: Metasploit
 permalink: msf
 ---
 
-使用的版本：metasploit v4.14.12-dev。
-
 Metasploit 将渗透测试的过程标准化自动化，每一步都有相应的代码对应，并提供了基础库，可以很方便的扩展。
 
 它是一个渗透测试的集大成者，即是工具，有时学习的框架。
+
+直接从代码安装开发本版，升级和看源码都很容易，推荐。
+
+使用的版本：metasploit v4.14.12-dev。
 
 # 安装
 
@@ -53,6 +55,7 @@ test:
   - 就可以执行啦： ./msfconsole
   - 也可以配置快捷访问：
     - echo 'alias msfconsole="pushd $HOME/path/to/metasploit-framework && ./msfconsole && popd"' >> ~/.bash_aliases
+  - 进去之后为了加快查找，会更新数据库：  db_rebuild_cache
 
 - [安装社区版](https://github.com/rapid7/metasploit-framework/wiki/Nightly-Installers)。
 
@@ -161,7 +164,7 @@ msfconsole 主要使用步骤：
 - use 选择漏洞
 - show options 查看需要设置的参数
 - set 设置参数
-  - PAYLOAD  攻击后执行的载荷
+  - PAYLOAD  攻击后执行的载荷，相当于导弹到达目的地后用于爆炸的弹药，是核弹还是什么的
   - RHOST(S) 目标地址
   - THREADS
   - LHOST    攻击者的 IP
