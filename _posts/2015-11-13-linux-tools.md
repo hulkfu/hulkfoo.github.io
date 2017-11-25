@@ -1,7 +1,9 @@
 ---
 layout: post
-title: Linux下好用的工具
+title: Linux 下好用的工具
+permalink: linux
 ---
+
 Linux 下各种好用的工具，可以让日常流程自动化、也可以实现你想要的效果。它们是 Linux 的宝贵资产，是代代程序员传承下来的。
 
 仅仅三十年间计算机软件就有了如此的积累，甚至第一代程序员还在编程，已经形成了如此庞大的基础，而且还会一直持续下去。如果说人类是靠书本将知识传递了下来，那计算机自出生就是一体的，一直多是它一个，在一步一步被人类养大。所以，怎能不看好计算机呢？
@@ -103,7 +105,7 @@ at> <Ctrl+D>
 ```
 
 ```bash
-echo "your-command" | at now 
+echo "your-command" | at now
 ```
 
 at -c 14  显示 14 号任务内容
@@ -339,12 +341,20 @@ rsync -avz --delete user@192.168.1.109:/home/user/test/ /home/my/New_Test/
 ## [lftp](http://lftp.yar.ru/)
 比ftp命令好用，封装了 rm 等常用命令。
 
+## [aria2c]
+
 # 远程控制
-[Remmina](https://github.com/FreeRDP/Remmina)
+## [Remmina](https://github.com/FreeRDP/Remmina)
 
 # 系统
 
-## systemd
+## [VeraCrypt]
+
+# 娱乐
+## [Steam]
+支持 dota2，文明等可玩性高的游戏。而且很方便，我愿意花钱买游戏。
+
+## [mpv]
 
 # 参考
 - http://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/crontab.html
