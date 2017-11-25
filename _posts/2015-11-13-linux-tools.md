@@ -343,6 +343,8 @@ rsync -avz --delete user@192.168.1.109:/home/user/test/ /home/my/New_Test/
 
 ## [aria2c]
 
+## [uGet](http://ugetdm.com/)
+
 # 远程控制
 ## [Remmina](https://github.com/FreeRDP/Remmina)
 
