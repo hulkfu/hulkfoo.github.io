@@ -7,9 +7,9 @@ permalink: bash
 bash 是大部分 Linux 的默认 shell，适合做胶水。
 
 # 语法
+和其他语言最不同的是每一个关键字都要有空格分离，都是命令。
 
 ## 变量
-
 
 * 给变量赋值等号两边不能有空。因为有空的话，会被当作命令执行。
 * 等号赋值，不加 local 就是全局变量
@@ -71,10 +71,14 @@ done
 
 ## 控制
 
+
 ```bash
-if [ -f $target_filepath ]; then
+if [ -f $target_filepath ]
+then
   echo "$1 already exists and remove it."
   rm $target_filepath
+else
+  # other
 fi
 ```
 
@@ -92,6 +96,14 @@ do
   echo $realpath
 done
 ```
+
+```bash
+while [ $i -le $match ]
+do
+  # todo
+done
+```
+
 
 ## 管道和 exec
 
