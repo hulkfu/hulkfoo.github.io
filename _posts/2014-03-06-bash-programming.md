@@ -4,9 +4,9 @@ title: Linux Bash 编程
 permalink: bash
 ---
 
-bash 是大部分 Linux 的默认 shell，适合做胶水。
+Bash 是大部分 Linux 的默认 shell，适合做胶水。Bash 编程是控制 Linux 系统的，而其它语言如C、Python 亦或 Ruby 编程是实现业务逻辑的。
 
-用 bash 的好处是快，它没有复杂的包引用，而且是直接对 Linux 系统的操作，只不过是把日常用的命令行打包起来。
+用 Bash 的好处是快，它没有复杂的包引用，而且是直接对 Linux 系统的操作，只不过是把日常用的命令行打包起来。
 
 虽然看上去语法有些怪异，但也特别好学。
 
