@@ -43,6 +43,15 @@ password: 明文密码方式，一般用md5.
 md5: md5密码方式。
 peer: 当前Linux的用户名，比如默认的postgres用户，需要切换到postgres用户去访问设置数据库。
 
+peer 权限对本机用户是很方便的，只需要创建对应名字的数据库的用户，如 jack，然后为其创建 名为 jack 的数据库：
+
+```bash
+create user jack with createdb login;
+create database jack;
+```
+
+就可以在 jack 下登录 psql 了。
+
 # auto start
 
 ```
