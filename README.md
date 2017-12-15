@@ -1,4 +1,4 @@
-astonfu.github.io
+hulkfoo.github.io
 =================
 
 My Blog with Jekyll.
