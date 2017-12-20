@@ -74,7 +74,7 @@ google:
   id: 2
   name: Google
   url: http://www.google.com
-```  
+```
 
 然后在 test_helper.rb 里，Fixtures 会在执行测试前装入数据库：
 
@@ -226,6 +226,9 @@ FactoryGirl.define do
 也因此只有在feature测试中才能使用。
 
 有时capybara提示ElementNotFound，可能是真的没有找到，也可能是其它地方出了问题，然后它只catch到这个错误。此时去浏览器里重现一下场景看看。
+
+# [Jasmine]
+纯测试 JavaScript 的功能，即不涉及后端的 Ruby 代码，只是前端测试。
 
 # 感悟
 真是越开发越知道测试的重要性，越测试越喜欢测试。不写测试代码用眼去开，那是懒惰的表现。而且测试代码也不需要多么DRY，能用就好。本来操作就是琐碎的。
