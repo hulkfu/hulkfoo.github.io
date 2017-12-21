@@ -85,6 +85,52 @@ curl https://www.twitter.com/
 git push origin master
 ```
 
+### 转成 HTTP proxy
+参考[这里](https://github.com/shadowsocks/shadowsocks/wiki/Convert-Shadowsocks-into-an-HTTP-proxy):
+
+```bash
+apt-get install polipo
+```
+
+然后修改 polipo 配置文件，/etc/polipo/config:
+
+加入：
+
+```bash
+socksParentProxy = localhost:1080
+```
+
+之后重启，默认就在本机的 8123 端口打开了 HTTP porxy：
+
+```bash
+sudo service polipo restart
+```
+
+之后配置 .bashrc，让所有 HTTP 访问都走代理：
+
+```bash
+# proxy
+export http_proxy=http://localhost:8123
+export https_proxy=$http_proxy
+```
+
+当然也可以手动生效：
+
+```bash
+http_proxy=http://localhost:8123 apt-get update
+
+http_proxy=http://localhost:8123 curl www.google.com
+
+http_proxy=http://localhost:8123 wget www.google.com
+
+git config --global http.proxy 127.0.0.1:8123
+git clone https://github.com/xxx/xxx.git
+git xxx
+git xxx
+git config --global --unset-all http.proxy
+```
+
+
 ### 中继
 参考 https://github.com/shadowsocks/shadowsocks/wiki/Setup-a-Shadowsocks-relay
 
