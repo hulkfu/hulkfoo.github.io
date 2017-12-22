@@ -165,6 +165,22 @@ xdotool search --name [name of the window] key [keys to press]
 xdotool mousemove x y click 1
 ```
 
+# [autokey](https://github.com/autokey-py3/autokey)
+这个使用 Python3 写的最新版，这里是[旧版](https://github.com/autokey/autokey)。
+
+通过设置触发快捷键，执行对应的 Python 脚本。
+
+安装：
+
+```bash
+pip3 install autokey
+# or, if you want the latest from this repository,
+pip3 install git+https://github.com/autokey-py3/autokey
+# or apt
+sudo add-apt-repository ppa:troxor/autokey
+sudo apt update
+sudo apt install autokey-gtk
+```
 
 
 # [PyAutoGUI](https://github.com/asweigart/pyautogui)
