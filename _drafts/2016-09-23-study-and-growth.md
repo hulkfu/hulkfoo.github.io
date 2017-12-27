@@ -19,6 +19,11 @@ title: 学习和成长
 知道恨晚啊，在读他的[《新生——七年就是一辈子》](http://zhibimo.com/books/xiaolai/reborn-every-7-years)，
 他28岁去了新东方，从此人生大不同，也让我看到自己还有时间。
 
+# 知识
+知识是要系统的才能够记牢用好。
+
+平时在需要知识时临时查了很多，然后立竿见影的用上了。但如果不把这些知识点系统化，它们就很容易被忘记，而且不成体系不能举一反三。
+
 # [《把时间当作朋友》](http://zhibimo.com/books/xiaolai/ba-shi-jian-dang-zuo-peng-you)
 
 ## 心智
