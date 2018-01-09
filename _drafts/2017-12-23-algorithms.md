@@ -52,3 +52,39 @@ permalink: algorithms
 动态规划往往需要一个辅助方法，来执行全局遍历中的判断和记录操作。如 LCS 问题中，需要判断当前子串是否是最长的，并把结果写到二维表里。从而将算法时间降低了一个维度。
 
 动态规划关键是找到子问题。
+
+参考这里[Dynamic programming vs memoization vs tabulation](http://programming.guide/dynamic-programming-vs-memoization-vs-tabulation.html)还有[这里](https://stackoverflow.com/questions/6184869/what-is-the-difference-between-memoization-and-dynamic-programming)，解决了我一直的困惑：动态规划与记事本的区别。
+
+记事本是一个术语，它描述了一种可以缓存运算结果，并在下次遇到同样的技术时直接返回缓存的技术。可以看作是计算的缓存。
+
+动态规划是递归的解决子问题重叠的问题的技术。通常用表格实现，但也可以用记事本实现。
+
+所以应该问的是表格与记事本的异同？
+
+- 表格是自下而上记录解决问题。用于需要算出所有子问题的情况，因为不需要判断这个子问题是否已有解，所以相比自上而下的记事本更快。
+- 记事本是自上而下，遇到没有解决的子问题再去解决。所以也就适合不用算出所有子问题的情况。
+
+举例，Fib 的实现：
+
+```js
+tabFib(n) {
+    mem[0] = 0
+    mem[1] = 1
+    for i = 2...n
+        mem[i] = mem[i-2] + mem[i-1]
+    return mem[n]
+}
+
+memFib(n) {
+    if (mem[n] is undefined)
+        if (n < 2) result = n
+        else result = memFib(n-2) + memFib(n-1)
+        mem[n] = result
+    return mem[n]
+}
+```
+
+而以上的两种解法都属于动态规划，因为它们都用子问题来解问题。
+
+- 用表格时不需要递归，因为子问题都已解决。
+- 而用记事本需要递归，因为需要跳进栈了先去解决子问题。所以效率也就没有表格高。
