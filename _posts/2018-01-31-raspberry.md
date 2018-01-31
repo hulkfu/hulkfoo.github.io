@@ -171,3 +171,4 @@ You will need to reboot your Pi for the new mode to take effect.
 - https://stackoverflow.com/questions/37312501/how-do-i-detect-and-connect-to-a-hidden-ssid-on-my-raspiberry-pi-3-raspbian
 - https://w1.fi/cgit/hostap/plain/wpa_supplicant/wpa_supplicant.conf
 - https://www.raspberrypi.org/documentation/remote-access/ssh/
+- https://raspberrypi.stackexchange.com/questions/56421/how-to-increase-resolution-on-latest-raspbian-pixel-while-connected-to-vnc-clien
