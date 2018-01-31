@@ -263,6 +263,10 @@ pyautogui.moveTo(100,100); pyautogui.click()
 所有的PyAutoGUI函数在延迟完成前都处于阻塞状态（block）。（未来计划增加一个可选的非阻塞模式来调用函数。）
 
 
+# [WebDriverAgent](https://github.com/facebook/WebDriverAgent)
+WebDriverAgent is a WebDriver server implementation for iOS that can be used to remote control iOS devices. It allows you to launch & kill applications, tap & scroll views or confirm view presence on a screen. This makes it a perfect tool for application end-to-end testing or general purpose device automation. It works by linking XCTest.framework and calling Apple's API to execute commands directly on a device.
+
+自动控制 iOS 上的 Web 的。
 
 # 参考
 * http://watir.github.io/docs/home
