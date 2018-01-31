@@ -140,7 +140,18 @@ sudo apt-get install realvnc-vnc-server realvnc-vnc-viewer
 sudo raspi-config
 ```
 
-在客户端去[realvnc](https://www.realvnc.com/download/viewer/)下载 VNC Viewer。
+设置分辨率：
+
+In the desktop menu, go to Preferences > Raspberry Pi Configuration and click the "Set Resolution" button. Or, from the terminal, run sudo raspi-config and choose Advanced Options > Resolution.
+
+If you have a monitor attached, it will show a list of modes supported by the monitor. If you don't have a monitor attached, it will show a list of the most common modes.
+
+If you want a mode that isn't listed, you will need to edit /boot/config.txt as described here: https://www.raspberrypi.org/documentation/configuration/config-txt/video.md
+
+You will need to reboot your Pi for the new mode to take effect.
+
+
+之后在客户端去[realvnc](https://www.realvnc.com/download/viewer/)下载 VNC Viewer。
 
 # 感想
 一个巴掌大的树莓派，完全能够满足上网、娱乐、学习、编程、搭服务等功能，真是太强大了！
