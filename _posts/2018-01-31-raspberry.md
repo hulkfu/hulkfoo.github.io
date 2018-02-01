@@ -281,6 +281,15 @@ apparently the clock is rounded to the next 2^n divider of 19.2MHz
 
 我看了库的代码，没有操作 GPIO 的底层库，说是用的 [这个C库](http://www.airspayce.com/mikem/bcm2835/index.html)，可以没有见，待研究。
 
+# 服务器
+
+## [seafile](https://github.com/haiwen/seafile-rpi)
+
+用 Python 写的，官方教程也清晰。
+
+## samba 服务器
+个人觉得如果只在家使用，samba 就够了。
+
 # 感想
 一个巴掌大的树莓派，完全能够满足上网、娱乐、学习、编程、搭服务等功能，真是太强大了！
 
@@ -302,3 +311,4 @@ apparently the clock is rounded to the next 2^n divider of 19.2MHz
 - https://w1.fi/cgit/hostap/plain/wpa_supplicant/wpa_supplicant.conf
 - https://www.raspberrypi.org/documentation/remote-access/ssh/
 - https://raspberrypi.stackexchange.com/questions/56421/how-to-increase-resolution-on-latest-raspbian-pixel-while-connected-to-vnc-clien
+- https://eltechs.com/raspberry-pi-nas-guide/
