@@ -44,14 +44,6 @@ brew install libimobiledevice
 iproxy 8100 8100
 ```
 
-使用 Python 控制，则需要安装相应的库 [facebook-wda](https://github.com/openatx/facebook-wda)：
-
-```bash
-pip install --pre facebook-wda
-```
-
-
-# 使用终端替代Xcode
 通常来说为了持续集成，能够全部自动化比较好一些。
 
 ```bash
@@ -65,6 +57,29 @@ UDID=$(idevice_id -l | head -n1)
 # 运行测试
 xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination "id=$UDID" test
 ```
+
+# 使用
+使用 Python 控制，则需要安装相应的库 [facebook-wda](https://github.com/openatx/facebook-wda)：
+
+```bash
+pip install --pre facebook-wda
+```
+
+```python
+import random
+import wda
+
+c = wda.Client()
+s = c.session()
+
+# 截屏
+c.screenshot('1.png')
+
+# 按屏幕
+press_time = 1000
+s.tap_hold(random.uniform(100,200), random.uniform(400,500), press_time)
+```
+
 
 # 参考
 - https://github.com/wangshub/wechat_jump_game
