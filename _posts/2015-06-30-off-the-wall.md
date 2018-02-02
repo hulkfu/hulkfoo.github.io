@@ -44,6 +44,24 @@ sudo apt install shadowsocks-libev
 sudo service shadowsocks-libev restart
 ```
 
+但当前 3.0.8 版本在我的 VPS 上有个问题：系统重启后虽然服务起来了，但是不能正常转发，需要我登录上来再重启一遍服务。
+
+看来这是服务启动过早的问题，于是查看 其 systemd 配置文件， /lib/systemd/system/shadowsocks-libev.service：
+
+发现 After=network.target，参考[这里](https://unix.stackexchange.com/questions/126009/cause-a-script-to-execute-after-networking-has-started)，这样并不能保证 VPS 的网络 online，与是改成如下就可以了：
+
+
+```bash
+[Unit]
+Description=Shadowsocks-libev Default Server Service
+Documentation=man:shadowsocks-libev(8)
+# After=network.target
+Wants=network-online.target
+After=network-online.target
+
+```
+
+
 ## 使用
 在 client 用 ss-client 来连接 server：
 
