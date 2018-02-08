@@ -42,6 +42,7 @@ remote-viewer 其实是和 virt-viewer 在一个软件包里，只不过它有�
 
 相比 spice 的速度比 ssh 的快，应该是 spice 默认是不加密的。
 
+在命令行后加 --spice-debug，方便调试。
 
 # USB 重定向
 USB 重定向应该是 SPICE 协议最大的用处了，可以把本地的 U 盘重定向到远程的虚拟机里。

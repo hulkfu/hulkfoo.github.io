@@ -7,6 +7,10 @@ permalink: pool
 虽然这几天虚拟货币跌的厉害，但是其实比着上一次监管还是涨了很多呢。瞧，把时间拉长，看问题就能够更清晰了。
 
 
+# 
+
+# pool
+这里使用 https://github.com/UNOMP/unified-node-open-mining-portal
 
 
 # 参考
