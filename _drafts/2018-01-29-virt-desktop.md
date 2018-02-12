@@ -47,6 +47,15 @@ remote-viewer 其实是和 virt-viewer 在一个软件包里，只不过它有�
 # USB 重定向
 USB 重定向应该是 SPICE 协议最大的用处了，可以把本地的 U 盘重定向到远程的虚拟机里。
 
+## [libusb](http://libusb.info/)
+libusb is a C library that provides generic access to USB devices. It is intended to be used by developers to facilitate the production of applications that communicate with USB hardware.
+
+It is portable: Using a single cross-platform API, it provides access to USB devices on Linux, OS X, Windows, Android, OpenBSD, etc.
+
+It is user-mode: No special privilege or elevation is required for the application to communicate with a device.
+
+It is version-agnostic: All versions of the USB protocol, from 1.0 to 3.1 (latest), are supported.
+
 ## USB3.0 重定向
 而默认虚拟机是不支持 USB3.0 的，需要设置一下，可以参考[SPICE usbredir 库的官方文档](https://www.spice-space.org/usbredir.html)。
 
