@@ -10,6 +10,25 @@ permalink: vans
 
 没有VPS又不想花钱买VPN的话用goAgent，有VPS的话可以架VPN，也可以使用隧道接口然后在使用时反向代理。
 
+# [VPN 服务]
+由于最近墙的厉害，Vultr 上的 VPS 都连不上了，于是选择了 VPN 服务，帮我搭可用的服务器吧。
+
+我用的是 [SocketPro](https://www.socketproapp.com/) 的服务，目前还挺稳定，注册后可以下载相应平台的客户端。
+
+# 客户端
+买一个 VPN 服务，一般会给你一个订阅链接，里面有可用的 VPN 节点，选择一个没有被墙的速度快的。
+
+## [Shadowrocket](https://itunes.apple.com/us/app/shadowrocket/id932747118?mt=8)
+iOS 下使用，需要国外的 Apple Store 帐号，而且主要注册一个国外的信用卡或 Paypal 来购买。
+
+打开应用，点击右上角的 “+”，类型选择 “Subscribe”，输入订阅的地址即可。
+
+## [electron-ssr](https://github.com/erguotou520/electron-ssr)
+基于 Electron 的跨平台桌面客户端，支持 Linux、Windows 和 Mac，可以在[这里下载编译好的安装包](https://github.com/erguotou520/electron-ssr/releases)。
+
+## 安全问题
+现在网站都有 HTTPS 了，你发给服务器的信息会用服务器发来的公钥进行加密，服务器发给你的信息也会用你的公钥加密，除非中间人拿到私钥，否则是不知道你们之间的通信内容的。
+
 # [goAgent](https://github.com/goagent/goagent)
 
 虽然免费，但不稳定，总要升级。
@@ -551,10 +570,10 @@ COMMIT
 * http://sshmenu.sourceforge.net/articles/transparent-mulithop.html
 * http://kaywu.xyz/2016/06/19/Shadowsocks-HAProxy/
 
+
 # 关于VPS
 
 目前使用的 2.5美元/月的 vultr.com，这里是推荐地址：
-
 [https://www.vultr.com/?ref=7167921](https://www.vultr.com/?ref=7167921)
 
 
@@ -563,3 +582,7 @@ COMMIT
 参考 [bennythink 的文章](https://www.bennythink.com/udp53.html)，像校园网使用的锐捷网关（或者说交换机）都默认放行DHCP 和DNS报文，也就是UDP53与UDP 67。
 
 所以在网关外开一个 53 的 UDP 端口 VPN 就可以通过其上网啦。
+
+# 参考
+- https://www.hinwen.com/3662.html
+- https://www.socketproapp.com/
