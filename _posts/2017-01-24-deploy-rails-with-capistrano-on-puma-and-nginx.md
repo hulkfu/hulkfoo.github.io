@@ -127,10 +127,11 @@ sudo apt-get install nodejs memcached imagemagick
 ```ruby
 # Gemfile
 group :development do
-  gem "capistrano", "~> 3.8.0", require: false
-  gem 'capistrano-rbenv', "~> 2.1.0", require: false
-  gem 'capistrano3-puma', "~> 3.1.0", require: false
-  gem 'capistrano-rails', "~> 1.2.3", require: false
+  gem "capistrano", require: false
+  gem 'capistrano-rbenv', require: false
+  gem 'capistrano3-puma', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-postgresql', require: false
 end
 ```
 
@@ -150,6 +151,7 @@ require "capistrano/bundler"
 require "capistrano/rails/assets"
 require "capistrano/rails/migrations"
 # require "capistrano/passenger"
+require 'capistrano/postgresql'
 
 # ...
 
@@ -337,6 +339,75 @@ nginx 其实会把 sites-enabled 里所有的配置文件合并到 /etc/nginx/ng
 
 ```bash
 proxy_set_header X-Forwarded-Proto https;
+```
+
+# 原理
+Rails 启动后通过 Puma 用 socket 绑定 app 的处理逻辑接口，Nginx 作为反向代理与 Puma 的 socket 进行交互。
+
+主要在于 Nginx 的配置文件：
+
+```c
+upstream puma_my-awesome-app_production {
+  server unix:/home/deploy/apps/my-awesome-app/shared/tmp/sockets/puma.sock fail_timeout=0;
+}
+
+server {
+  listen 80;
+  server_name caogupiao.com;
+  # 公开静态资源的目录
+  root /home/deploy/apps/my-awesome-app/current/public;
+  # 上面的 public 里没有找到的话就把请求传到 puma 里
+  try_files $uri/index.html $uri @puma_my-awesome-app_production;
+
+  client_max_body_size 4G;
+  keepalive_timeout 10;
+
+  error_page 500 502 504 /500.html;
+  error_page 503 @503;
+
+  location @puma_my-awesome-app_production {
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $host;
+    proxy_redirect off;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+    proxy_set_header X-Forwarded-Proto http;
+    proxy_pass http://puma_my-awesome-app_production;
+    # limit_req zone=one;
+    access_log /home/deploy/apps/my-awesome-app/shared/log/nginx.access.log;
+    error_log /home/deploy/apps/my-awesome-app/shared/log/nginx.error.log;
+  }
+
+  location ^~ /assets/ {
+    gzip_static on;
+    expires max;
+    add_header Cache-Control public;
+  }
+
+  location = /50x.html {
+    root html;
+  }
+
+  location = /404.html {
+    root html;
+  }
+
+  location @503 {
+    error_page 405 = /system/maintenance.html;
+    if (-f $document_root/system/maintenance.html) {
+      rewrite ^(.*)$ /system/maintenance.html break;
+    }
+    rewrite ^(.*)$ /503.html break;
+  }
+
+  if ($request_method !~ ^(GET|HEAD|PUT|PATCH|POST|DELETE|OPTIONS)$ ){
+    return 405;
+  }
+
+  if (-f $document_root/system/maintenance.html) {
+    return 503;
+  }
+}
 ```
 
 

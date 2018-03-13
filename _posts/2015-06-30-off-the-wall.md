@@ -15,6 +15,10 @@ permalink: vans
 
 我用的是 [SocketPro](https://www.socketproapp.com/) 的服务，目前还挺稳定，注册后可以下载相应平台的客户端。
 
+这里还有备用的：
+
+- https://www.rixcloud.com
+
 # 客户端
 买一个 VPN 服务，一般会给你一个订阅链接，里面有可用的 VPN 节点，选择一个没有被墙的速度快的。
 
@@ -27,7 +31,9 @@ iOS 下使用，需要国外的 Apple Store 帐号，而且主要注册一个国
 基于 Electron 的跨平台桌面客户端，支持 Linux、Windows 和 Mac，可以在[这里下载编译好的安装包](https://github.com/erguotou520/electron-ssr/releases)。
 
 ## 安全问题
-现在网站都有 HTTPS 了，你发给服务器的信息会用服务器发来的公钥进行加密，服务器发给你的信息也会用你的公钥加密，除非中间人拿到私钥，否则是不知道你们之间的通信内容的。
+现在网站都有 HTTPS 了，在客户端验证了服务器的公钥后，会用这个公钥加密一个对称密码发送给服务器。之后它们之间就用这个密码进行加密通信。
+
+除非客户端导入中间人的证书，否则还是挺安全的。
 
 # [goAgent](https://github.com/goagent/goagent)
 
