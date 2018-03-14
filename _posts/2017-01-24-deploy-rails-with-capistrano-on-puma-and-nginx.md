@@ -410,6 +410,22 @@ server {
 }
 ```
 
+# 升级
+Rails 的更新还是很快的，一年至少两个新版本，而且新的功能都很吸引人。
+
+升级时主要参考[http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html),看看具体的新版本的变化。
+
+执行 app:update 命令能补全新版本的文件。
+
+```bash
+rails app:update
+```
+
+之后：
+
+- 修改 Gemfile 里 rails 到要升级到的版本
+- bundle update 升级 gems
+
 
 # 参考
 - http://askubuntu.com/questions/7477/how-can-i-add-a-new-user-as-sudoer-using-the-command-line

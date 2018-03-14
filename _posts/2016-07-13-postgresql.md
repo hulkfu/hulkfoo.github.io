@@ -16,6 +16,9 @@ psql
 # 为应用创建角色和密码
 create role myapp with createdb login password 'password';
 
+# 创建数据库
+create database mydb owner myapp;
+
 # 回复数据库
 psql exampledb < exampledb.sql
 
