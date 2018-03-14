@@ -22,6 +22,7 @@ create database mydb owner myapp;
 # 回复数据库
 psql exampledb < exampledb.sql
 
+# 退出
 \q
 ```
 
