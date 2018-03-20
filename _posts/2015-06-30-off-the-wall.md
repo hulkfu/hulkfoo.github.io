@@ -94,6 +94,8 @@ After=network-online.target
 ss-local -s server-ip -p server-port -b 127.0.0.1 -l 1080 -k password -t 600 -m aes-256-cfb
 ```
 
+也可以编辑 /etc/rc.local 文件，让 ss-local 在后台执行。
+
 
 ### 命令行也proxy
 使用[proxychains-ng](https://github.com/rofl0r/proxychains-ng)
